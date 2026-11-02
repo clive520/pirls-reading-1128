@@ -47,18 +47,19 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 5px;
+      height: 4px;
       background: linear-gradient(90deg, #3E4B35, #7D976A);
       width: 0%;
       z-index: 100;
       transition: width 0.25s ease;
+      flex-shrink: 0;
     }
 
     #deck {
       position: relative;
       flex: 1;
       width: 100%;
-      height: 100%;
+      min-height: 0;
       overflow: hidden;
     }
 
@@ -68,10 +69,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 40px 70px 80px 70px;
+      padding: clamp(14px, 2.2vh, 26px) clamp(24px, 4vw, 56px);
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       opacity: 0;
       pointer-events: none;
       transform: scale(0.98);
@@ -91,7 +92,8 @@
 
     /* 標題與標籤 - 精簡有力 */
     .slide-header {
-      margin-bottom: 24px;
+      margin-bottom: clamp(8px, 1.6vh, 16px);
+      flex-shrink: 0;
     }
 
     .slide-badge {
@@ -100,19 +102,19 @@
       background: var(--tag-bg);
       color: var(--tag-text);
       font-weight: 800;
-      font-size: 0.85rem;
-      padding: 5px 14px;
+      font-size: clamp(0.72rem, 1.2vh, 0.82rem);
+      padding: clamp(2px, 0.5vh, 4px) clamp(8px, 1vw, 12px);
       border-radius: 999px;
       letter-spacing: 0.08em;
-      margin-bottom: 12px;
+      margin-bottom: clamp(3px, 0.6vh, 6px);
     }
 
     .slide-title {
-      font-size: 2.5rem;
+      font-size: clamp(1.55rem, 2.7vh, 2.2rem);
       font-weight: 900;
       color: var(--primary-dark);
       letter-spacing: -0.02em;
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
     .slide-body {
@@ -120,7 +122,14 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      max-height: calc(100vh - 190px);
+      min-height: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .slide-body::-webkit-scrollbar {
+      display: none;
     }
 
     /* ================= Slide 1: 封面 (大器乾淨) ================= */
@@ -296,54 +305,56 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      gap: 20px;
+      gap: clamp(8px, 1.3vh, 14px);
       align-content: stretch;
+      min-height: 0;
     }
 
     .quadrant-card {
       background: white;
-      border-radius: 20px;
-      padding: 22px 28px;
+      border-radius: 14px;
+      padding: clamp(8px, 1.2vh, 14px) clamp(12px, 1.4vw, 18px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 8px 22px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       transition: all 0.25s ease;
       position: relative;
+      min-height: 0;
     }
 
     .quadrant-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 28px rgba(62, 75, 53, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(62, 75, 53, 0.08);
     }
 
     .quadrant-card.q1 {
-      border-left: 6px solid #536E46;
+      border-left: 5px solid #536E46;
     }
     .quadrant-card.q2 {
-      border-left: 6px solid #3B5F71;
+      border-left: 5px solid #3B5F71;
     }
     .quadrant-card.q3 {
-      border-left: 6px solid #9C6C2E;
+      border-left: 5px solid #9C6C2E;
     }
     .quadrant-card.q4 {
-      border-left: 6px solid #994441;
+      border-left: 5px solid #994441;
     }
 
     .q-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 2px;
     }
 
     .q-pill {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.85rem;
+      font-size: clamp(0.72rem, 1.1vh, 0.78rem);
       font-weight: 800;
-      padding: 3px 12px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: 5px;
       letter-spacing: 0.04em;
     }
 
@@ -353,27 +364,27 @@
     .q4 .q-pill { background: #FBEBEA; color: #752927; }
 
     .q-level-tag {
-      font-size: 0.85rem;
+      font-size: clamp(0.7rem, 1.1vh, 0.78rem);
       font-weight: 700;
       color: var(--text-muted);
     }
 
     .q-title {
-      font-size: 1.7rem;
+      font-size: clamp(1.15rem, 1.8vh, 1.45rem);
       font-weight: 900;
       color: var(--primary-dark);
-      margin-bottom: 8px;
+      margin-bottom: 2px;
     }
 
     .q-action-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 1.05rem;
+      gap: 5px;
+      font-size: clamp(0.8rem, 1.25vh, 0.92rem);
       font-weight: 800;
-      padding: 5px 14px;
-      border-radius: 8px;
-      margin-bottom: 10px;
+      padding: clamp(2px, 0.4vh, 4px) clamp(6px, 0.9vw, 10px);
+      border-radius: 6px;
+      margin-bottom: 4px;
       width: fit-content;
     }
 
@@ -383,21 +394,22 @@
     .q4 .q-action-pill { background: #FBEEEE; color: #691E1C; }
 
     .q-desc {
-      font-size: 1.02rem;
+      font-size: clamp(0.76rem, 1.2vh, 0.86rem);
       color: #4E5648;
-      line-height: 1.5;
+      line-height: 1.35;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
     }
 
     .q-example-box {
       background: #F7F7F2;
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-size: 0.92rem;
+      border-radius: 6px;
+      padding: clamp(4px, 0.7vh, 6px) clamp(8px, 1vw, 10px);
+      font-size: clamp(0.72rem, 1.15vh, 0.8rem);
       color: #4C5447;
       border-left: 3px solid #BAC4B2;
       font-weight: 600;
+      line-height: 1.3;
     }
 
     .quadrant-center-badge {
@@ -409,11 +421,11 @@
       color: #FFFFFF;
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
-      font-size: 0.88rem;
-      padding: 8px 18px;
+      font-size: clamp(0.7rem, 1.1vh, 0.8rem);
+      padding: clamp(4px, 0.6vh, 6px) clamp(10px, 1.2vw, 14px);
       border-radius: 99px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-      border: 4px solid var(--bg-cream);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      border: 3px solid var(--bg-cream);
       z-index: 10;
       pointer-events: none;
       letter-spacing: 0.06em;
@@ -621,41 +633,46 @@
     /* ================= Slide 8: 任務指派機制 ================= */
     .task-assign-layout {
       display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 28px;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .task-preview-panel {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .task-preview-panel img {
       width: 100%;
-      height: auto;
-      border-radius: 14px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .task-features-column {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: clamp(8px, 1.2vh, 12px);
     }
 
     .task-feature-card {
       background: white;
-      border-radius: 18px;
-      padding: 18px 22px;
-      border-left: 6px solid var(--primary);
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border-left: 5px solid var(--primary);
       border-top: 1px solid var(--border-color);
       border-right: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
       transition: transform 0.2s ease;
     }
 
@@ -667,71 +684,76 @@
     .task-feature-card.c3 { border-left-color: #3B5F71; }
 
     .task-feature-title {
-      font-size: 1.25rem;
+      font-size: clamp(0.95rem, 1.5vh, 1.1rem);
       font-weight: 800;
       color: var(--primary-dark);
-      margin-bottom: 6px;
+      margin-bottom: 2px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .task-feature-desc {
-      font-size: 0.98rem;
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
       color: var(--text-muted);
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.35;
     }
 
     .task-highlight-pill {
       display: inline-block;
-      margin-top: 8px;
+      margin-top: 3px;
       background: #F2F5EF;
       color: var(--primary);
-      font-size: 0.88rem;
+      font-size: clamp(0.68rem, 1.1vh, 0.76rem);
       font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 6px;
+      padding: 2px 7px;
+      border-radius: 5px;
     }
 
     /* ================= Slide 9: 智慧成果與批改 ================= */
     .grading-results-layout {
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 28px;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .grading-screenshot-card {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .grading-screenshot-card img {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .grading-features-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: clamp(6px, 0.9vh, 9px);
     }
 
     .grading-feature-item {
       background: white;
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: all 0.2s ease;
     }
 
@@ -743,26 +765,26 @@
     .g-item-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1.15rem;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
       font-weight: 800;
       color: var(--primary-dark);
     }
 
     .g-item-text {
-      font-size: 0.92rem;
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
       color: var(--text-muted);
       font-weight: 600;
-      line-height: 1.45;
+      line-height: 1.35;
     }
 
     .g-item-tag {
       align-self: flex-start;
-      margin-top: 4px;
-      font-size: 0.82rem;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 1px 6px;
+      border-radius: 4px;
       background: #F1F4EE;
       color: #38492E;
     }
@@ -771,41 +793,46 @@
     .rubric-review-layout {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
-      gap: 28px;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .rubric-screenshot-card {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .rubric-screenshot-card img {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .rubric-features-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: clamp(8px, 1.2vh, 12px);
     }
 
     .rubric-feature-card {
       background: white;
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      border-left: 6px solid var(--primary);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: all 0.2s ease;
     }
 
@@ -821,41 +848,46 @@
     .radar-report-layout {
       display: grid;
       grid-template-columns: 1.3fr 1fr;
-      gap: 28px;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .radar-screenshot-card {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .radar-screenshot-card img {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .radar-features-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: clamp(8px, 1.2vh, 12px);
     }
 
     .radar-feature-card {
       background: white;
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      border-left: 6px solid #2B5773;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid #2B5773;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: all 0.2s ease;
     }
 
@@ -867,45 +899,50 @@
     .radar-feature-card.c-radar { border-left-color: #C87D25; }
     .radar-feature-card.c-guide { border-left-color: #435038; }
 
-    /* ================= Slide 11: 班級弱點分析 ================= */
+    /* ================= Slide 12: 班級弱點分析 ================= */
     .class-analytics-layout {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
-      gap: 28px;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .class-analytics-screenshot {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .class-analytics-screenshot img {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .class-weakness-cards {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: clamp(6px, 0.9vh, 9px);
     }
 
     .weakness-card {
       background: white;
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      border-left: 6px solid #D94841;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: all 0.2s ease;
     }
 
@@ -917,69 +954,74 @@
     .weakness-card.action { border-left-color: #435038; }
 
     .weakness-card-title {
-      font-size: 1.15rem;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
       font-weight: 800;
       color: var(--primary-dark);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .weakness-card-desc {
-      font-size: 0.92rem;
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
       color: var(--text-muted);
       font-weight: 600;
-      line-height: 1.45;
+      line-height: 1.35;
     }
 
     .weakness-pill {
       align-self: flex-start;
-      margin-top: 4px;
-      font-size: 0.82rem;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 1px 6px;
+      border-radius: 4px;
     }
 
-    /* ================= Slide 12: 課堂補救策略 ================= */
+    /* ================= Slide 13: 課堂補救策略 ================= */
     .remedial-layout {
       display: grid;
       grid-template-columns: 1.3fr 1fr;
-      gap: 28px;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .remedial-screenshot {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .remedial-screenshot img {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .remedial-cards-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: clamp(8px, 1.2vh, 12px);
     }
 
     .remedial-card {
       background: white;
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      border-left: 6px solid var(--primary);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: all 0.2s ease;
     }
 
@@ -992,69 +1034,74 @@
     .remedial-card.s3 { border-left-color: #C87D25; }
 
     .remedial-card-title {
-      font-size: 1.15rem;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
       font-weight: 800;
       color: var(--primary-dark);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .remedial-card-desc {
-      font-size: 0.92rem;
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
       color: var(--text-muted);
       font-weight: 600;
-      line-height: 1.45;
+      line-height: 1.35;
     }
 
     .remedial-pill {
       align-self: flex-start;
-      margin-top: 4px;
-      font-size: 0.82rem;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 1px 6px;
+      border-radius: 4px;
     }
 
-    /* ================= Slide 13: 成本與多模型 API 設定 ================= */
+    /* ================= Slide 14: 成本與多模型 API 設定 ================= */
     .api-cost-layout {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
-      gap: 28px;
+      gap: clamp(14px, 2vw, 24px);
       align-items: center;
+      min-height: 0;
     }
 
     .api-screenshot-card {
       background: white;
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
       border: 1.5px solid var(--border-color);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .api-screenshot-card img {
       width: 100%;
-      height: auto;
-      border-radius: 12px;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
       display: block;
     }
 
     .api-cost-cards-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: clamp(6px, 0.9vh, 9px);
     }
 
     .cost-card {
       background: white;
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      border-left: 6px solid #D94841;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       transition: all 0.2s ease;
     }
 
@@ -1067,84 +1114,83 @@
     .cost-card.c-openrouter { border-left-color: #2B5773; }
 
     .cost-card-title {
-      font-size: 1.15rem;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
       font-weight: 800;
       color: var(--primary-dark);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .cost-card-desc {
-      font-size: 0.92rem;
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
       color: var(--text-muted);
       font-weight: 600;
-      line-height: 1.45;
+      line-height: 1.35;
     }
 
     .cost-pill {
       align-self: flex-start;
-      margin-top: 4px;
-      font-size: 0.82rem;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 1px 6px;
+      border-radius: 4px;
     }
 
-    /* ================= Slide 14: 審閱與下一步 ================= */
+    /* ================= Slide 15: 審閱與下一步 ================= */
     .step-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      gap: clamp(14px, 1.8vw, 24px);
+      min-height: 0;
     }
 
     .step-card {
       background: white;
-      border-radius: 20px;
-      padding: 30px 26px;
+      border-radius: 16px;
+      padding: clamp(16px, 2.2vh, 26px) clamp(16px, 1.8vw, 22px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
     }
 
     .step-num {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 2.2rem;
+      font-size: clamp(1.6rem, 2.5vh, 2.2rem);
       font-weight: 900;
       color: #637754;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .step-card h3 {
-      font-size: 1.45rem;
+      font-size: clamp(1.2rem, 1.8vh, 1.4rem);
       font-weight: 900;
       color: var(--primary-dark);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .step-card ul {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      font-size: 1.05rem;
+      gap: 6px;
+      font-size: clamp(0.85rem, 1.3vh, 0.98rem);
       color: #4C5246;
       font-weight: 600;
     }
 
     /* ================= 底部導覽控制列 ================= */
     #deck-controls {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 64px;
-      background: rgba(247, 246, 241, 0.95);
+      position: relative;
+      height: 54px;
+      flex-shrink: 0;
+      background: rgba(247, 246, 241, 0.98);
       backdrop-filter: blur(10px);
       border-top: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 40px;
+      padding: 0 clamp(16px, 3vw, 40px);
       z-index: 50;
     }
 
@@ -1290,9 +1336,95 @@
       color: var(--primary);
     }
 
+    /* ================= 筆電全螢幕與高度受限自適應 (@media max-height) ================= */
+    @media (max-height: 850px) {
+      .slide {
+        padding: 14px clamp(20px, 3.5vw, 44px);
+      }
+      .slide-header {
+        margin-bottom: 8px;
+      }
+      .slide-title {
+        font-size: 1.75rem;
+      }
+      .slide-badge {
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+      }
+      .cover-hero-title {
+        font-size: 2.8rem;
+        margin-bottom: 12px;
+      }
+      .cover-hero-title span {
+        font-size: 2rem;
+      }
+      .cover-punchline {
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+      }
+      .pain-card {
+        padding: 16px 18px;
+      }
+      .agenda-box {
+        padding: 12px 16px;
+      }
+      .step-card {
+        padding: 14px 18px;
+      }
+      .step-num {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+      }
+      .step-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+      }
+      .step-card ul {
+        font-size: 0.88rem;
+        gap: 4px;
+      }
+    }
+
+    @media (max-height: 720px) {
+      .slide {
+        padding: 10px clamp(16px, 3vw, 36px);
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .slide-header {
+        margin-bottom: 6px;
+      }
+      .g-item-text, .weakness-card-desc, .cost-card-desc, .remedial-card-desc, .task-feature-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .quadrant-card {
+        padding: 6px 10px;
+      }
+      .q-desc {
+        margin-bottom: 2px;
+      }
+      .q-example-box {
+        padding: 3px 8px;
+      }
+      .grading-screenshot-card img,
+      .class-analytics-screenshot img,
+      .api-screenshot-card img,
+      .rubric-screenshot-card img,
+      .radar-screenshot-card img,
+      .remedial-screenshot img,
+      .task-preview-panel img {
+        max-height: min(340px, calc(100vh - 160px));
+      }
+    }
+
     @media (max-width: 1024px) {
       .slide {
-        padding: 30px 30px 80px 30px;
+        padding: 20px 24px;
       }
       .cover-layout {
         grid-template-columns: 1fr;
@@ -1301,7 +1433,7 @@
         display: none;
       }
       .quadrant-wrapper {
-        gap: 14px;
+        gap: 10px;
       }
       .quadrant-center-badge {
         display: none;
