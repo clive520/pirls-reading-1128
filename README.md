@@ -1,20 +1,29 @@
 # AI 賦能閱讀理解：從 PIRLS 架構到智慧化課堂實踐
 
-專為國小教師增能研習打造的 HTML 互動簡報與講者逐字稿手冊，結合 PIRLS 國際閱讀素養四層次架構與 Google AI Studio / Gemini 技術，實現智慧提問、即時批改與深度思維對話。
+專為國小教師增能研習打造的 HTML 互動簡報與講者逐字稿手冊，結合 PIRLS 國際閱讀素養四層次架構與 Google AI Studio / Gemini 技術，實現智慧提問、即時批改、素養診斷與實體課堂補救。
 
 ---
 
 ## 📂 專案檔案結構
 
-- **`index.html`**：演講投影片主頁（極簡重點、大字級、鍵盤與觸控翻頁、全螢幕播放）。
-- **`script.html`**：講者專用演講逐字稿手冊（附建議時間、現場互動指示、完整口語逐字講稿、支援列印與另存 PDF）。
+- **`index.html`**：演講投影片主頁（共 15 頁，極簡重點大字級、大地綠與象牙白風格、鍵盤與觸控翻頁、全螢幕播放、目錄彈窗）。
+- **`script.html`**：講者專用演講逐字稿手冊（附建議時間、現場身態互動指示、完整口語逐字講稿、支援列印與另存 PDF）。
 - **`assets/images/`**：
-  - `reading_system_login.png`：雲端閱讀認證系統前台入口截圖。
-  - `teacher_dashboard.png`：教師管理後台截圖。
+  - `reading_system_login.png`：雲端閱讀認證系統前台入口（師生雙端）。
+  - `teacher_dashboard.png`：教師管理後台功能導覽。
+  - `ai_generate_article.png`：AI 智慧生成題庫（主題撰寫文章）。
+  - `manual_input_article.png`：手動輸入文章導入生成題庫（課本教材）。
+  - `assign_task.png`：隨時指派新測驗任務（單次/多次、期限、跨班）。
+  - `results_review.png`：測驗成果檢視（2-5分鐘秒級回饋、PIRLS國際基準、作答歷程防猜）。
+  - `rubric_teacher_review.png`：PIRLS 0~3分 Rubrics 閱卷規準與教師評分調整。
+  - `pirls_benchmark_radar.png`：個人素養診斷報告（611分高基準與四向度雷達圖）。
+  - `class_weakness_analysis.png`：班級弱點巨觀診斷（題型得分率斷層、PIRLS 四認知歷程階梯）。
+  - `remedial_strategies.png`：針對性課堂教學與補救策略（AI 專家模型生成的三大實體教案）。
+  - `api_provider_settings.png`：系統與 API 設定（Gemini / DeepSeek / OpenRouter 多模型極致性價比）。
 
 ---
 
-## 📑 簡報完整大綱與架構（共 11 頁）
+## 📑 簡報完整大綱與架構（共 15 頁）
 
 - **Slide 01 封面**：`AI 賦能閱讀理解：PIRLS 提問 × 智慧批改實踐`
 - **Slide 02 研習藍圖**：六大模組規劃總覽
@@ -23,10 +32,18 @@
 - **Slide 05 思維轉變**：傳統人工作業 vs. 人機協同模式對比
 - **Slide 06 系統實踐**：雲端閱讀認證系統（師生雙端入口與管理總覽）
 - **Slide 07 出題雙軌模式**：**AI 原創撰文出題** × **自行提供文章出題**
-- **Slide 08 隨時指派任務**：**單次/多次測驗**、**時間期限**、**跨班多選派卷**
-- **Slide 09 成果總覽與後台批改**：**2-5 分鐘秒級回饋** × **PIRLS 國際基準對標** × **作答歷程防猜檢視**
-- **Slide 10 AI 評改 × 老師二次審閱**：**PIRLS 0~3分 Rubrics 規準微調** × **四向度認知雷達圖診斷**
-- **Slide 11 審閱與後續規劃**：大綱審閱與後續章節擴充規劃
+- **Slide 08 隨時彈性指派任務**：**單次/多次測驗** × **時間期限** × **跨班多選派卷**
+- **Slide 09 智慧自動批改**：**2-5 分鐘秒級回饋** × **PIRLS 國際基準對標** × **作答歷程防猜檢視**
+- **Slide 10 閱卷規準與二次審閱**：**PIRLS 0~3分 Rubrics 規準參照** × **教師主控微調點選**（人機雙重把關）
+- **Slide 11 個人素養診斷報告**：**611分高基準國際常模彩帶** × **四向度認知歷程雷達圖** × **雙向指引**
+- **Slide 12 班級弱點巨觀診斷**：**題型斷層（問答題僅17%）** × **PIRLS 四歷程斷崖（L3/L4）** × **時間預警**
+- **Slide 13 針對性課堂補救策略**：**AI 專家模型生成 3 大實體教案**（雙段落比對學習單、三級式標記法、詩意辨析）
+- **Slide 14 現實與成本考量**：**理想很豐滿、現實很骨感** × **DeepSeek 極致性價比 API** × **OpenRouter 多元生態**
+- **Slide 15 大綱審閱與後續規劃**：三大步驟（前導架構確認、後續章節擴充、GitHub 部署與現場演講）
+
+---
+
+## 🖥️ 簡報操作快捷鍵
 
 - **下一頁**：鍵盤 `→` / `Space` / `PageDown`，或點擊下方「下一頁」
 - **上一頁**：鍵盤 `←` / `PageUp`，或點擊下方「上一頁」
@@ -47,7 +64,7 @@
    在本地終端機（PowerShell）執行：
    ```bash
    git add .
-   git commit -m "feat: 初版完成（PIRLS閱讀簡報重點頁 + 獨立逐字稿手冊網頁）"
+   git commit -m "feat: 完成15頁全套簡報與講者逐字稿手冊"
    git branch -M main
    git remote add origin https://github.com/<您的GitHub帳號>/<儲存庫名稱>.git
    git push -u origin main
