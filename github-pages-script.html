@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>講者演講逐字稿手冊 • GitHub Pages 快速發布實戰教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e293b;
+      --primary-accent: #0284c7;
+      --gh-green: #15803d;
+      --gh-green-light: #f0fdf4;
+      --gh-green-border: #bbf7d0;
+      --accent: #b45309;
+      --accent-light: #fffbeb;
+      --accent-border: #fde68a;
+      --bg-body: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --quote-bg: #f1f5f9;
+      --action-bg: #fffbf0;
+      --action-border: #fcd34d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.85;
+      font-size: 16.5px;
+    }
+
+    /* 頂部導覽列 */
+    header.top-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+      padding: 14px clamp(16px, 3.5vw, 40px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-badge {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1px solid #bae6fd;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: white;
+      color: #334155;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .btn-primary {
+      background: #0284c7;
+      color: white;
+      border-color: #0284c7;
+    }
+
+    .btn-primary:hover {
+      background: #0369a1;
+      color: white;
+    }
+
+    /* 主版面佈局 */
+    .container {
+      max-width: 1060px;
+      margin: 30px auto;
+      padding: 0 20px 80px 20px;
+    }
+
+    /* 快捷快速跳轉索引 */
+    .quick-jump-panel {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .quick-jump-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .jump-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .jump-pill {
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .jump-pill:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
+    /* 講稿卡片 */
+    .script-section {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+      margin-bottom: 36px;
+      overflow: hidden;
+      scroll-margin-top: 85px;
+    }
+
+    .section-header {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .slide-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: #0f172a;
+      padding: 4px 12px;
+      border-radius: 6px;
+    }
+
+    .slide-topic {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      flex: 1;
+      margin-left: 10px;
+    }
+
+    .time-badge {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      padding: 3px 10px;
+      border-radius: 99px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .section-body {
+      padding: 28px 32px;
+    }
+
+    /* 投影片重點對照卡 */
+    .slide-summary-box {
+      background: #f0f9ff;
+      border-left: 4px solid #0284c7;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.94rem;
+      color: #0c4a6e;
+    }
+
+    .slide-summary-box strong {
+      color: #0369a1;
+      font-size: 0.98rem;
+    }
+
+    /* 講者身態與現場動作指示 */
+    .stage-directions {
+      background: var(--action-bg);
+      border: 1px solid var(--action-border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 22px;
+      font-size: 0.92rem;
+      color: #854d0e;
+    }
+
+    .stage-directions strong {
+      color: #713f12;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 逐字稿正文 */
+    .speech-script {
+      font-size: 1.1rem;
+      color: #1e293b;
+      line-height: 1.95;
+    }
+
+    .speech-script p {
+      margin-bottom: 16px;
+      text-indent: 2em;
+    }
+
+    .speech-script .highlight-phrase {
+      background: #fef08a;
+      color: #713f12;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .speech-script .punchline {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #065f46;
+      background: var(--gh-green-light);
+      border: 1px solid var(--gh-green-border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin: 18px 0;
+      text-indent: 0;
+      border-left: 4px solid #16a34a;
+    }
+
+    .code-inline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* 列印樣式 */
+    @media print {
+      header.top-bar, .quick-jump-panel, .top-actions {
+        display: none !important;
+      }
+      body {
+        background: white;
+        font-size: 12pt;
+        line-height: 1.6;
+        color: black;
+      }
+      .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .script-section {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+        margin-bottom: 24pt;
+      }
+      .section-header {
+        background: #eee !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="top-bar">
+    <div class="brand">
+      <h1>GitHub Pages 快速發布實戰 • 講者逐字稿手冊</h1>
+      <span class="brand-badge">🎙️ 報告者專用</span>
+      <span class="brand-badge" style="background:#fef3c7; color:#92400e; border-color:#fde68a;">⏱️ 總時長約 8-10 分鐘</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="github-pages-tutorial.html" target="_blank" class="btn btn-primary" title="在新分頁開啟投影片">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        <span>開啟線上簡報 (Deck)</span>
+      </a>
+      <button onclick="window.print()" class="btn" title="列印或另存為 PDF">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        <span>列印 / 另存 PDF</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- 快速跳轉錨點 -->
+    <div class="quick-jump-panel">
+      <div class="quick-jump-title">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/></svg>
+        <span>快速跳轉至指定投影片講稿：</span>
+      </div>
+      <div class="jump-pills">
+        <a href="#slide-1" class="jump-pill">Slide 01 封面開場</a>
+        <a href="#slide-2" class="jump-pill">Slide 02 步驟 1：進入 Settings</a>
+        <a href="#slide-3" class="jump-pill">Slide 03 步驟 2：側欄定位 Pages</a>
+        <a href="#slide-4" class="jump-pill">Slide 04 步驟 3：部署來源與分支</a>
+        <a href="#slide-5" class="jump-pill">Slide 05 步驟 4：成功發布 Live</a>
+        <a href="#slide-6" class="jump-pill">Slide 06 多簡報共存架構</a>
+        <a href="#slide-7" class="jump-pill">Slide 07 總結口訣與排錯</a>
+      </div>
+    </div>
+
+    <!-- ==================== SLIDE 01 ==================== -->
+    <section class="script-section" id="slide-1">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 01</span>
+        <h2 class="slide-topic">封面開場：如何設定 GitHub Repo 為公開 Pages？</h2>
+        <span class="time-badge">⏱️ 建議時間：1.5 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片核心要點：</strong>帶出主題「將靜態網頁 / HTML 簡報一鍵發布上線」，強調免伺服器、免費全球 CDN 與 Git 連動秒更新三大優勢。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>語調保持明快、自信。向台下詢問是否曾為「做好的 HTML 網頁不知道如何給別人看」、「不想自己租伺服器買網域」而苦惱，迅速吸引注意力。
+        </div>
+
+        <div class="speech-script">
+          <p>各位夥伴、老師們好！今天我們要來解決一個非常實際、而且非常關鍵的問題：<span class="highlight-phrase">「當我們做好了一份漂亮的 HTML 互動簡報、或者前端網頁專案，到底該如何用最快、最穩定、而且完全免費的方式，發布給所有人瀏覽？」</span></p>
+
+          <p>過去大家可能覺得：「架網站是不是要花錢買主機？要申請網域？還要設定一堆資安憑證？」答案是：<span class="highlight-phrase">完全不用！</span></p>
+
+          <div class="punchline">
+            💡「只要你的專案在 GitHub 上，GitHub Pages 就能在三分鐘內，免費為你提供全球 CDN 加速與 HTTPS 安全網址！」
+          </div>
+
+          <p>大家請看畫面，GitHub Pages 具備三大無可取代的優勢：第一，<strong>最速直接發布</strong>，只要勾選分支跟根目錄，點一下 Save 就搞定；第二，<strong>自帶全球高速 CDN 與 SSL 憑證</strong>，不管在哪裡開都極速載入；第三，<strong>Git 秒級熱更新</strong>，未來本地只要執行 <span class="code-inline">git push</span>，雲端就會自動更新，甚至可以在同一個專案放好幾份不同簡報！</p>
+
+          <p>接下來，我將用 4 個最直覺的操作步驟，一步步帶大家親眼見證如何讓網頁秒速上線！</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 02 ==================== -->
+    <section class="script-section" id="slide-2">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 02</span>
+        <h2 class="slide-topic">步驟 1：開啟專案倉庫，進入 Settings（設定）</h2>
+        <span class="time-badge">⏱️ 建議時間：1.5 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong>專案首頁上方選單，右側齒輪圖示「Settings」高亮標示。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>手指投影片右側的視窗截圖，特別圈出最右上角的齒輪圖示。提醒學員注意檢查自己是否有專案管理權限與 Public 設定。
+        </div>
+
+        <div class="speech-script">
+          <p>好，請大家看第一步：請開啟瀏覽器，登入你的 GitHub 帳號，並進入你放簡報或網頁檔案的儲存庫（Repository）。</p>
+
+          <p>在專案首頁頂部，你會看到一排選單標籤：從左邊的 Code、Issues、Pull requests，一路往右看，最右邊有一個<span class="highlight-phrase">帶有齒輪圖示的「Settings」（設定）</span>。請直接點選它！</p>
+
+          <div class="punchline">
+            ⚠️「注意：如果你進去專案卻找不到 Settings 分頁，代表你目前帳號只是 Collaborator 甚至是訪客，必須是專案擁有者（Owner）或擁有 Admin 管理員權限才看得到喔！」
+          </div>
+
+          <p>另外特別提醒一個很常被問到的細節：GitHub 免費個人帳號對 <span class="code-inline">Public</span>（公開）儲存庫是<strong>完全免費、無限制開放 GitHub Pages</strong> 的；但如果你把專案設為 Private，免費方案是無法直接開啟 Pages 的，所以請務必確認你的專案倉庫是 Public 狀態！</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 03 ==================== -->
+    <section class="script-section" id="slide-3">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 03</span>
+        <h2 class="slide-topic">步驟 2：在左側選單點選「Pages」</h2>
+        <span class="time-badge">⏱️ 建議時間：1 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong>Settings 左側功能清單，在「Code, planning, and automation」分組下高亮「Pages」。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>引導大家視線看向左側導覽目錄，口吻輕鬆清晰，強調選單層級結構。
+        </div>
+
+        <div class="speech-script">
+          <p>點進 Settings 之後，畫面左側會出現非常長的一排功能清單。請大家往下拉一點點，找到一個叫作 <span class="highlight-phrase">「Code, planning, and automation」</span>（程式碼、規劃與自動化）的大標題。</p>
+
+          <p>在這個分組底下，你會看到 Branches、Tags、Actions，再往下看，有一個帶有網頁小視窗圖示的項目，叫做<strong>「Pages」</strong>。請不要猶豫，直接點下去！</p>
+
+          <div class="punchline">
+            📄「點進 Pages，我們就正式進入了 GitHub Pages 的專屬部署控制台！」
+          </div>
+
+          <p>這時候畫面中央就會出現完整的「GitHub Pages」設定頁面，我們所有的發布來源、網域綁定跟上線狀態，全部都在這裡統一掌控。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 04 ==================== -->
+    <section class="script-section" id="slide-4">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 04</span>
+        <h2 class="slide-topic">步驟 3：設定 Build and deployment（來源與分支）</h2>
+        <span class="time-badge">⏱️ 建議時間：2 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong>Source 下拉選單「Deploy from a branch」，分支選「main」，目錄選「/ (root)」，點擊「Save」。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>放慢語速，這裡是整份教學的「核心精髓」，務必帶大家逐一確認三個欄位的值。
+        </div>
+
+        <div class="speech-script">
+          <p>接下來請大家看螢幕，這是最關鍵、也是唯一需要做設定的地方——<span class="highlight-phrase">「Build and deployment」（建置與部署）</span>。</p>
+
+          <p>在 Source（來源）這個下拉選單中，通常會有兩種選擇：一種是「Deploy from a branch」（直接以分支發布），另一種是「GitHub Actions」（自動化工作流發布）。</p>
+
+          <div class="punchline">
+            ⚡「對於我們目前的 HTML 互動簡報、靜態網頁，『最速做法』就是直接選：Deploy from a branch！」
+          </div>
+
+          <p>選定 <span class="code-inline">Deploy from a branch</span> 之後，下方會立刻展開兩個小選單：</p>
+          <p>第一，<strong>Branch（分支）</strong>：請選你的主要分支，通常是 <span class="code-inline">main</span>（如果是較早期的儲存庫可能叫 <span class="code-inline">master</span>）。</p>
+          <p>第二，<strong>Folder（目錄）</strong>：請保持預設的 <span class="code-inline">/ (root)</span>，這代表 GitHub 會直接從專案的根目錄尋找網頁檔案。</p>
+          <p>最後一步，也是大家最常忘記的一步：<strong>請一定要點右邊那個深色的「Save」（儲存）按鈕！</strong>只要按下 Save，設定就完成了！</p>
+
+          <p>（補充說明：如果是用 Vue、React、Vite 這類需要 npm run build 的前端專案，才會建議選下方的 GitHub Actions 讓雲端自動編譯，但純 HTML/CSS/JS 簡報用 Branch 發布最簡單、最不會出錯！）</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 05 ==================== -->
+    <section class="script-section" id="slide-5">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 05</span>
+        <h2 class="slide-topic">步驟 4：靜候 1~2 分鐘，網站正式發布成功！</h2>
+        <span class="time-badge">⏱️ 建議時間：1.5 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong>GitHub Pages 頂端出現醒目的綠色成功橫幅與「Your site is live at...」即時網址。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>面帶微笑安撫台下「按下 Save 後不要慌張」，解釋背景排程概念，並指向綠色橫幅與 Visit site 按鈕。
+        </div>
+
+        <div class="speech-script">
+          <p>很多初學者按完 Save 之後，重新整理網頁發現什麼都沒變，就開始慌張：「是不是我設錯了？」</p>
+
+          <p>請放心！因為 GitHub 在背後需要指派雲端伺服器幫你打包、配發 SSL 憑證跟全球 CDN 快取，這大約需要 <span class="highlight-phrase">60 秒到 120 秒</span>。</p>
+
+          <div class="punchline">
+            🎉「當你在 1~2 分鐘後重新整理頁面，頂部出現綠色框框寫著『Your site is live at...』，恭喜你，你的網站已經正式向全世界公開上線了！」
+          </div>
+
+          <p>大家可以看到，綠色橫幅裡會直接附上這份網站的專屬網址，格式永遠是：<br>
+          <span class="code-inline">https://&lt;你的帳號名稱&gt;.github.io/&lt;專案儲存庫名稱&gt;/</span></p>
+
+          <p>右邊還有一個 <strong>「Visit site」</strong> 按鈕，點下去就會直接在瀏覽器新分頁中打開你的專案首頁！是不是非常簡單、優雅？</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 06 ==================== -->
+    <section class="script-section" id="slide-6">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 06</span>
+        <h2 class="slide-topic">進階實踐：同一個 Repo，如何部署多份不同 HTML 簡報？</h2>
+        <span class="time-badge">⏱️ 建議時間：2 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong>index.html、github-pages-tutorial.html、script.html 三種檔案與對應 URL 的樹狀映射，以及日常 git push 更新工作流。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>語調轉為專業與啟發性，解答大家心中最常浮現的「那我下一份簡報難道要再開一個 Repo 嗎？」的核心疑問。
+        </div>
+
+        <div class="speech-script">
+          <p>很多朋友學到這裡，馬上就會問一個很經典的問題：<span class="highlight-phrase">「講者，我不可能每次做一份新簡報，就去開一個全新的 GitHub Repo 吧？如果我在同一個專案裡想放好幾份不同主題的簡報，該怎麼做？」</span></p>
+
+          <p>這就是靜態網頁託管最強大的地方！大家請看畫面上的檔案與網址對應規則：</p>
+
+          <p>第一，如果你在專案根目錄放了名為 <span class="code-inline">index.html</span> 的檔案，它會成為專案的<strong>預設首頁</strong>，網址最後面只要打專案名稱斜線（<span class="code-inline">.../pirls-reading-1128/</span>）就會自動載入它。</p>
+
+          <p>第二，如果你設計了一份新的簡報，取名叫 <span class="code-inline">github-pages-tutorial.html</span>，它就會擁有專屬的獨立網址：<br>
+          <span class="code-inline">.../pirls-reading-1128/github-pages-tutorial.html</span>！</p>
+
+          <p>第三，同理，我們現在這份給報告人看的逐字稿手冊 <span class="code-inline">github-pages-script.html</span>，也是直接接在網址後面就能打開！</p>
+
+          <div class="punchline">
+            🚀「這意味著：同一個 GitHub Repo 可以放無限多個 HTML 頁面，只要檔名不同，每一個頁面都能獨立成為一份線上簡報或教學手冊！」
+          </div>
+
+          <p>而且最棒的是日常維護工作流：日後你只要在本地修改檔案，終端機執行三行指令：<span class="code-inline">git add .</span>、<span class="code-inline">git commit -m "update"</span>、<span class="code-inline">git push origin main</span>，<strong>完全不需要再進 GitHub 後台點任何按鈕，GitHub Pages 就會秒級自動熱更新！</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 07 ==================== -->
+    <section class="script-section" id="slide-7">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 07</span>
+        <h2 class="slide-topic">總結速查與常見排錯 CheckList</h2>
+        <span class="time-badge">⏱️ 建議時間：1.5 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong>4 步極速上線口訣、常見排錯 Q&A（404 處理、快取問題），以及本專案所有成果直達連結。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 講者動作與現場身態：</strong>帶領大家進行最後的記憶固化，用口訣帶過重點，並主動說明最容易踩坑的「404」與「瀏覽器快取」問題，為整場分享劃下完美句點。
+        </div>
+
+        <div class="speech-script">
+          <p>最後，我們用一分鐘來幫大家做個總結記憶。請大家在心裡跟我一起覆誦這四步口訣：</p>
+
+          <div class="punchline">
+            📋「一進 Settings 齒輪 ➔ 二選 Pages 標籤 ➔ 三設 Deploy from a branch (main + /root) ➔ 四點 Save 大功告成！」
+          </div>
+
+          <p>另外，當你日後遇到問題時，請優先檢查這三個最常見的狀況：</p>
+          <p>第一，<strong>按下 Save 沒看到綠色橫幅？</strong>請別急，點頂部「Actions」分頁看建置進度，等黃色圈圈轉成綠色勾勾就完成了。</p>
+          <p>第二，<strong>點開網址出現 404 Not Found？</strong>請檢查網址英文字母大小寫有沒有打錯（GitHub Pages 是嚴格區分大小寫的），或者確認所選的 branch 確實有包含你的 html 檔案。</p>
+          <p>第三，<strong>本地 push 後線上好像沒變？</strong>通常是瀏覽器暫存快取，請按下 <span class="code-inline">Ctrl + F5</span> 強制重新整理，或用無痕視窗開啟即可！</p>
+
+          <p>以上就是今天為大家帶來的「GitHub Pages 快速發布實戰教學」。投影片右下方有提供直接複製簡報網址的按鈕，大家可以隨時把這份成果分享給你的團隊或學生。謝謝大家！</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

@@ -12,6 +12,7 @@
 - 🖥️ **線上簡報（Slide Deck）**：[https://clive520.github.io/pirls-reading-1128/](https://clive520.github.io/pirls-reading-1128/)
 - 🎙️ **講者逐字稿手冊（Speaker Script）**：[https://clive520.github.io/pirls-reading-1128/script.html](https://clive520.github.io/pirls-reading-1128/script.html)
 - 🚀 **GitHub Pages 設定教學簡報**：[https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html](https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html)
+- 📝 **GitHub Pages 教學講者逐字稿**：[https://clive520.github.io/pirls-reading-1128/github-pages-script.html](https://clive520.github.io/pirls-reading-1128/github-pages-script.html)
 - 📦 **GitHub 專案儲存庫**：[https://github.com/clive520/pirls-reading-1128](https://github.com/clive520/pirls-reading-1128)
 
 ---
@@ -21,6 +22,7 @@
 - **`index.html`**：演講投影片主頁（共 15 頁，極簡重點大字級、大地綠與象牙白風格、鍵盤與觸控翻頁、全螢幕播放、目錄彈窗）。
 - **`script.html`**：講者專用演講逐字稿手冊（附建議時間、現場身態互動指示、完整口語逐字講稿、支援列印與另存 PDF）。
 - **`github-pages-tutorial.html`**：獨立設計之「如何設定 GitHub Repo 為公開 Pages」互動教學簡報（共 7 頁，含完整截圖引導、分支設定、Actions 比較與排錯 CheckList）。
+- **`github-pages-script.html`**：GitHub Pages 設定教學簡報專用「講者演講逐字稿手冊」（含投影片重點、動作提示、口語逐字講稿、支援列印與 PDF）。
 - **`assets/images/`**：
   - `reading_system_login.png`：雲端閱讀認證系統前台入口（師生雙端）。
   - `teacher_dashboard.png`：教師管理後台功能導覽。
