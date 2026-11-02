@@ -1266,6 +1266,78 @@
       50% { opacity: 1; transform: scale(1.06); }
     }
 
+    /* ================= Slide 8 先行測試：超大聚焦＋靠畫面中間＋壓圖焦點 (Audience Center Spotlight) ================= */
+    .slide[data-slide="8"] .task-assign-layout {
+      position: relative;
+    }
+
+    /* Slide 8 正在講的那一點：放大約 1.18 倍、大幅靠向畫面中央、壓在左圖上、頂級立體投影與邊框 */
+    .slide[data-slide="8"] .step-item.revealed.active-step {
+      transform: translateX(clamp(-110px, -8vw, -60px)) translateY(-2px) scale(1.18) !important;
+      transform-origin: center right;
+      z-index: 50 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid rgba(62, 75, 53, 0.25) !important;
+      border-left: 7px solid var(--primary) !important;
+      box-shadow: 0 22px 50px rgba(20, 28, 16, 0.22),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(67, 80, 56, 0.45) !important;
+    }
+
+    .slide[data-slide="8"] .step-item.c2.revealed.active-step {
+      border-left: 7px solid #C87D25 !important;
+      border-color: rgba(200, 125, 37, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(200, 125, 37, 0.5) !important;
+    }
+
+    .slide[data-slide="8"] .step-item.c2.revealed.active-step::after {
+      color: #8C5311;
+      background: #FDF3E5;
+    }
+
+    .slide[data-slide="8"] .step-item.c3.revealed.active-step {
+      border-left: 7px solid #3B5F71 !important;
+      border-color: rgba(59, 95, 113, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(59, 95, 113, 0.5) !important;
+    }
+
+    .slide[data-slide="8"] .step-item.c3.revealed.active-step::after {
+      color: #254656;
+      background: #EAF0F4;
+    }
+
+    /* 放大聚焦時，卡片內文字體適度清晰放大，方便遠處觀眾辨識 */
+    .slide[data-slide="8"] .step-item.revealed.active-step .task-feature-title {
+      font-size: clamp(1.02rem, 1.65vh, 1.2rem);
+      color: #1F2818;
+      margin-bottom: 4px;
+    }
+
+    .slide[data-slide="8"] .step-item.revealed.active-step .task-feature-desc {
+      font-size: clamp(0.82rem, 1.3vh, 0.92rem);
+      color: #283320;
+      line-height: 1.45;
+    }
+
+    .slide[data-slide="8"] .step-item.revealed.active-step .task-highlight-pill {
+      font-size: clamp(0.72rem, 1.15vh, 0.8rem);
+      padding: 3px 9px;
+      font-weight: 800;
+      margin-top: 5px;
+    }
+
+    /* Slide 8 講過的重點保持在旁，微縮並柔化，將全場視覺徹底留給中間焦點 */
+    .slide[data-slide="8"] .step-item.revealed:not(.active-step) {
+      opacity: 0.42 !important;
+      transform: translateY(0) scale(0.96) !important;
+      filter: saturate(0.8) !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03) !important;
+    }
+
     @media print {
       .step-item {
         opacity: 1 !important;
