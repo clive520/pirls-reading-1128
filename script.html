@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>講者演講逐字稿手冊 • AI 賦能閱讀理解教學</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3E4B35;
+      --primary-light: #596B4C;
+      --primary-dark: #273121;
+      --accent: #C87D25;
+      --accent-red: #D94841;
+      --bg-body: #F5F4EE;
+      --card-bg: #FFFFFF;
+      --text-main: #20241D;
+      --text-muted: #5F6659;
+      --border-color: #E2DFD4;
+      --quote-bg: #F4F6F1;
+      --action-bg: #FFF8EE;
+      --action-border: #F0C383;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    /* 頂部導覽列 */
+    header.top-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .brand-badge {
+      background: #E7EEE0;
+      color: #34422B;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: white;
+      color: var(--primary-dark);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #ECEFE8;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+    }
+
+    /* 主版面佈局 */
+    .container {
+      max-width: 1100px;
+      margin: 36px auto;
+      padding: 0 24px 80px 24px;
+    }
+
+    /* 講稿模組卡片 */
+    .script-section {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+      margin-bottom: 40px;
+      overflow: hidden;
+      scroll-margin-top: 90px;
+    }
+
+    .section-header {
+      background: #FAFAF7;
+      border-bottom: 1px solid var(--border-color);
+      padding: 22px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .slide-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #FFF;
+      background: var(--primary);
+      padding: 4px 14px;
+      border-radius: 8px;
+    }
+
+    .slide-topic {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      flex: 1;
+      margin-left: 14px;
+    }
+
+    .time-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: #FFF7EC;
+      border: 1px solid #F0DEBF;
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+
+    .section-body {
+      padding: 32px;
+    }
+
+    /* 投影片重點對照卡 */
+    .slide-summary-box {
+      background: #F4F6F1;
+      border-left: 5px solid var(--primary);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .slide-summary-box strong {
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+    }
+
+    /* 講者動作與現場互動指示 */
+    .stage-directions {
+      background: var(--action-bg);
+      border: 1px solid var(--action-border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #7A4F0E;
+    }
+
+    .stage-directions strong {
+      color: #5C3A07;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 逐字稿正文樣式 */
+    .speech-script {
+      font-size: 1.12rem;
+      color: #2D3328;
+      line-height: 1.95;
+    }
+
+    .speech-script p {
+      margin-bottom: 18px;
+      text-indent: 2em;
+    }
+
+    .speech-script .highlight-phrase {
+      background: #FFF0D9;
+      color: #9C5708;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .speech-script .punchline {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: #EDF3E7;
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin: 20px 0;
+      text-indent: 0;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* 快捷目錄浮動列 */
+    .quick-jump {
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .quick-jump span {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .quick-pill {
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #F1F3ED;
+      color: var(--primary-dark);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .quick-pill:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* 列印友善排版 */
+    @media print {
+      header.top-bar, .quick-jump, .top-actions {
+        display: none !important;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+      }
+      .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .script-section {
+        box-shadow: none;
+        border: 1px solid #CCC;
+        page-break-after: always;
+        margin-bottom: 20px;
+      }
+      .section-header {
+        background: #EEE !important;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部功能條 -->
+  <header class="top-bar">
+    <div class="brand">
+      <h1>🎙️ 講者演講逐字稿手冊</h1>
+      <span class="brand-badge">國小教師增能研習專用</span>
+    </div>
+    <div class="top-actions">
+      <button class="btn" onclick="window.print()">🖨️ 列印 / 另存 PDF</button>
+      <a href="index.html" class="btn btn-primary" target="_blank">🖥️ 開啟播放投影片</a>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- 快捷跳轉 -->
+    <div class="quick-jump">
+      <span>快速跳轉：</span>
+      <a href="#slide-1" class="quick-pill">01 封面開場</a>
+      <a href="#slide-2" class="quick-pill">02 研習藍圖</a>
+      <a href="#slide-3" class="quick-pill">03 現場痛點</a>
+      <a href="#slide-4" class="quick-pill">04 PIRLS 四層次</a>
+      <a href="#slide-5" class="quick-pill">05 人機協同</a>
+      <a href="#slide-6" class="quick-pill">06 系統實踐</a>
+      <a href="#slide-7" class="quick-pill">07 審閱總結</a>
+    </div>
+
+    <!-- ==================== SLIDE 1 講稿 ==================== -->
+    <article class="script-section" id="slide-1">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 01</span>
+        <h2 class="slide-topic">封面開場：AI 賦能閱讀理解教學</h2>
+        <span class="time-badge">⏱️ 建議時間：2 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 標題「AI 賦能閱讀理解：PIRLS 提問 × 智慧批改實踐」、副標「把繁重出題批改交給 AI，把深度思維對話還給課堂」、系統前台截圖。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 面帶微笑，眼神環視全場老師，語氣親切懇切。開場先向大家致意，讓老師感受到這場研習不是來炫耀高科技，而是「身為第一線老師，我懂大家的辛苦」。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            各位校長、主任、各位親愛的老師夥伴們，大家午安！很高興今天能有這個機會，跟現場這麼多默默耕耘閱讀教育的優秀老師們聚在一起交流。
+          </p>
+          <p>
+            今天我們研習的主題是：<span class="highlight-phrase">「AI 賦能閱讀理解：從 PIRLS 提問到智慧化批改的現場實踐」</span>。
+          </p>
+          <p>
+            在開始之前，我先跟各位老師報告：今天我們不是要來談什麼深奧難懂的演算法，更不是要用科技來取代我們老師的專業。相反地，我是站在第一線教學者的角度，想跟大家分享：我們如何運用現在最成熟的 Google AI Studio 與大型語言模型，打造出一個專門為我們國小閱讀課量身定做的「智慧助教」——也就是畫面上各位看到的這套自主研發的<strong>「雲端閱讀認證系統」</strong>。
+          </p>
+          <div class="punchline">
+            🎯 我們今天的核心目標只有一句話：「把出題與批改的繁重瑣事交給 AI，把最珍貴的深度思考與師生對話還給課堂！」
+          </div>
+          <p>
+            就讓我們一起展開今天這段智慧閱讀的新篇章，請看下一頁。
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 2 講稿 ==================== -->
+    <article class="script-section" id="slide-2">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 02</span>
+        <h2 class="slide-topic">研習藍圖與六大模組規劃</h2>
+        <span class="time-badge">⏱️ 建議時間：2 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 六個模組卡片（01 現場痛點、02 PIRLS 架構、03 雲端系統展示、04 AI Studio 出題規準、05 課堂落地、06 實作演練）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 用指引筆或手勢依序掃過畫面上的模組，語調平穩清晰，讓老師們對今天的研習動線有全局的安全感與期待感。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            為了讓大家今天收穫滿滿、回去就能用，我把今天的研習劃分成六個循序漸進的模組：
+          </p>
+          <p>
+            首先，第一部分我們會直擊<strong>「現場痛點」</strong>：聊聊我們在小學帶閱讀理解時，最常遇到的真實掙扎。
+          </p>
+          <p>
+            第二部分，我們要重新梳理我們最重要的評量指北針——<strong>「PIRLS 閱讀理解四層次」</strong>。很多老師常問我：「孩子閱讀測驗總是考不好，到底問題出在哪裡？」我們會用四個思維階梯把問題拆解清楚。
+          </p>
+          <p>
+            第三部分，我會為大家揭開<strong>「雲端閱讀認證系統」</strong>的面紗，看看學生端是如何作答、AI 如何秒回，以及老師後台如何一鍵管理。
+          </p>
+          <p>
+            而接下來的四、五、六模組，則是更深度的實戰操作：我們會教大家怎麼寫出符合 PIRLS 的 Prompt（提示詞）、課堂三階段如何無痛導入，最後還會帶大家動手實作。
+          </p>
+          <p>
+            今天前半段，我們先把最關鍵的前三個觀念與系統架構完整建立起來！
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 3 講稿 ==================== -->
+    <article class="script-section" id="slide-3">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 03</span>
+        <h2 class="slide-topic">國小閱讀教學的三大現場痛點</h2>
+        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 三大痛點卡片（出題難、批改累、回饋慢）、底部黑底紅字警告標語。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 走入老師群中或眼神加強互動。可以問在場老師：「老師們，每週批改閱讀單時，有沒有改到眼睛酸痛的經驗？請舉手！」引發全場強烈共鳴與笑聲。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            老師們，聊到閱讀課，大家心裡一定有很多共鳴與無奈。我們常常笑說：語文老師不是在備課，就是在批改作業的路上。到底我們在閱讀理解教學上，遇到了哪三大瓶頸？
+          </p>
+          <p>
+            <span class="highlight-phrase">第一點，叫做「出題難」！</span><br>
+            很多時候我們想讓孩子做閱讀測驗，但坊間的題目常常只問「故事的主角叫什麼名字？」、「他是哪一年出生的？」這種只要回文章瞄一眼就能抄下來的題目。但如果老師想要自己出題、出出能考驗「推論」與「深層意涵」的好題目，往往要花一兩個小時絞盡腦汁，備課時間根本不夠。
+          </p>
+          <p>
+            <span class="highlight-phrase">第二點，更是所有老師的噩夢——「批改累」！</span><br>
+            選擇題還好改，但真正能看出閱讀素養的，是「開放性簡答題」。全班 28 到 30 本學習單，每篇你都得看他寫了什麼、文法順不順、到底有沒有讀懂。常常改完一個班，天都黑了，脖子酸痛不已。
+          </p>
+          <p>
+            <span class="highlight-phrase">第三點，也是最致命的：「回饋太慢」！</span><br>
+            當老師好不容易把整疊學習單改完發下去，往往已經是三天後甚至下個星期了。孩子拿到本子，看一眼分數或打勾，就塞進書包抽屜，他早就忘了當初自己是怎麼想的！那種「思維碰撞與及時修正」的黃金時機，就這樣流失掉了。
+          </p>
+          <div class="punchline">
+            🚨 老師的時間與心力，全都被繁重的「出題與批改」卡死了，我們哪還有餘裕去關心個別落後的孩子？這就是我們必須引進 AI 的根本原因！
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 4 講稿 ==================== -->
+    <article class="script-section" id="slide-4">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 04</span>
+        <h2 class="slide-topic">評量指北針：PIRLS 閱讀理解四層次</h2>
+        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> PIRLS 四層次階梯（提取訊息、直接推論、詮釋整合、檢驗評估），每層包含核心動作與簡介。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 語調轉為專業、穩健。配合手勢從低往高比劃，形象化表現思維的「爬升過程」。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            既然要用 AI 輔助，AI 就不能亂出題。我們的指北針是什麼？就是教育部與國際上最權威的<strong>「PIRLS 國際閱讀素養評量」</strong>。
+          </p>
+          <p>
+            PIRLS 把閱讀理解精準拆成四個階梯，這也是我寫進 AI 系統核心的靈魂：
+          </p>
+          <p>
+            <strong>第一層次【提取特定訊息】：</strong> 核心動作是「找得到」。答案就在文章裡，清清楚楚寫在那裡，考的是學生的專注力與資訊檢索。
+          </p>
+          <p>
+            <strong>第二層次【直接推論】：</strong> 核心動作是「連得起」。文章沒有明講，但把前一句和後一句連在一起，就能推論出主角為什麼會難過、為什麼會做出這個抉擇。
+          </p>
+          <p>
+            <strong>第三層次【詮釋與整合】：</strong> 核心動作是「想得深」。跳出單一文句，綜觀整篇文章，孩子能不能讀懂作者真正想傳遞的核心意旨？有沒有看出文字背後的寓意？
+          </p>
+          <p>
+            <strong>第四層次【檢驗與評估】：</strong> 核心動作是「說得明」。這是最高階的批判性思維！跳出文章框架：「你同意作者的看法嗎？如果是你，你會怎麼做？請舉生活例子說明。」
+          </p>
+          <div class="punchline">
+            💡 過去傳統考卷 80% 都在考第一層次；但真正決定孩子未來競爭力的，是第二到第四層次的高階思維！而這，正是 AI 能夠大顯身手的地方！
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 5 講稿 ==================== -->
+    <article class="script-section" id="slide-5">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 05</span>
+        <h2 class="slide-topic">思維轉變：人機協同的新教學模式</h2>
+        <span class="time-badge">⏱️ 建議時間：3 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 左右對照（傳統閱讀模式 vs. AI 賦能協同模式）、底部核心原則金句。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 堅定、溫暖的眼神。重申老師不可取代的價值，消除老師對於「會不會被 AI 取代」的潛在焦慮。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            有的老師會問：「那我們都給 AI 做，老師要做什麼？」這張對比圖就是最好的答案。
+          </p>
+          <p>
+            在傳統模式下，老師是「孤軍奮戰」：出題、印卷子、收本子、改到深夜，換來的卻是延遲的回饋，學生也沒有真正學會反思。
+          </p>
+          <p>
+            但在 AI 賦能的協同模式下，我們的角色轉變了：
+          </p>
+          <p>
+            我們把任意一篇適合的文章放進系統，AI 會依據 PIRLS 四大維度，在幾秒鐘內產生嚴謹、分層的提問。當孩子在平板上作答時，AI 依照我們設定好的 Rubric（評分規準），立刻給予孩子具體的鷹架引導——告訴他哪裡說得好、哪裡推論不夠完整，還可以怎麼補充！
+          </p>
+          <p>
+            與此同時，老師的後台儀表板直接顯示出：全班有哪些孩子在第三層次（詮釋整合）卡關了？哪幾位同學需要協助？
+          </p>
+          <div class="punchline">
+            🌟 請大家記得這句金科玉律：「讓 AI 去做繁雜且重複的機械批閱，讓老師去做有溫度、有深度的個別對話與陪伴！」
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 6 講稿 ==================== -->
+    <article class="script-section" id="slide-6">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 06</span>
+        <h2 class="slide-topic">實踐成果：雲端閱讀認證系統</h2>
+        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 實作系統截圖（學生端極簡登入入口 + 教師管理後台導覽列與班級清單）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 語氣自豪且親近，強調這套系統是用 Google AI Studio 原型構建而成，證明現場國小老師也能用現代 AI 工具解決教學問題。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            光說不練不是我們的風格！這不是天馬行空的想像，而是已經實踐出來的系統——也就是畫面上各位看到的<strong>「雲端閱讀認證系統」</strong>。
+          </p>
+          <p>
+            大家可以看到左邊這張圖，這是<strong>「學生端入口」</strong>。介面非常素雅清爽，符合國小孩子的使用習慣。學生登入後，可以直接看到老師指派的閱讀任務，讀完文章後直接在下方回答 PIRLS 四層次題目，送出後秒級獲得 AI 老師的溫柔診斷與星星回饋！
+          </p>
+          <p>
+            而右邊這張圖，則是我們老師專屬的<strong>「教師管理後台」</strong>。在後台裡，老師可以建立班級、管理題庫與文章、一鍵指派任務，還能隨時切換「學生畫面預覽」。最重要的是「測驗成果檢視」，老師不用翻改 30 本簿子，後台自動把全班的理解分佈圖畫好給你看！
+          </p>
+          <p>
+            這套系統的核心大腦，正是運用了 <strong>Google AI Studio</strong> 的 API 與強大的 Gemini 模型所驅動。在接下來的章節裡，我就要帶大家逐步看懂：我們是如何在 AI Studio 裡面把 Prompt 調教得如此精準聽話！
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 7 講稿 ==================== -->
+    <article class="script-section" id="slide-7">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 07</span>
+        <h2 class="slide-topic">大綱審閱與後續規劃總結</h2>
+        <span class="time-badge">⏱️ 建議時間：2 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 三大步驟（確認前導架構、後續章節擴充、GitHub 部署與現場演講）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 結尾語調誠懇有力，邀請台下老師思考提問，並為後續實作環節埋下伏筆。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            以上就是我們今天第一階段的導言與前置大綱！
+          </p>
+          <p>
+            我們從教學的真實痛點出發，錨定了 PIRLS 閱讀理解的四個階梯，確立了人機協同的定位，也帶大家看過實作的系統樣貌。
+          </p>
+          <p>
+            在接下來的實作單元，我們會把後台的神秘面紗一層層揭開，讓每一位老師都能學會：如何自己用 Google AI Studio 設定出題指令？如何給予 AI 明確的批改給分規準？以及如何把它融入到你每週的語文課當中。
+          </p>
+          <p>
+            這份簡報我們已經採用 GitHub 進行線上部署，隨時隨地都可以投影使用，老師手上的這份逐字稿手冊也可以隨時列印或在平板上對照。
+          </p>
+          <p>
+            謝謝大家，接下來請大家審閱並提出反饋，我們馬上進入更精采的下一階段！
+          </p>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+</body>
+</html>

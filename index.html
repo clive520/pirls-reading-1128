@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 賦能閱讀理解：從 PIRLS 架構到智慧化課堂實踐</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3E4B35;
+      --primary-light: #596B4C;
+      --primary-dark: #273121;
+      --accent: #C87D25;
+      --accent-red: #D94841;
+      --bg-cream: #F7F6F1;
+      --card-bg: #FFFFFF;
+      --text-main: #20241D;
+      --text-muted: #5F6659;
+      --border-color: #E2DFD4;
+      --tag-bg: #E7EEE0;
+      --tag-text: #34422B;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* 頂部進度條 */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #3E4B35, #7D976A);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.25s ease;
+    }
+
+    #deck {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px 70px 80px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98);
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      transform: scale(1.02);
+    }
+
+    /* 標題與標籤 - 精簡有力 */
+    .slide-header {
+      margin-bottom: 24px;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 5px 14px;
+      border-radius: 999px;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .slide-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: calc(100vh - 190px);
+    }
+
+    /* ================= Slide 1: 封面 (大器乾淨) ================= */
+    .cover-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .cover-hero-title {
+      font-size: 3.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .cover-hero-title span {
+      display: block;
+      color: #637754;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .cover-punchline {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #384230;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      border-left: 5px solid var(--accent);
+      padding-left: 18px;
+    }
+
+    .cover-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag-item {
+      background: white;
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .cover-card-preview {
+      background: white;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 16px 36px rgba(46, 56, 38, 0.12);
+      border: 1px solid #E2E6DC;
+      text-align: center;
+    }
+
+    .cover-card-preview img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    /* ================= Slide 2: 研習藍圖 (模組化大字) ================= */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .agenda-box {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      position: relative;
+    }
+
+    .agenda-box.highlight {
+      border: 2px solid #738864;
+      background: #FDFAF4;
+    }
+
+    .agenda-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #798D6C;
+      margin-bottom: 8px;
+    }
+
+    .agenda-box h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .agenda-box p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ================= Slide 3: 現場痛點 (高對比大字) ================= */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pain-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 26px;
+      border-top: 6px solid var(--accent-red);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .pain-tag {
+      background: #FDF0EF;
+      color: var(--accent-red);
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 4px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pain-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #262924;
+      margin-bottom: 12px;
+    }
+
+    .pain-desc {
+      font-size: 1.1rem;
+      color: #555A50;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .pain-summary-bar {
+      margin-top: 26px;
+      background: #2D3627;
+      color: #FFF;
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    /* ================= Slide 4: PIRLS 四層次 (階梯大字) ================= */
+    .pirls-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .pirls-step-card {
+      background: white;
+      border-radius: 18px;
+      padding: 26px 22px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pirls-level-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #7A8E6A;
+      margin-bottom: 8px;
+    }
+
+    .pirls-step-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+    }
+
+    .pirls-core-action {
+      background: #F3F5EE;
+      color: var(--primary);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .pirls-brief {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* ================= Slide 5: 人機協同對比 ================= */
+    .split-contrast {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .contrast-box {
+      border-radius: 22px;
+      padding: 32px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .contrast-old {
+      background: #EFEFEA;
+      border: 1px solid #DEDDD6;
+    }
+
+    .contrast-ai {
+      background: #FFFFFF;
+      border: 3px solid #637754;
+      box-shadow: 0 14px 30px rgba(62, 75, 53, 0.1);
+    }
+
+    .contrast-header {
+      font-size: 1.7rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contrast-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contrast-list li {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .golden-rule {
+      margin-top: 22px;
+      background: #EAF0E4;
+      border-left: 5px solid var(--primary);
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 6: 系統實例展示 ================= */
+    .system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .preview-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .preview-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .preview-caption {
+      margin-top: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .preview-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ================= Slide 7: 審閱與下一步 ================= */
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 26px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+    }
+
+    .step-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #637754;
+      margin-bottom: 10px;
+    }
+
+    .step-card h3 {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+    }
+
+    .step-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 1.05rem;
+      color: #4C5246;
+      font-weight: 600;
+    }
+
+    /* ================= 底部導覽控制列 ================= */
+    #deck-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      background: rgba(247, 246, 241, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 50;
+    }
+
+    .control-info {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-indicator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--primary-dark);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: #E8ECE2;
+      border-color: #A6B898;
+    }
+
+    .btn-nav.primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .btn-nav.primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-nav.script-btn {
+      background: #C87D25;
+      color: #FFF;
+      border-color: #B26E1D;
+    }
+
+    .btn-nav.script-btn:hover {
+      background: #B26E1D;
+    }
+
+    /* 目錄跳轉彈窗 */
+    #agenda-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #agenda-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 650px;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #EEE;
+      padding-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .slide-jump-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .jump-item {
+      padding: 12px 16px;
+      border: 1px solid #E5E5DF;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #FAFAFA;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .jump-item:hover {
+      background: #EBF1E6;
+      border-color: #798D6C;
+      color: var(--primary);
+    }
+
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 30px 30px 80px 30px;
+      }
+      .cover-layout {
+        grid-template-columns: 1fr;
+      }
+      .cover-card-preview {
+        display: none;
+      }
+      .pirls-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .agenda-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div id="progress-bar"></div>
+
+  <!-- 簡報容器 -->
+  <main id="deck">
+
+    <!-- ==================== SLIDE 1: 封面 ==================== -->
+    <section class="slide active" data-slide="1">
+      <div class="cover-layout">
+        <div>
+          <div class="slide-badge">國小教師增能研習</div>
+          <h1 class="cover-hero-title">
+            AI 賦能閱讀理解
+            <span>PIRLS 提問 × 智慧批改實踐</span>
+          </h1>
+          <p class="cover-punchline">
+            把繁重出題批改交給 AI，把深度思維對話還給課堂
+          </p>
+          <div class="cover-tags">
+            <div class="tag-item">🎯 PIRLS 閱讀理解四層次</div>
+            <div class="tag-item">⚡ Google AI Studio 實戰</div>
+            <div class="tag-item">💻 雲端閱讀認證系統</div>
+          </div>
+        </div>
+
+        <div class="cover-card-preview">
+          <img src="assets/images/reading_system_login.png" alt="雲端閱讀認證系統入口">
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 2: 研習藍圖 ==================== -->
+    <section class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-badge">ROADMAP</div>
+        <h2 class="slide-title">研習六大模組規劃</h2>
+      </div>
+      <div class="slide-body">
+        <div class="agenda-grid">
+          <div class="agenda-box highlight">
+            <div class="agenda-num">01</div>
+            <h3>現場痛點分析</h3>
+            <p>傳統閱讀教學的三大難題</p>
+          </div>
+
+          <div class="agenda-box highlight">
+            <div class="agenda-num">02</div>
+            <h3>PIRLS 四層次思維</h3>
+            <p>從訊息提取到批判評估</p>
+          </div>
+
+          <div class="agenda-box highlight">
+            <div class="agenda-num">03</div>
+            <h3>雲端閱讀認證系統</h3>
+            <p>師生雙端實作介面展示</p>
+          </div>
+
+          <div class="agenda-box">
+            <div class="agenda-num">04</div>
+            <h3>Google AI Studio 出題</h3>
+            <p>結構化提示詞與批改標準</p>
+          </div>
+
+          <div class="agenda-box">
+            <div class="agenda-num">05</div>
+            <h3>課堂三階段落地</h3>
+            <p>課前自學、課中對話、課後扶助</p>
+          </div>
+
+          <div class="agenda-box">
+            <div class="agenda-num">06</div>
+            <h3>現場體驗與實作</h3>
+            <p>教師動手體驗與 Q&amp;A</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 3: 現場痛點 ==================== -->
+    <section class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-badge">TEACHING CHALLENGES</div>
+        <h2 class="slide-title">國小閱讀教學的三大現場痛點</h2>
+      </div>
+      <div class="slide-body">
+        <div class="pain-grid">
+          <div class="pain-card">
+            <div class="pain-tag">痛點 1</div>
+            <div class="pain-title">出題難</div>
+            <div class="pain-desc">
+              好問題難生！常停留在表面「找人名、找時間」，缺乏高層次思維提問。
+            </div>
+          </div>
+
+          <div class="pain-card">
+            <div class="pain-tag">痛點 2</div>
+            <div class="pain-title">批改累</div>
+            <div class="pain-desc">
+              全班 30 本開放式簡答，字字推敲，耗費大量下班時間批閱。
+            </div>
+          </div>
+
+          <div class="pain-card">
+            <div class="pain-tag">痛點 3</div>
+            <div class="pain-title">回饋慢</div>
+            <div class="pain-desc">
+              批改發回已隔數日，學生早忘光當初想法，錯失認知修正最佳時機。
+            </div>
+          </div>
+        </div>
+
+        <div class="pain-summary-bar">
+          🚨 核心瓶頸：老師時間被繁重批改卡住，無法聚焦個別化引導！
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 4: PIRLS 四層次 ==================== -->
+    <section class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-badge">PIRLS FRAMEWORK</div>
+        <h2 class="slide-title">評量指北針：PIRLS 閱讀理解四層次</h2>
+      </div>
+      <div class="slide-body">
+        <div class="pirls-grid">
+          <div class="pirls-step-card">
+            <div class="pirls-level-label">LEVEL 1 • 基礎</div>
+            <div class="pirls-step-title">提取特定訊息</div>
+            <div class="pirls-core-action">找得到 • 字面資訊</div>
+            <div class="pirls-brief">找尋文章直接清楚說出的人事物與時間。</div>
+          </div>
+
+          <div class="pirls-step-card">
+            <div class="pirls-level-label">LEVEL 2 • 進階</div>
+            <div class="pirls-step-title">推論與延伸</div>
+            <div class="pirls-core-action">連得起 • 前後因果</div>
+            <div class="pirls-brief">連結前後文意，推導出未直接明言的心情或動機。</div>
+          </div>
+
+          <div class="pirls-step-card">
+            <div class="pirls-level-label">LEVEL 3 • 高階</div>
+            <div class="pirls-step-title">詮釋與整合</div>
+            <div class="pirls-core-action">想得深 • 主旨寓意</div>
+            <div class="pirls-brief">貫穿整篇文章，掌握核心意旨與深層哲理。</div>
+          </div>
+
+          <div class="pirls-step-card">
+            <div class="pirls-level-label">LEVEL 4 • 批判</div>
+            <div class="pirls-step-title">檢驗與評估</div>
+            <div class="pirls-core-action">說得明 • 批判省思</div>
+            <div class="pirls-brief">跳出文本視角，省思作者觀點並連結自身經驗。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 5: 人機協同模式 ==================== -->
+    <section class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-badge">PARADIGM SHIFT</div>
+        <h2 class="slide-title">思維轉變：人機協同的新教學模式</h2>
+      </div>
+      <div class="slide-body">
+        <div class="split-contrast">
+          <div class="contrast-box contrast-old">
+            <div>
+              <div class="contrast-header" style="color: #646860;">❌ 傳統閱讀模式</div>
+              <ul class="contrast-list">
+                <li>• 老師包辦出題，容易偏頗重事實</li>
+                <li>• 批改耗費 3~5 天，回饋嚴重滯後</li>
+                <li>• 只打勾打叉，缺乏具體引導話語</li>
+              </ul>
+            </div>
+            <div style="font-weight: 700; color: #7A7F75; margin-top: 16px;">
+              老師累得精疲力竭，學生收效有限
+            </div>
+          </div>
+
+          <div class="contrast-box contrast-ai">
+            <div>
+              <div class="contrast-header" style="color: var(--primary);">✅ AI 賦能協同模式</div>
+              <ul class="contrast-list">
+                <li>• <strong>AI 智慧出題：</strong>依 PIRLS 4 維度瞬間出題</li>
+                <li>• <strong>AI 秒級診斷：</strong>即時鷹架提示與給分</li>
+                <li>• <strong>數據化報表：</strong>全班弱點掌握一目了然</li>
+              </ul>
+            </div>
+            <div class="golden-rule">
+              💡 核心原則：讓 AI 處理繁複瑣事，讓老師專注深刻對話
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 6: 系統實踐展示 ==================== -->
+    <section class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-badge">SYSTEM PREVIEW</div>
+        <h2 class="slide-title">實踐成果：雲端閱讀認證系統</h2>
+      </div>
+      <div class="slide-body">
+        <div class="system-grid">
+          <div class="preview-card">
+            <img src="assets/images/reading_system_login.png" alt="雲端閱讀認證系統學生與老師入口">
+            <div class="preview-caption">學生端入口</div>
+            <div class="preview-sub">乾淨無干擾 • 即時作答與智慧回饋</div>
+          </div>
+
+          <div class="preview-card">
+            <img src="assets/images/teacher_dashboard.png" alt="教師管理後台">
+            <div class="preview-caption">教師管理後台</div>
+            <div class="preview-sub">班級管理 • 題庫管理 • 任務指派 • 成果數據</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 7: 審閱與後續規劃 ==================== -->
+    <section class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-badge">REVIEW &amp; NEXT STEPS</div>
+        <h2 class="slide-title">大綱審閱與後續章節規劃</h2>
+      </div>
+      <div class="slide-body">
+        <div class="step-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h3>確認前導架構</h3>
+            <ul>
+              <li>• 痛點喚醒切入</li>
+              <li>• PIRLS 四層次定位</li>
+              <li>• 系統成果展示</li>
+            </ul>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h3>後續章節擴充</h3>
+            <ul>
+              <li>• AI Studio 提示詞配方</li>
+              <li>• 真實課文出題與批改範例</li>
+              <li>• 課堂 3 階段教學活動設計</li>
+            </ul>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h3>部署與現場演講</h3>
+            <ul>
+              <li>• 搭配獨立逐字稿網頁</li>
+              <li>• 一鍵推送到 GitHub Pages</li>
+              <li>• 隨時隨地開啟投影演講</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部導覽列 -->
+  <footer id="deck-controls">
+    <div class="control-info">
+      <span>AI 協助國小閱讀理解 • PIRLS 專題研習</span>
+      <span class="page-indicator" id="page-num">1 / 7</span>
+    </div>
+
+    <div class="control-buttons">
+      <a href="script.html" target="_blank" class="btn-nav script-btn" title="在新分頁開啟講者逐字稿網頁">🎙️ 講者逐字稿</a>
+      <button class="btn-nav" id="btn-agenda" title="查看目錄">📑 目錄</button>
+      <button class="btn-nav" id="btn-prev" title="上一頁 (←)">上一頁</button>
+      <button class="btn-nav primary" id="btn-next" title="下一頁 (→)">下一頁</button>
+      <button class="btn-nav" id="btn-fullscreen" title="全螢幕 (F)">⛶ 全螢幕</button>
+    </div>
+  </footer>
+
+  <!-- 目錄跳轉彈窗 -->
+  <div id="agenda-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">快速跳轉至投影片</h3>
+        <button class="close-btn" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="slide-jump-grid">
+        <div class="jump-item" data-jump="1"><span>01</span> 封面：AI 賦能閱讀理解</div>
+        <div class="jump-item" data-jump="2"><span>02</span> 研習六大模組規劃</div>
+        <div class="jump-item" data-jump="3"><span>03</span> 國小閱讀三大現場痛點</div>
+        <div class="jump-item" data-jump="4"><span>04</span> 評量指北針：PIRLS 四層次</div>
+        <div class="jump-item" data-jump="5"><span>05</span> 思維轉變：人機協同新模式</div>
+        <div class="jump-item" data-jump="6"><span>06</span> 實踐成果：雲端閱讀認證系統</div>
+        <div class="jump-item" data-jump="7"><span>07</span> 大綱審閱與後續規劃</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const pageIndicator = document.getElementById('page-num');
+    const progressBar = document.getElementById('progress-bar');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const btnAgenda = document.getElementById('btn-agenda');
+    const agendaModal = document.getElementById('agenda-modal');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    const jumpItems = document.querySelectorAll('.jump-item');
+
+    function updateSlide(targetIndex) {
+      if (targetIndex < 1) targetIndex = 1;
+      if (targetIndex > totalSlides) targetIndex = totalSlides;
+
+      slides.forEach((slide, idx) => {
+        const slideIndex = idx + 1;
+        slide.classList.remove('active', 'prev');
+        if (slideIndex === targetIndex) {
+          slide.classList.add('active');
+        } else if (slideIndex < targetIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      currentSlide = targetIndex;
+      pageIndicator.textContent = `${currentSlide} / ${totalSlides}`;
+      progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      btnPrev.disabled = (currentSlide === 1);
+      btnNext.disabled = (currentSlide === totalSlides);
+    }
+
+    btnPrev.addEventListener('click', () => updateSlide(currentSlide - 1));
+    btnNext.addEventListener('click', () => updateSlide(currentSlide + 1));
+
+    window.addEventListener('keydown', (e) => {
+      if (agendaModal.classList.contains('active')) {
+        if (e.key === 'Escape') agendaModal.classList.remove('active');
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          updateSlide(currentSlide + 1);
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          updateSlide(currentSlide - 1);
+          break;
+        case 'Home':
+          updateSlide(1);
+          break;
+        case 'End':
+          updateSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'm':
+        case 'M':
+          agendaModal.classList.toggle('active');
+          break;
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    btnAgenda.addEventListener('click', () => agendaModal.classList.add('active'));
+    btnCloseModal.addEventListener('click', () => agendaModal.classList.remove('active'));
+    agendaModal.addEventListener('click', (e) => {
+      if (e.target === agendaModal) agendaModal.classList.remove('active');
+    });
+
+    jumpItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = parseInt(item.getAttribute('data-jump'), 10);
+        updateSlide(target);
+        agendaModal.classList.remove('active');
+      });
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    window.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) updateSlide(currentSlide + 1);
+      if (touchEndX > touchStartX + 50) updateSlide(currentSlide - 1);
+    }, false);
+
+    updateSlide(1);
+  </script>
+</body>
+</html>
