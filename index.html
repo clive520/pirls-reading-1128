@@ -288,53 +288,136 @@
       letter-spacing: 0.03em;
     }
 
-    /* ================= Slide 4: PIRLS 四層次 (階梯大字) ================= */
-    .pirls-grid {
+    /* ================= Slide 4: PIRLS 四象限排版 (2x2 矩陣) ================= */
+    .quadrant-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      align-content: stretch;
     }
 
-    .pirls-step-card {
+    .quadrant-card {
       background: white;
-      border-radius: 18px;
-      padding: 26px 22px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+      border-radius: 20px;
+      padding: 22px 28px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.03);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
     }
 
-    .pirls-level-label {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #7A8E6A;
+    .quadrant-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(62, 75, 53, 0.08);
+    }
+
+    .quadrant-card.q1 {
+      border-left: 6px solid #536E46;
+    }
+    .quadrant-card.q2 {
+      border-left: 6px solid #3B5F71;
+    }
+    .quadrant-card.q3 {
+      border-left: 6px solid #9C6C2E;
+    }
+    .quadrant-card.q4 {
+      border-left: 6px solid #994441;
+    }
+
+    .q-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 8px;
     }
 
-    .pirls-step-title {
-      font-size: 1.55rem;
+    .q-pill {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .q1 .q-pill { background: #EBF1E6; color: #364C2E; }
+    .q2 .q-pill { background: #E9F1F5; color: #264757; }
+    .q3 .q-pill { background: #F8F0E4; color: #724A18; }
+    .q4 .q-pill { background: #FBEBEA; color: #752927; }
+
+    .q-level-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .q-title {
+      font-size: 1.7rem;
       font-weight: 900;
       color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .q-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 5px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+
+    .q1 .q-action-pill { background: #F1F6EE; color: #2C4223; }
+    .q2 .q-action-pill { background: #EEF5F8; color: #1D3E4F; }
+    .q3 .q-action-pill { background: #FBF4EB; color: #613C0F; }
+    .q4 .q-action-pill { background: #FBEEEE; color: #691E1C; }
+
+    .q-desc {
+      font-size: 1.02rem;
+      color: #4E5648;
+      line-height: 1.5;
+      font-weight: 600;
       margin-bottom: 10px;
     }
 
-    .pirls-core-action {
-      background: #F3F5EE;
-      color: var(--primary);
-      padding: 8px 12px;
+    .q-example-box {
+      background: #F7F7F2;
       border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 800;
-      margin-bottom: 14px;
+      padding: 8px 14px;
+      font-size: 0.92rem;
+      color: #4C5447;
+      border-left: 3px solid #BAC4B2;
+      font-weight: 600;
     }
 
-    .pirls-brief {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      line-height: 1.5;
+    .quadrant-center-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2C3524;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      padding: 8px 18px;
+      border-radius: 99px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      border: 4px solid var(--bg-cream);
+      z-index: 10;
+      pointer-events: none;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
     }
 
     /* ================= Slide 5: 人機協同對比 ================= */
@@ -646,8 +729,11 @@
       .cover-card-preview {
         display: none;
       }
-      .pirls-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .quadrant-wrapper {
+        gap: 14px;
+      }
+      .quadrant-center-badge {
+        display: none;
       }
       .agenda-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -774,41 +860,81 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 4: PIRLS 四層次 ==================== -->
+    <!-- ==================== SLIDE 4: PIRLS 四層次 (四象限排版) ==================== -->
     <section class="slide" data-slide="4">
       <div class="slide-header">
         <div class="slide-badge">PIRLS FRAMEWORK</div>
-        <h2 class="slide-title">評量指北針：PIRLS 閱讀理解四層次</h2>
+        <h2 class="slide-title">評量指北針：PIRLS 閱讀理解四層次 (四象限)</h2>
       </div>
       <div class="slide-body">
-        <div class="pirls-grid">
-          <div class="pirls-step-card">
-            <div class="pirls-level-label">LEVEL 1 • 基礎</div>
-            <div class="pirls-step-title">提取特定訊息</div>
-            <div class="pirls-core-action">找得到 • 字面資訊</div>
-            <div class="pirls-brief">找尋文章直接清楚說出的人事物與時間。</div>
+        <div class="quadrant-wrapper">
+          <!-- 中央核心徽章 -->
+          <div class="quadrant-center-badge">PIRLS 閱讀素養核心</div>
+
+          <!-- 第一象限：左上 -->
+          <div class="quadrant-card q1">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第一象限 • 基礎</span>
+                <span class="q-level-tag">LEVEL 1 • 字面檢索</span>
+              </div>
+              <h3 class="q-title">提取特定訊息</h3>
+              <div class="q-action-pill">🔍 找得到 • 字面直接陳述</div>
+              <p class="q-desc">在文章中搜尋並找出直接清楚陳述的事實、人物、時間與地點。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「故事的主角在森林裡遇到了誰？」
+            </div>
           </div>
 
-          <div class="pirls-step-card">
-            <div class="pirls-level-label">LEVEL 2 • 進階</div>
-            <div class="pirls-step-title">推論與延伸</div>
-            <div class="pirls-core-action">連得起 • 前後因果</div>
-            <div class="pirls-brief">連結前後文意，推導出未直接明言的心情或動機。</div>
+          <!-- 第二象限：右上 -->
+          <div class="quadrant-card q2">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第二象限 • 進階</span>
+                <span class="q-level-tag">LEVEL 2 • 文意推論</span>
+              </div>
+              <h3 class="q-title">推論與延伸</h3>
+              <div class="q-action-pill">🔗 連得起 • 前後文因果</div>
+              <p class="q-desc">連結前後文句，推敲字面未直接明說的因果關係、角色動機或心境轉折。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「主角為什麼會做出這個決定？從哪裡看出來？」
+            </div>
           </div>
 
-          <div class="pirls-step-card">
-            <div class="pirls-level-label">LEVEL 3 • 高階</div>
-            <div class="pirls-step-title">詮釋與整合</div>
-            <div class="pirls-core-action">想得深 • 主旨寓意</div>
-            <div class="pirls-brief">貫穿整篇文章，掌握核心意旨與深層哲理。</div>
+          <!-- 第三象限：左下 -->
+          <div class="quadrant-card q3">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第三象限 • 高階</span>
+                <span class="q-level-tag">LEVEL 3 • 篇章統整</span>
+              </div>
+              <h3 class="q-title">詮釋與整合</h3>
+              <div class="q-action-pill">💡 想得深 • 篇章主旨寓意</div>
+              <p class="q-desc">貫穿整篇文章，統整不同段落訊息，理解作者的寫作意圖、核心價值或隱喻。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「這篇寓言故事想要傳達給我們什麼道理？」
+            </div>
           </div>
 
-          <div class="pirls-step-card">
-            <div class="pirls-level-label">LEVEL 4 • 批判</div>
-            <div class="pirls-step-title">檢驗與評估</div>
-            <div class="pirls-core-action">說得明 • 批判省思</div>
-            <div class="pirls-brief">跳出文本視角，省思作者觀點並連結自身經驗。</div>
+          <!-- 第四象限：右下 -->
+          <div class="quadrant-card q4">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第四象限 • 批判</span>
+                <span class="q-level-tag">LEVEL 4 • 批判省思</span>
+              </div>
+              <h3 class="q-title">檢驗與評估</h3>
+              <div class="q-action-pill">⚖️ 說得明 • 批判與生活連結</div>
+              <p class="q-desc">跳脫文本視角，省思作者觀點與寫作手法，並結合生活經驗提出批判與評價。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「如果是你，你會採取主角的做法嗎？請說明理由。」
+            </div>
           </div>
+
         </div>
       </div>
     </section>
