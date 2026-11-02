@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何設定 GitHub Repo 為公開的 GitHub Pages？完整實戰教學簡報</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --bg-card: #111827;
+      --bg-card-hover: #162032;
+      --bg-surface: #1e293b;
+      --border-subtle: #1e293b;
+      --border-glow: #334155;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-bright: #ffffff;
+      
+      --gh-green: #22c55e;
+      --gh-green-glow: rgba(34, 197, 94, 0.25);
+      --gh-blue: #38bdf8;
+      --gh-blue-glow: rgba(56, 189, 248, 0.2);
+      --gh-purple: #a855f7;
+      --gh-amber: #f59e0b;
+      
+      --transition-speed: 0.35s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* 頂部動態進度條 */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #22c55e, #a855f7);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #deck {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: clamp(16px, 3vh, 32px) clamp(20px, 4.5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px) scale(0.99);
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+      z-index: 10;
+    }
+
+    /* 標頭樣式 */
+    .slide-header {
+      margin-bottom: clamp(14px, 2.4vh, 22px);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(0.72rem, 1.1vw, 0.82rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--gh-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .slide-badge.green {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--gh-green);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    .slide-badge.purple {
+      background: rgba(168, 85, 247, 0.12);
+      color: var(--gh-purple);
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .slide-title {
+      font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slide-desc {
+      font-size: clamp(0.92rem, 1.25vw, 1.08rem);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* 內容容器區塊 */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      gap: clamp(16px, 2.5vw, 32px);
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    /* 左右雙欄 */
+    .col-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(12px, 1.8vh, 18px);
+      justify-content: center;
+    }
+
+    .col-right {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* 卡片設計 */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: clamp(14px, 2.2vh, 20px) clamp(16px, 2vw, 24px);
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+    }
+
+    .card.highlight-green {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: linear-gradient(145deg, #111827, #0d1e18);
+      box-shadow: 0 8px 24px var(--gh-green-glow);
+    }
+
+    .card.highlight-blue {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: linear-gradient(145deg, #111827, #0e1e2d);
+      box-shadow: 0 8px 24px var(--gh-blue-glow);
+    }
+
+    .card-title {
+      font-size: clamp(1.05rem, 1.4vw, 1.22rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-desc {
+      font-size: clamp(0.88rem, 1.15vw, 0.98rem);
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 截圖展示框（模擬現代視窗） */
+    .mockup-window {
+      width: 100%;
+      max-height: 100%;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mockup-titlebar {
+      height: 32px;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 8px;
+    }
+
+    .mockup-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .mockup-address {
+      flex: 1;
+      height: 20px;
+      background: #0d1117;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #8b949e;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      margin: 0 16px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mockup-content {
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0d1117;
+      position: relative;
+    }
+
+    .mockup-img {
+      max-width: 100%;
+      max-height: clamp(240px, 45vh, 440px);
+      object-fit: contain;
+      border-radius: 8px;
+      border: 1px solid #21262d;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    /* 重點聚焦效果與引導箭頭 */
+    .focus-callout {
+      position: absolute;
+      border: 2px solid #22c55e;
+      background: rgba(34, 197, 94, 0.15);
+      border-radius: 8px;
+      pointer-events: none;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+    }
+
+    /* 程式碼 / 網址展示框 */
+    .code-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+      color: var(--gh-blue);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      word-break: break-all;
+    }
+
+    .code-box.green {
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+      background: rgba(34, 197, 94, 0.05);
+    }
+
+    /* 步驟清單 */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .step-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--gh-blue);
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gh-blue);
+      color: #04121e;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-num.green {
+      background: var(--gh-green);
+      color: #031c0c;
+    }
+
+    .step-content h4 {
+      font-size: clamp(0.95rem, 1.25vw, 1.05rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 3px;
+    }
+
+    .step-content p {
+      font-size: clamp(0.82rem, 1.05vw, 0.92rem);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* 封面特色網格 */
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    .cover-card {
+      background: linear-gradient(180deg, #151d2e 0%, #0d131f 100%);
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gh-blue), var(--gh-green));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .cover-card:hover::before {
+      opacity: 1;
+    }
+
+    .cover-card-icon {
+      font-size: 2rem;
+    }
+
+    .cover-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .cover-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 底部導覽列 */
+    #nav-bar {
+      height: clamp(52px, 7vh, 64px);
+      background: rgba(10, 14, 23, 0.9);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 3vw, 40px);
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #1e293b;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #334155;
+      border-color: #475569;
+      color: #ffffff;
+    }
+
+    .btn.primary {
+      background: #22c55e;
+      color: #031c0c;
+      border-color: #16a34a;
+    }
+
+    .btn.primary:hover {
+      background: #16a34a;
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .slide-counter {
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 65px;
+      text-align: center;
+    }
+
+    .slide-counter span {
+      color: var(--text-bright);
+    }
+
+    /* 大綱目錄 Modal */
+    #agenda-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    #agenda-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: min(850px, 92vw);
+      max-height: 85vh;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .jump-item {
+      padding: 14px 16px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .jump-item:hover {
+      border-color: var(--gh-blue);
+      background: #253349;
+      transform: translateY(-2px);
+    }
+
+    .jump-item-num {
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-size: 0.78rem;
+      color: var(--gh-blue);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .jump-item-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.4;
+    }
+
+    /* 快捷鍵提示標籤 */
+    .kbd {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+    }
+
+    @media (max-width: 900px) {
+      .slide-body {
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .cover-grid {
+        grid-template-columns: 1fr;
+      }
+      .col-right {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div id="progress-bar"></div>
+
+  <!-- 簡報投影主要舞台 -->
+  <main id="deck">
+
+    <!-- ==================== SLIDE 1: 封面 ==================== -->
+    <section class="slide active" data-index="1">
+      <div class="slide-header" style="text-align: center; align-items: center; margin-top: clamp(20px, 4vh, 40px);">
+        <div class="badge-row">
+          <span class="slide-badge green">🚀 GitHub Pages 完整實戰指南</span>
+          <span class="slide-badge">零伺服器極速上線</span>
+        </div>
+        <h1 class="slide-title" style="font-size: clamp(2rem, 3.8vw, 3.2rem); justify-content: center; margin: 12px 0 8px;">
+          如何設定 GitHub Repo 為公開 Pages？
+        </h1>
+        <p class="slide-desc" style="max-width: 760px; font-size: clamp(1rem, 1.4vw, 1.25rem);">
+          只要 5 個直覺點擊動作，無須自建 Web 伺服器，將您的 HTML 簡報、互動網頁、成果作品一鍵發布至全球高可用 CDN！
+        </p>
+      </div>
+
+      <div class="cover-grid" style="max-width: 1080px; margin: 24px auto 0;">
+        <div class="cover-card">
+          <div class="cover-card-icon">⚡</div>
+          <h3>1. 最速直接發布</h3>
+          <p>免寫任何設定檔，在 GitHub 介面勾選 <code style="color:var(--gh-blue)">main</code> 分支與根目錄，按下 Save 立即生效。</p>
+        </div>
+
+        <div class="cover-card">
+          <div class="cover-card-icon">🔒</div>
+          <h3>2. 全球 CDN 與 HTTPS</h3>
+          <p>GitHub 原生提供免費 SSL 加密憑證、超低延遲全球邊緣節點加速，完全零維護負擔。</p>
+        </div>
+
+        <div class="cover-card">
+          <div class="cover-card-icon">🔄</div>
+          <h3>3. Git 推送秒級同步</h3>
+          <p>本地更新只需 <code style="color:var(--gh-green)">git push</code>，雲端自動同步重構，多個 HTML 頁面獨立網址共存。</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px;">
+        <span style="font-size: 0.88rem; color: var(--text-muted);">
+          按鍵盤 <span class="kbd">→</span> 或點擊右下角「下一頁」開始逐步設定教學
+        </span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 2: 步驟一 ==================== -->
+    <section class="slide" data-index="2">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="slide-badge">步驟 01 / STEP 01</span>
+          <span class="slide-badge green">專案設定入口</span>
+        </div>
+        <h2 class="slide-title">開啟專案倉庫，進入 Settings（設定）</h2>
+        <p class="slide-desc">找到專案最核心的管理中樞，開啟部署配置權限。</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h4>瀏覽專案儲存庫首頁</h4>
+                <p>開啟瀏覽器，登入 GitHub 並進入您要發布的 Repository（例如：<code style="color:var(--gh-blue)">lyps_pirls_V4</code> 或 <code style="color:var(--gh-blue)">pirls-reading-1128</code>）。</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h4>點擊頂部選單最右側「Settings」</h4>
+                <p>在專案頂部頁籤中，點選齒輪圖示的 <strong>Settings</strong> 選項，進入倉庫設定面板。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card highlight-blue" style="margin-top: 8px;">
+            <div class="card-title">💡 重點備忘與權限檢查</div>
+            <div class="card-desc">
+              • <strong>管理者權限</strong>：必須是該儲存庫的擁有者（Owner）或擁有 Admin 管理權限。<br>
+              • <strong>Public 公開儲存庫</strong>：免費版 GitHub 帳號對 Public 儲存庫無限制提供 Pages 服務；若是 Private 則需升級為付費帳號或將 Repo 設為 Public。
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="mockup-window">
+            <div class="mockup-titlebar">
+              <div class="mockup-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <div class="mockup-address">github.com/chihshien896-pig/lyps_pirls_V4</div>
+            </div>
+            <div class="mockup-content">
+              <img src="assets/images/gh_pages_step1_repo_settings.png" alt="步驟一：點擊頂部選單的 Settings" class="mockup-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 3: 步驟二 ==================== -->
+    <section class="slide" data-index="3">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="slide-badge">步驟 02 / STEP 02</span>
+          <span class="slide-badge purple">側邊欄功能定位</span>
+        </div>
+        <h2 class="slide-title">在左側選單點選「Pages」</h2>
+        <p class="slide-desc">於眾多自動化與程式碼設定項目中，切換至 GitHub Pages 專用配置中心。</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h4>尋找側邊欄分組</h4>
+                <p>向下滾動左側導覽目錄，找到 <strong>Code, planning, and automation</strong>（程式碼、規劃與自動化）分組。</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h4>點選「Pages」分頁標籤</h4>
+                <p>點選帶有網頁視窗小圖示的 <strong>Pages</strong>，畫面中央將載入 GitHub Pages 的管理與建置介面。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 8px;">
+            <div class="card-title">🔍 什麼是 GitHub Pages？</div>
+            <div class="card-desc">
+              GitHub Pages 是 GitHub 提供的免費靜態網站代管服務。它會直接從您的儲存庫讀取 HTML、CSS、JavaScript 及圖片資源，並賦予一個專屬且受 HTTPS 保護的公開網址。
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="mockup-window" style="max-width: 480px;">
+            <div class="mockup-titlebar">
+              <div class="mockup-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <div class="mockup-address">Settings > Code, planning, and automation > Pages</div>
+            </div>
+            <div class="mockup-content">
+              <img src="assets/images/gh_pages_step2_sidebar_pages.png" alt="步驟二：在左側選單點選 Pages" class="mockup-img" style="max-height: 400px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 4: 步驟三 ==================== -->
+    <section class="slide" data-index="4">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="slide-badge">步驟 03 / STEP 03</span>
+          <span class="slide-badge green">核心發布配置</span>
+        </div>
+        <h2 class="slide-title">設定 Build and deployment（來源與分支）</h2>
+        <p class="slide-desc">根據專案架構選擇最適合的部署模式（最速分支發布 vs. 自動化 Actions）。</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="card highlight-green">
+            <div class="card-title">
+              <span style="color:var(--gh-green); font-size:1.3rem;">⚡</span>
+              最速做法：Deploy from a branch（直接以分支發布）
+            </div>
+            <div class="card-desc" style="color: #cbd5e1; margin-top: 6px;">
+              <strong>適合對象</strong>：靜態 HTML 簡報、純靜態展示網站、手刻 HTML/JS 專案。<br>
+              <strong>設定步驟</strong>：
+              <ol style="margin-left: 20px; margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+                <li>在 <strong>Source（來源）</strong> 下拉選單選取 <code>Deploy from a branch</code>。</li>
+                <li>在 <strong>Branch</strong> 下方將分支選為 <code>main</code>（或舊版 <code>master</code>）。</li>
+                <li>目錄資料夾選 <code>/ (root)</code> 根目錄。</li>
+                <li>按下 <strong>Save（儲存）</strong> 按鈕即可！</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span style="color:var(--gh-blue); font-size:1.3rem;">🤖</span>
+              推薦進階做法：GitHub Actions（自動化完整發布）
+            </div>
+            <div class="card-desc">
+              <strong>適合對象</strong>：使用 React、Vue、Vite、Node 打包或需自定義 CI/CD 建置流程的專案。GitHub 會自動偵測 <code>.github/workflows</code> 並在每次 push 時自動編譯發布。
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="mockup-window">
+            <div class="mockup-titlebar">
+              <div class="mockup-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <div class="mockup-address">GitHub Pages > Build and deployment</div>
+            </div>
+            <div class="mockup-content">
+              <img src="assets/images/gh_pages_step3_build_deployment.png" alt="步驟三：設定 Build and deployment 來源與分支" class="mockup-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 5: 步驟四 ==================== -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="slide-badge green">步驟 04 / STEP 04</span>
+          <span class="slide-badge">部署成功上線</span>
+        </div>
+        <h2 class="slide-title">靜候 1~2 分鐘，網站正式發布成功！</h2>
+        <p class="slide-desc">查看綠色成功通知與專屬網址，一鍵點擊即可公開瀏覽。</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left">
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num green">✓</div>
+              <div class="step-content">
+                <h4>GitHub 背景自動建置部署</h4>
+                <p>按下 Save 之後，GitHub 會在背後建立排程打包。只需靜候約 <strong>60 ~ 120 秒</strong>，重新整理網頁。</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-num green">★</div>
+              <div class="step-content">
+                <h4>頂端出現綠色「Your site is live at...」</h4>
+                <p>當畫面頂部浮現綠色通知橫幅時，即代表部署全面成功！隨附即時上線網址。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-box green" style="margin-top: 10px;">
+            <span>🌐 上線網址格式：<br><strong>https://&lt;username&gt;.github.io/&lt;repository-name&gt;/</strong></span>
+          </div>
+
+          <div class="card" style="margin-top: 10px;">
+            <div class="card-title">🔗 快速開啟與操作按鈕</div>
+            <div class="card-desc">
+              • 點擊 <strong>Visit site</strong>：直接開新分頁檢視首頁。<br>
+              • <strong>Unpublish site</strong>：若日後需暫時下線或停止公開託管，隨時可在此解除發布。
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right">
+          <div class="mockup-window">
+            <div class="mockup-titlebar">
+              <div class="mockup-dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+              <div class="mockup-address">GitHub Pages > Your site is live!</div>
+            </div>
+            <div class="mockup-content">
+              <img src="assets/images/gh_pages_step4_live_success.png" alt="步驟四：部署成功上線橫幅" class="mockup-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 6: 網址架構與多頁面共存 ==================== -->
+    <section class="slide" data-index="6">
+      <div class="slide-header">
+        <div class="badge-row">
+          <span class="slide-badge purple">進階實踐 / PRO TIPS</span>
+          <span class="slide-badge">網址規則與多頁共存</span>
+        </div>
+        <h2 class="slide-title">同一個 Repo，如何部署多份不同 HTML 簡報？</h2>
+        <p class="slide-desc">活用靜態檔案路徑映射，一套專案倉庫輕鬆承載多個獨立作品與簡報！</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="col-left" style="flex:1;">
+          <div class="card highlight-blue">
+            <div class="card-title">📂 檔案名稱與網址對應規則</div>
+            <div class="card-desc" style="color: #cbd5e1; display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <strong style="color:var(--gh-blue)">1. 專案預設首頁（預設載入）：</strong><br>
+                檔案：<code>index.html</code><br>
+                網址：<code>https://clive520.github.io/pirls-reading-1128/</code>
+              </div>
+              <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                <strong style="color:var(--gh-green)">2. 本份 GitHub Pages 教學簡報（獨立檔名）：</strong><br>
+                檔案：<code>github-pages-tutorial.html</code><br>
+                網址：<code>https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html</code>
+              </div>
+              <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                <strong style="color:var(--gh-purple)">3. 講者逐字稿手冊：</strong><br>
+                檔案：<code>script.html</code><br>
+                網址：<code>https://clive520.github.io/pirls-reading-1128/script.html</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right" style="flex:1;">
+          <div class="card highlight-green" style="width: 100%;">
+            <div class="card-title">💡 日常更新與維護工作流</div>
+            <div class="card-desc" style="line-height: 1.8;">
+              只要將新建立的 HTML 檔案放在專案根目錄，終端機執行三行指令：
+              <div class="code-box" style="margin: 10px 0; font-size:0.85rem; color:#f1f5f9; background:#0d1117;">
+                git add .<br>
+                git commit -m "feat: add github pages guide slide"<br>
+                git push origin main
+              </div>
+              GitHub 就會<strong>自動觸發熱更新</strong>！完全不需要再去後台點 Save，1 分鐘內全球立即同步。
+            </div>
+          </div>
+
+          <div class="card" style="width: 100%; margin-top: 14px;">
+            <div class="card-title">🏷️ 檔名命名黃金建議</div>
+            <div class="card-desc">
+              建議一律採用 <strong>全小寫英文字母 + 連字號（kebab-case）</strong>，例如：<br>
+              <code>github-pages-tutorial.html</code>、<code>lecture-part2.html</code>。<br>
+              避免使用中文、空白或特殊符號，確保網址乾淨且在各國行動裝置與社群分享時不亂碼。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 7: 總結與排錯 CheckList ==================== -->
+    <section class="slide" data-index="7">
+      <div class="slide-header" style="text-align: center; align-items: center;">
+        <div class="badge-row">
+          <span class="slide-badge green">總結速查 / CHECKLIST</span>
+          <span class="slide-badge">常見排錯指南</span>
+        </div>
+        <h2 class="slide-title" style="justify-content: center;">一分鐘總結與常見問題排除</h2>
+        <p class="slide-desc">掌握核心流程，隨時排除常見上線疑難雜症。</p>
+      </div>
+
+      <div class="slide-body" style="max-width: 1000px; margin: 0 auto; width: 100%;">
+        <div class="col-left" style="flex:1;">
+          <div class="card highlight-green">
+            <div class="card-title">📋 4 步極速上線口訣</div>
+            <div class="card-desc" style="font-size: 1rem; line-height: 2;">
+              ① 進入專案頂部 <strong>Settings</strong> 齒輪<br>
+              ② 左側側邊欄點選 <strong>Pages</strong><br>
+              ③ Source 選 <strong>Deploy from a branch</strong><br>
+              ④ Branch 設為 <strong>main</strong> 與 <strong>/ (root)</strong> ➔ 點擊 <strong>Save</strong>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 12px;">
+            <div class="card-title">🔗 本專案所有線上成果入口</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top: 10px;">
+              <a href="https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html" target="_blank" class="btn primary" style="justify-content:flex-start;">
+                🎯 本份 GitHub Pages 教學簡報網址
+              </a>
+              <a href="https://clive520.github.io/pirls-reading-1128/" target="_blank" class="btn" style="justify-content:flex-start;">
+                🖥️ PIRLS 閱讀理解互動簡報（主頁）
+              </a>
+              <a href="https://clive520.github.io/pirls-reading-1128/script.html" target="_blank" class="btn" style="justify-content:flex-start;">
+                🎙️ 講者逐字稿手冊（Speaker Script）
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-right" style="flex:1.1;">
+          <div class="card" style="width: 100%;">
+            <div class="card-title">⚠️ 常見排錯與解決方案</div>
+            <div class="card-desc" style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
+              <div>
+                <strong style="color:var(--gh-amber)">Q1: 按下 Save 後沒有立刻出現綠色上線橫幅？</strong><br>
+                <span style="color:var(--text-muted)">A: GitHub 需要排程建置約 1~2 分鐘。可點擊專案頂部的「Actions」頁籤查看目前 Build / Deploy 進度，看到綠色勾勾完成後重新整理 Pages 頁面即可。</span>
+              </div>
+              <div style="border-top:1px dashed #334155; padding-top:8px;">
+                <strong style="color:var(--gh-amber)">Q2: 開啟網址顯示 404 There isn't a GitHub Pages site here？</strong><br>
+                <span style="color:var(--text-muted)">A: 檢查網址路徑大小寫是否完全相符；確認根目錄下是否真有該 html 檔案；確認選擇的分支是否為最新包含檔案的 <code>main</code>。</span>
+              </div>
+              <div style="border-top:1px dashed #334155; padding-top:8px;">
+                <strong style="color:var(--gh-amber)">Q3: 本地修改更新後，線上沒看到變化？</strong><br>
+                <span style="color:var(--text-muted)">A: 瀏覽器常有快取，請使用 <span class="kbd">Ctrl</span> + <span class="kbd">F5</span> 強制重新整理或以無痕視窗開啟確認。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部控制導覽列 -->
+  <footer id="nav-bar">
+    <div class="nav-left">
+      <button id="btn-agenda" class="btn" title="切換投影片目錄 (M)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/></svg>
+        <span>目錄 (M)</span>
+      </button>
+      <button id="btn-fullscreen" class="btn" title="全螢幕切換 (F)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+        <span>全螢幕 (F)</span>
+      </button>
+    </div>
+
+    <div class="nav-center">
+      <button id="btn-prev" class="btn" title="上一頁 (←)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        <span>上一頁</span>
+      </button>
+
+      <div class="slide-counter">
+        <span id="current-slide-num">01</span> / <span id="total-slide-num">07</span>
+      </div>
+
+      <button id="btn-next" class="btn primary" title="下一頁 (→ / 空白鍵)">
+        <span>下一頁</span>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="nav-right">
+      <button id="btn-copy-url" class="btn" title="複製本簡報線上網址">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        <span id="copy-btn-text">複製簡報網址</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- 目錄 Modal -->
+  <div id="agenda-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">📑 簡報大綱與投影片跳轉</h3>
+        <button id="btn-close-modal" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="jump-item" data-jump="1">
+          <div class="jump-item-num">SLIDE 01</div>
+          <div class="jump-item-title">封面：如何設定 GitHub Repo 為公開 Pages？</div>
+        </div>
+        <div class="jump-item" data-jump="2">
+          <div class="jump-item-num">SLIDE 02</div>
+          <div class="jump-item-title">步驟 01：開啟專案倉庫，進入 Settings</div>
+        </div>
+        <div class="jump-item" data-jump="3">
+          <div class="jump-item-num">SLIDE 03</div>
+          <div class="jump-item-title">步驟 02：在左側選單點選 Pages</div>
+        </div>
+        <div class="jump-item" data-jump="4">
+          <div class="jump-item-num">SLIDE 04</div>
+          <div class="jump-item-title">步驟 03：設定 Build & deployment 分支與來源</div>
+        </div>
+        <div class="jump-item" data-jump="5">
+          <div class="jump-item-num">SLIDE 05</div>
+          <div class="jump-item-title">步驟 04：等候建置與成功發布（Your site is live!）</div>
+        </div>
+        <div class="jump-item" data-jump="6">
+          <div class="jump-item-num">SLIDE 06</div>
+          <div class="jump-item-title">進階技巧：網址對應規則與多簡報/頁面共存機制</div>
+        </div>
+        <div class="jump-item" data-jump="7">
+          <div class="jump-item-num">SLIDE 07</div>
+          <div class="jump-item-title">總結清單：4 步口訣、常用網址與排錯 CheckList</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 投影片交互邏輯
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+
+    const progressBar = document.getElementById('progress-bar');
+    const currentSlideNum = document.getElementById('current-slide-num');
+    const totalSlideNum = document.getElementById('total-slide-num');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const btnAgenda = document.getElementById('btn-agenda');
+    const agendaModal = document.getElementById('agenda-modal');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    const jumpItems = document.querySelectorAll('.jump-item');
+    const btnCopyUrl = document.getElementById('btn-copy-url');
+    const copyBtnText = document.getElementById('copy-btn-text');
+
+    totalSlideNum.textContent = String(totalSlides).padStart(2, '0');
+
+    function updateSlide(targetIndex) {
+      if (targetIndex < 1) targetIndex = 1;
+      if (targetIndex > totalSlides) targetIndex = totalSlides;
+
+      slides.forEach((s, idx) => {
+        s.classList.remove('active');
+        if (idx + 1 === targetIndex) {
+          s.classList.add('active');
+          s.scrollTop = 0;
+        }
+      });
+
+      currentSlide = targetIndex;
+      currentSlideNum.textContent = String(currentSlide).padStart(2, '0');
+      
+      const progressPercent = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      btnPrev.disabled = (currentSlide === 1);
+      btnNext.disabled = (currentSlide === totalSlides);
+      
+      // 更新網址 Hash 便於分享特定頁
+      history.replaceState(null, null, `#slide-${currentSlide}`);
+    }
+
+    function goNext() {
+      if (currentSlide < totalSlides) updateSlide(currentSlide + 1);
+    }
+
+    function goPrev() {
+      if (currentSlide > 1) updateSlide(currentSlide - 1);
+    }
+
+    btnPrev.addEventListener('click', goPrev);
+    btnNext.addEventListener('click', goNext);
+
+    // 鍵盤導覽
+    window.addEventListener('keydown', (e) => {
+      if (agendaModal.classList.contains('active')) {
+        if (e.key === 'Escape') agendaModal.classList.remove('active');
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          goNext();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          goPrev();
+          break;
+        case 'Home':
+          updateSlide(1);
+          break;
+        case 'End':
+          updateSlide(totalSlides);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'm':
+        case 'M':
+          agendaModal.classList.toggle('active');
+          break;
+      }
+    });
+
+    // 全螢幕切換
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    // 目錄 Modal 切換
+    btnAgenda.addEventListener('click', () => agendaModal.classList.add('active'));
+    btnCloseModal.addEventListener('click', () => agendaModal.classList.remove('active'));
+    agendaModal.addEventListener('click', (e) => {
+      if (e.target === agendaModal) agendaModal.classList.remove('active');
+    });
+
+    jumpItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = parseInt(item.getAttribute('data-jump'), 10);
+        updateSlide(target);
+        agendaModal.classList.remove('active');
+      });
+    });
+
+    // 複製線上網址
+    btnCopyUrl.addEventListener('click', () => {
+      const fullUrl = 'https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html';
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        copyBtnText.textContent = '已複製網址！';
+        setTimeout(() => { copyBtnText.textContent = '複製簡報網址'; }, 2000);
+      }).catch(() => {
+        prompt('請手動複製網址：', fullUrl);
+      });
+    });
+
+    // 觸控手勢
+    let touchStartX = 0;
+    window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    window.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) goNext();
+      if (touchEndX > touchStartX + 50) goPrev();
+    }, false);
+
+    // 支援直接透過 URL hash 進入特定頁
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#slide-')) {
+      const initialPage = parseInt(hash.replace('#slide-', ''), 10);
+      if (!isNaN(initialPage) && initialPage >= 1 && initialPage <= totalSlides) {
+        updateSlide(initialPage);
+      } else {
+        updateSlide(1);
+      }
+    } else {
+      updateSlide(1);
+    }
+  </script>
+</body>
+</html>
