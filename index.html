@@ -1179,6 +1179,105 @@
       font-weight: 600;
     }
 
+    /* ================= 簡報重點逐項跳出與放大聚焦 (Step Animation) ================= */
+    .step-item {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+                  opacity 0.28s ease,
+                  box-shadow 0.35s ease,
+                  filter 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* 1. 已揭示但非當前的重點（上一點縮小，保持清晰參考） */
+    .step-item.revealed {
+      opacity: 0.58;
+      visibility: visible;
+      transform: translateY(0) scale(0.98);
+      filter: saturate(0.85);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .step-item.revealed:hover {
+      opacity: 0.92;
+      filter: saturate(1);
+      transform: translateY(-2px) scale(1);
+    }
+
+    /* 2. 正在講的那一點：放大聚焦、鮮明立體、光暈環繞！ */
+    .step-item.revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(-2px) scale(1.04) translateX(4px) !important;
+      filter: saturate(1.1) !important;
+      z-index: 10;
+      box-shadow: 0 10px 24px rgba(46, 56, 38, 0.12),
+                  0 0 0 2.5px rgba(67, 80, 56, 0.5) !important;
+      background: #FFFFFF !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色 */
+    .step-item.c2.revealed.active-step,
+    .step-item.c-rubric.revealed.active-step,
+    .step-item.c-radar.revealed.active-step,
+    .step-item.s3.revealed.active-step,
+    .step-item.c-deepseek.revealed.active-step {
+      box-shadow: 0 10px 24px rgba(200, 125, 37, 0.16),
+                  0 0 0 2.5px rgba(200, 125, 37, 0.55) !important;
+    }
+
+    .step-item.c3.revealed.active-step,
+    .step-item.c-feedback.revealed.active-step,
+    .step-item.c-scale.revealed.active-step,
+    .step-item.s2.revealed.active-step,
+    .step-item.c-openrouter.revealed.active-step {
+      box-shadow: 0 10px 24px rgba(43, 87, 115, 0.16),
+                  0 0 0 2.5px rgba(43, 87, 115, 0.55) !important;
+    }
+
+    .step-item.weakness-card.revealed.active-step,
+    .step-item.cost-card:not(.c-deepseek):not(.c-openrouter):not(.c-gemini).revealed.active-step {
+      box-shadow: 0 10px 24px rgba(217, 72, 65, 0.16),
+                  0 0 0 2.5px rgba(217, 72, 65, 0.55) !important;
+    }
+
+    /* 聚焦中動態提示徽章 */
+    .step-item.revealed.active-step::after {
+      content: '● 聚焦中';
+      position: absolute;
+      top: 7px;
+      right: 12px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #3E4B35;
+      background: #EAF0E4;
+      padding: 1px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      animation: pulseFocusTag 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseFocusTag {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+
+    @media print {
+      .step-item {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .step-item::after {
+        display: none !important;
+      }
+    }
+
     /* ================= 底部導覽控制列 ================= */
     #deck-controls {
       position: relative;
@@ -1777,7 +1876,7 @@
           <!-- 右側三大機制解析 -->
           <div class="task-features-column">
             <!-- 特色 1 -->
-            <div class="task-feature-card">
+            <div class="task-feature-card step-item" data-step="1">
               <div class="task-feature-title">
                 <span>🎯</span> 單次測驗 vs. 多次測驗
               </div>
@@ -1789,7 +1888,7 @@
             </div>
 
             <!-- 特色 2 -->
-            <div class="task-feature-card c2">
+            <div class="task-feature-card c2 step-item" data-step="2">
               <div class="task-feature-title">
                 <span>⏱️</span> 精準時間期限 (Deadline)
               </div>
@@ -1801,7 +1900,7 @@
             </div>
 
             <!-- 特色 3 -->
-            <div class="task-feature-card c3">
+            <div class="task-feature-card c3 step-item" data-step="3">
               <div class="task-feature-title">
                 <span>👥</span> 跨班級一鍵指派 (可多選)
               </div>
@@ -1831,7 +1930,7 @@
 
           <!-- 右側四大亮點卡片 -->
           <div class="grading-features-list">
-            <div class="grading-feature-item">
+            <div class="grading-feature-item step-item" data-step="1">
               <div class="g-item-header">
                 <span>⚡</span> 2-5 分鐘內極速回饋
               </div>
@@ -1839,7 +1938,7 @@
               <span class="g-item-tag">告別傳統 3-5 天批改延遲</span>
             </div>
 
-            <div class="grading-feature-item">
+            <div class="grading-feature-item step-item" data-step="2">
               <div class="g-item-header">
                 <span>📊</span> 對標 PIRLS 國際基準
               </div>
@@ -1847,7 +1946,7 @@
               <span class="g-item-tag" style="background: #E8F0F8; color: #1E4467;">精準定位閱讀學力落點</span>
             </div>
 
-            <div class="grading-feature-item">
+            <div class="grading-feature-item step-item" data-step="3">
               <div class="g-item-header">
                 <span>⏱️</span> 作答歷程防猜檢視
               </div>
@@ -1855,7 +1954,7 @@
               <span class="g-item-tag" style="background: #FFF5E8; color: #7F4D14;">輔導弱勢與態度把關</span>
             </div>
 
-            <div class="grading-feature-item">
+            <div class="grading-feature-item step-item" data-step="4">
               <div class="g-item-header">
                 <span>🔄</span> AI 再次批改與匯出
               </div>
@@ -1882,7 +1981,7 @@
 
           <!-- 右側三大機制解析 -->
           <div class="rubric-features-col">
-            <div class="rubric-feature-card c-rubric">
+            <div class="rubric-feature-card c-rubric step-item" data-step="1">
               <div class="g-item-header">
                 <span>🎯</span> PIRLS 0~3 分閱卷規準 (Rubrics)
               </div>
@@ -1892,7 +1991,7 @@
               <span class="g-item-tag" style="background: #FDF3E5; color: #8C5311;">客觀量化評閱標竿</span>
             </div>
 
-            <div class="rubric-feature-card c-feedback">
+            <div class="rubric-feature-card c-feedback step-item" data-step="2">
               <div class="g-item-header">
                 <span>🤖</span> AI 智能初評與診斷草稿
               </div>
@@ -1902,7 +2001,7 @@
               <span class="g-item-tag" style="background: #E8F0F8; color: #1E4467;">省下 80% 批改心力</span>
             </div>
 
-            <div class="rubric-feature-card c-teacher">
+            <div class="rubric-feature-card c-teacher step-item" data-step="3">
               <div class="g-item-header">
                 <span>✍️</span> 教師主控二次審閱
               </div>
@@ -1931,7 +2030,7 @@
 
           <!-- 右側三大機制解析 -->
           <div class="radar-features-col">
-            <div class="radar-feature-card c-scale">
+            <div class="radar-feature-card c-scale step-item" data-step="1">
               <div class="g-item-header">
                 <span>🌈</span> PIRLS 國際常模量尺落點
               </div>
@@ -1941,7 +2040,7 @@
               <span class="g-item-tag" style="background: #E8F0F8; color: #1E4467;">對標國際權威標準</span>
             </div>
 
-            <div class="radar-feature-card c-radar">
+            <div class="radar-feature-card c-radar step-item" data-step="2">
               <div class="g-item-header">
                 <span>🕸️</span> 四向度認知歷程雷達圖
               </div>
@@ -1951,7 +2050,7 @@
               <span class="g-item-tag" style="background: #FDF3E5; color: #8C5311;">思維強弱向度立現</span>
             </div>
 
-            <div class="radar-feature-card c-guide">
+            <div class="radar-feature-card c-guide step-item" data-step="3">
               <div class="g-item-header">
                 <span>💡</span> 具體雙向指引清單
               </div>
@@ -1981,7 +2080,7 @@
           <!-- 右側四大教學洞察 -->
           <div class="class-weakness-cards">
             <!-- 洞察 1 -->
-            <div class="weakness-card">
+            <div class="weakness-card step-item" data-step="1">
               <div class="weakness-card-title">
                 <span>🚨</span> 題型斷層：會選不會寫！
               </div>
@@ -1992,7 +2091,7 @@
             </div>
 
             <!-- 洞察 2 -->
-            <div class="weakness-card radar">
+            <div class="weakness-card radar step-item" data-step="2">
               <div class="weakness-card-title">
                 <span>📉</span> PIRLS 四認知歷程斷崖
               </div>
@@ -2003,7 +2102,7 @@
             </div>
 
             <!-- 洞察 3 -->
-            <div class="weakness-card">
+            <div class="weakness-card step-item" data-step="3">
               <div class="weakness-card-title">
                 <span>⏱️</span> 班級常模與時間預警
               </div>
@@ -2014,7 +2113,7 @@
             </div>
 
             <!-- 洞察 4 -->
-            <div class="weakness-card action">
+            <div class="weakness-card action step-item" data-step="4">
               <div class="weakness-card-title">
                 <span>🎯</span> 數據驅動精準教學 (Data-Driven)
               </div>
@@ -2044,7 +2143,7 @@
           <!-- 右側三大具體補救教案 -->
           <div class="remedial-cards-col">
             <!-- 策略 1 -->
-            <div class="remedial-card s1">
+            <div class="remedial-card s1 step-item" data-step="1">
               <div class="remedial-card-title">
                 <span>📋</span> 策略 1（針對 L3 詮釋）：雙段落比對單
               </div>
@@ -2055,7 +2154,7 @@
             </div>
 
             <!-- 策略 2 -->
-            <div class="remedial-card s2">
+            <div class="remedial-card s2 step-item" data-step="2">
               <div class="remedial-card-title">
                 <span>🖍️</span> 策略 2（針對 L4 評估）：證據三級書寫法
               </div>
@@ -2066,7 +2165,7 @@
             </div>
 
             <!-- 策略 3 -->
-            <div class="remedial-card s3">
+            <div class="remedial-card s3 step-item" data-step="3">
               <div class="remedial-card-title">
                 <span>💡</span> 策略 3（針對意象）：詩句改寫與對照辨析
               </div>
@@ -2096,7 +2195,7 @@
           <!-- 右側四大策略卡片 -->
           <div class="api-cost-cards-col">
             <!-- 痛點 1 -->
-            <div class="cost-card">
+            <div class="cost-card step-item" data-step="1">
               <div class="cost-card-title">
                 <span>⚠️</span> 現實瓶頸：免費額度常卡關
               </div>
@@ -2107,7 +2206,7 @@
             </div>
 
             <!-- 解方 2: DeepSeek -->
-            <div class="cost-card c-deepseek">
+            <div class="cost-card c-deepseek step-item" data-step="2">
               <div class="cost-card-title">
                 <span>⚡</span> DeepSeek 官方 API：極致性價比
               </div>
@@ -2118,7 +2217,7 @@
             </div>
 
             <!-- 解方 3: OpenRouter -->
-            <div class="cost-card c-openrouter">
+            <div class="cost-card c-openrouter step-item" data-step="3">
               <div class="cost-card-title">
                 <span>🌐</span> OpenRouter：頂級模型隨選
               </div>
@@ -2129,7 +2228,7 @@
             </div>
 
             <!-- 解方 4: Google Gemini -->
-            <div class="cost-card c-gemini">
+            <div class="cost-card c-gemini step-item" data-step="4">
               <div class="cost-card-title">
                 <span>🔒</span> 預設 Gemini ＋ 安全本地儲存
               </div>
@@ -2235,6 +2334,7 @@
     const slides = document.querySelectorAll('.slide');
     const totalSlides = slides.length;
     let currentSlide = 1;
+    let currentStep = 1;
 
     const pageIndicator = document.getElementById('page-num');
     const progressBar = document.getElementById('progress-bar');
@@ -2246,7 +2346,38 @@
     const btnCloseModal = document.getElementById('btn-close-modal');
     const jumpItems = document.querySelectorAll('.jump-item');
 
-    function updateSlide(targetIndex) {
+    function getSlideStepItems(slideEl) {
+      if (!slideEl) return [];
+      return Array.from(slideEl.querySelectorAll('.step-item'));
+    }
+
+    function applySlideSteps(slideEl, activeStepIndex) {
+      const items = getSlideStepItems(slideEl);
+      if (items.length === 0) return;
+
+      currentStep = Math.max(1, Math.min(activeStepIndex, items.length));
+
+      items.forEach((item, idx) => {
+        const itemStep = idx + 1;
+        if (itemStep < currentStep) {
+          // 上一點已講過：保留顯示但縮小、輕柔對比
+          item.classList.add('revealed');
+          item.classList.remove('active-step');
+        } else if (itemStep === currentStep) {
+          // 正在講的那一點：跳出放大、光暈聚焦！
+          item.classList.add('revealed', 'active-step');
+        } else {
+          // 尚未輪到的點：隱藏
+          item.classList.remove('revealed', 'active-step');
+        }
+      });
+
+      pageIndicator.textContent = `${currentSlide} / ${totalSlides} • 重點 ${currentStep}/${items.length}`;
+      btnPrev.disabled = (currentSlide === 1 && currentStep <= 1);
+      btnNext.disabled = (currentSlide === totalSlides && currentStep >= items.length);
+    }
+
+    function updateSlide(targetIndex, initialStep = 1) {
       if (targetIndex < 1) targetIndex = 1;
       if (targetIndex > totalSlides) targetIndex = totalSlides;
 
@@ -2261,15 +2392,68 @@
       });
 
       currentSlide = targetIndex;
-      pageIndicator.textContent = `${currentSlide} / ${totalSlides}`;
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
       progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
 
-      btnPrev.disabled = (currentSlide === 1);
-      btnNext.disabled = (currentSlide === totalSlides);
+      if (items.length > 0) {
+        applySlideSteps(activeSlideEl, initialStep);
+      } else {
+        currentStep = 1;
+        pageIndicator.textContent = `${currentSlide} / ${totalSlides}`;
+        btnPrev.disabled = (currentSlide === 1);
+        btnNext.disabled = (currentSlide === totalSlides);
+      }
     }
 
-    btnPrev.addEventListener('click', () => updateSlide(currentSlide - 1));
-    btnNext.addEventListener('click', () => updateSlide(currentSlide + 1));
+    function goNext() {
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      if (items.length > 0 && currentStep < items.length) {
+        // 在當前頁面推進到下一個重點
+        applySlideSteps(activeSlideEl, currentStep + 1);
+      } else {
+        // 當前頁面的重點已全部講完，推進到下一頁
+        if (currentSlide < totalSlides) {
+          updateSlide(currentSlide + 1, 1);
+        }
+      }
+    }
+
+    function goPrev() {
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      if (items.length > 0 && currentStep > 1) {
+        // 在當前頁面返回上一個重點
+        applySlideSteps(activeSlideEl, currentStep - 1);
+      } else {
+        // 返回上一頁（若上一頁有重點，直接進入上一頁的最後一個重點）
+        if (currentSlide > 1) {
+          const prevSlideEl = slides[currentSlide - 2];
+          const prevItems = getSlideStepItems(prevSlideEl);
+          updateSlide(currentSlide - 1, prevItems.length > 0 ? prevItems.length : 1);
+        }
+      }
+    }
+
+    btnPrev.addEventListener('click', goPrev);
+    btnNext.addEventListener('click', goNext);
+
+    // 點擊任何重點卡片，可直接切換聚焦該重點
+    document.querySelectorAll('.step-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const slideEl = item.closest('.slide');
+        if (!slideEl || !slideEl.classList.contains('active')) return;
+        const items = getSlideStepItems(slideEl);
+        const clickedIndex = items.indexOf(item);
+        if (clickedIndex !== -1) {
+          applySlideSteps(slideEl, clickedIndex + 1);
+        }
+      });
+    });
 
     window.addEventListener('keydown', (e) => {
       if (agendaModal.classList.contains('active')) {
@@ -2280,17 +2464,19 @@
         case 'ArrowRight':
         case 'PageDown':
         case ' ':
-          updateSlide(currentSlide + 1);
+          e.preventDefault();
+          goNext();
           break;
         case 'ArrowLeft':
         case 'PageUp':
-          updateSlide(currentSlide - 1);
+          e.preventDefault();
+          goPrev();
           break;
         case 'Home':
-          updateSlide(1);
+          updateSlide(1, 1);
           break;
         case 'End':
-          updateSlide(totalSlides);
+          updateSlide(totalSlides, 1);
           break;
         case 'f':
         case 'F':
@@ -2322,7 +2508,7 @@
     jumpItems.forEach(item => {
       item.addEventListener('click', () => {
         const target = parseInt(item.getAttribute('data-jump'), 10);
-        updateSlide(target);
+        updateSlide(target, 1);
         agendaModal.classList.remove('active');
       });
     });
@@ -2332,11 +2518,11 @@
     window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
     window.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
-      if (touchEndX < touchStartX - 50) updateSlide(currentSlide + 1);
-      if (touchEndX > touchStartX + 50) updateSlide(currentSlide - 1);
+      if (touchEndX < touchStartX - 50) goNext();
+      if (touchEndX > touchStartX + 50) goPrev();
     }, false);
 
-    updateSlide(1);
+    updateSlide(1, 1);
   </script>
 </body>
 </html>
