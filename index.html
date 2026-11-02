@@ -718,7 +718,232 @@
       border-radius: 5px;
     }
 
-    /* ================= Slide 9: 智慧成果與批改 ================= */
+    /* ================= Slide: 現場互動實測 (Live Testing QR Code) ================= */
+    .live-test-layout {
+      display: grid;
+      grid-template-columns: 1.12fr 1fr;
+      gap: clamp(14px, 2.2vw, 28px);
+      align-items: center;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .live-test-qr-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 22px) clamp(16px, 2vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: clamp(8px, 1.2vh, 14px);
+    }
+
+    .live-qr-wrapper {
+      position: relative;
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      border: 2px solid #D6DDCF;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .live-qr-wrapper:hover {
+      transform: scale(1.03);
+    }
+
+    .live-qr-img {
+      width: clamp(150px, 22vh, 205px);
+      height: clamp(150px, 22vh, 205px);
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .live-qr-scan-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EAF0E4;
+      color: #354B2A;
+      font-size: clamp(0.78rem, 1.25vh, 0.88rem);
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+
+    .live-url-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #F6F8F3;
+      border: 1.5px solid #CCD8C3;
+      padding: clamp(6px, 1vh, 9px) clamp(12px, 1.4vw, 18px);
+      border-radius: 10px;
+      text-decoration: none;
+      color: #26381C;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-weight: 800;
+      font-size: clamp(0.85rem, 1.35vh, 1.02rem);
+      transition: all 0.2s ease;
+      word-break: break-all;
+    }
+
+    .live-url-pill:hover {
+      background: #E8F0E2;
+      border-color: #557245;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(62, 75, 53, 0.15);
+    }
+
+    .live-credentials-box {
+      background: #FDFBF5;
+      border: 1.5px solid #EFE4D0;
+      border-radius: 11px;
+      padding: clamp(8px, 1.1vh, 11px) clamp(12px, 1.2vw, 16px);
+      width: 100%;
+      text-align: left;
+    }
+
+    .live-cred-title {
+      font-size: clamp(0.82rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: #8C5311;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-cred-row {
+      font-size: clamp(0.78rem, 1.15vh, 0.86rem);
+      color: #4C5246;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* 右側操作流程卡片 */
+    .live-test-guide-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 20px) clamp(16px, 1.8vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.3vh, 14px);
+      justify-content: space-between;
+    }
+
+    .live-preview-box {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: #FAFBF8;
+      border-radius: 12px;
+      padding: clamp(8px, 1.2vh, 12px);
+      border: 1px solid var(--border-color);
+    }
+
+    .live-preview-img {
+      width: clamp(95px, 14vh, 130px);
+      border-radius: 9px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .live-preview-text h4 {
+      font-size: clamp(0.96rem, 1.5vh, 1.12rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+
+    .live-preview-text p {
+      font-size: clamp(0.76rem, 1.15vh, 0.84rem);
+      color: var(--text-muted);
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .live-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1vh, 10px);
+    }
+
+    .live-step-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(10px, 1.2vw, 14px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+
+    .live-step-item:hover {
+      transform: translateX(4px);
+      border-color: #7D976A;
+    }
+
+    .live-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .live-step-content {
+      flex: 1;
+    }
+
+    .live-step-content strong {
+      font-size: clamp(0.85rem, 1.35vh, 0.96rem);
+      color: var(--primary-dark);
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .live-step-content span {
+      font-size: clamp(0.74rem, 1.1vh, 0.82rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      display: block;
+    }
+
+    .live-bottom-notice {
+      background: linear-gradient(135deg, #EEF4E8, #E2ECD8);
+      border: 1.5px solid #BACFB0;
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(12px, 1.2vw, 16px);
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: #2D4421;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ================= Slide: 智慧成果與批改 ================= */
     .grading-results-layout {
       display: grid;
       grid-template-columns: 1.35fr 1fr;
@@ -1248,8 +1473,8 @@
 
     /* 特殊色系聚焦光暈配合主題色：橘色系 */
     .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step,
-    .slide[data-slide="9"] .grading-feature-item:nth-child(3).revealed.active-step,
-    .slide[data-slide="12"] .weakness-card:nth-child(3).revealed.active-step {
+    .grading-feature-item:nth-child(3).revealed.active-step,
+    .weakness-card:nth-child(3).revealed.active-step {
       border-left: 7px solid #C87D25 !important;
       border-color: rgba(200, 125, 37, 0.3) !important;
       box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
@@ -1259,7 +1484,7 @@
 
     /* 特殊色系聚焦光暈配合主題色：藍色系 */
     .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step,
-    .slide[data-slide="9"] .grading-feature-item:nth-child(2).revealed.active-step {
+    .grading-feature-item:nth-child(2).revealed.active-step {
       border-left: 7px solid #2B5773 !important;
       border-color: rgba(43, 87, 115, 0.3) !important;
       box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
@@ -1268,8 +1493,8 @@
     }
 
     /* 特殊色系聚焦光暈配合主題色：紅色警示系 */
-    .slide[data-slide="12"] .weakness-card:first-child.revealed.active-step,
-    .slide[data-slide="14"] .cost-card:first-child.revealed.active-step {
+    .weakness-card:first-child.revealed.active-step,
+    .cost-card:first-child.revealed.active-step {
       border-left: 7px solid #D94841 !important;
       border-color: rgba(217, 72, 65, 0.3) !important;
       box-shadow: 0 22px 50px rgba(180, 40, 35, 0.25),
@@ -1295,20 +1520,20 @@
     }
 
     .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step::after,
-    .slide[data-slide="9"] .grading-feature-item:nth-child(3).revealed.active-step::after,
-    .slide[data-slide="12"] .weakness-card:nth-child(3).revealed.active-step::after {
+    .grading-feature-item:nth-child(3).revealed.active-step::after,
+    .weakness-card:nth-child(3).revealed.active-step::after {
       color: #8C5311 !important;
       background: #FDF3E5 !important;
     }
 
     .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step::after,
-    .slide[data-slide="9"] .grading-feature-item:nth-child(2).revealed.active-step::after {
+    .grading-feature-item:nth-child(2).revealed.active-step::after {
       color: #254656 !important;
       background: #EAF0F4 !important;
     }
 
-    .slide[data-slide="12"] .weakness-card:first-child.revealed.active-step::after,
-    .slide[data-slide="14"] .cost-card:first-child.revealed.active-step::after {
+    .weakness-card:first-child.revealed.active-step::after,
+    .cost-card:first-child.revealed.active-step::after {
       color: #901C17 !important;
       background: #FDF0EF !important;
     }
@@ -1339,7 +1564,7 @@
     }
 
     /* 左側面板當有卡片聚焦時，微調對比與亮度，突顯右側浮空的當前焦點 */
-    .slide:is([data-slide="8"], [data-slide="9"], [data-slide="10"], [data-slide="11"], [data-slide="12"], [data-slide="13"], [data-slide="14"]):has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
+    .slide:has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
       filter: brightness(0.97) saturate(0.92);
       transition: filter 0.35s ease;
     }
@@ -1993,8 +2218,89 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 9: 智慧自動批改與成果 ==================== -->
+    <!-- ==================== SLIDE 9: 現場互動實測 (QR Code 登入體驗) ==================== -->
     <section class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-badge">HANDS-ON INTERACTION</div>
+        <h2 class="slide-title">現場實際實測：手機掃碼進入學生端體驗</h2>
+      </div>
+      <div class="slide-body">
+        <div class="live-test-layout">
+          <!-- 左側：QR Code 掃描與網址入口 -->
+          <div class="live-test-qr-card">
+            <div class="live-qr-scan-badge">📱 手機 / 平板 掃描 QR Code 立即進入</div>
+            
+            <div class="live-qr-wrapper">
+              <img src="assets/images/reading_system_qrcode.png" alt="學生端測驗 QR Code" class="live-qr-img">
+            </div>
+
+            <!-- 可點擊網址 -->
+            <a href="https://clive520-lyps.github.io/Reading/" target="_blank" class="live-url-pill" title="點擊在新分頁開啟學生端系統">
+              🌐 https://clive520-lyps.github.io/Reading/
+            </a>
+
+            <!-- 登入資訊提示 -->
+            <div class="live-credentials-box">
+              <div class="live-cred-title">
+                <span>🔑</span> 研習現場測試帳號指引
+              </div>
+              <div class="live-cred-row">
+                • <strong>學生帳號：</strong>例如 <code>S10101</code>（或自訂任意學生代號）<br>
+                • <strong>學生密碼：</strong>請輸入任意密碼後點擊「登入系統」
+              </div>
+            </div>
+          </div>
+
+          <!-- 右側：學生端介面展示與體驗步驟 -->
+          <div class="live-test-guide-card">
+            <!-- 學生端登入預覽 -->
+            <div class="live-preview-box">
+              <img src="assets/images/student_login.png" alt="學生端登入介面" class="live-preview-img">
+              <div class="live-preview-text">
+                <h4>IEA PIRLS 閱讀認證</h4>
+                <p>化身為國小學童視角，親身體驗四層次素養評量作答情境！</p>
+              </div>
+            </div>
+
+            <!-- 三大實測步驟 -->
+            <div class="live-steps-list">
+              <div class="live-step-item">
+                <div class="live-step-num">1</div>
+                <div class="live-step-content">
+                  <strong>手機掃描或點擊網址</strong>
+                  <span>開啟學生端登入頁面，無須安裝任何 App</span>
+                </div>
+              </div>
+
+              <div class="live-step-item">
+                <div class="live-step-num">2</div>
+                <div class="live-step-content">
+                  <strong>輸入帳號並點選測驗任務</strong>
+                  <span>進入剛才第 8 頁指派的閱讀文章，開始作答</span>
+                </div>
+              </div>
+
+              <div class="live-step-item">
+                <div class="live-step-num">3</div>
+                <div class="live-step-content">
+                  <strong>完成是非、選擇與問答並送出</strong>
+                  <span>體驗 PIRLS L1~L4 提問架構與作答歷程</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 底部銜接提示 -->
+            <div class="live-bottom-notice">
+              <span>⚡</span>
+              <div><strong>即時批改預告：</strong>大家送出後，系統 AI 將於 2-5 分鐘內完成批改，下一頁立即檢視全場成果！</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 10: 智慧自動批改與成果 ==================== -->
+    <section class="slide" data-slide="10">
       <div class="slide-header">
         <div class="slide-badge">SMART GRADING &amp; ANALYTICS</div>
         <h2 class="slide-title">後台自行批改：2-5 分鐘極速回饋 × PIRLS 國際基準</h2>
@@ -2044,8 +2350,8 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 10: PIRLS 規準與教師二次審閱 ==================== -->
-    <section class="slide" data-slide="10">
+    <!-- ==================== SLIDE 11: PIRLS 規準與教師二次審閱 ==================== -->
+    <section class="slide" data-slide="11">
       <div class="slide-header">
         <div class="slide-badge">RUBRICS &amp; SECONDARY REVIEW</div>
         <h2 class="slide-title">AI 智慧初評 × 教師二次審閱（人機雙重把關）</h2>
@@ -2093,8 +2399,8 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 11: 個人素養診斷報告與雷達圖 ==================== -->
-    <section class="slide" data-slide="11">
+    <!-- ==================== SLIDE 12: 個人素養診斷報告與雷達圖 ==================== -->
+    <section class="slide" data-slide="12">
       <div class="slide-header">
         <div class="slide-badge">INDIVIDUAL DIAGNOSTICS &amp; RADAR</div>
         <h2 class="slide-title">個人素養診斷報告：PIRLS 國際常模基準 × 四向度雷達圖</h2>
@@ -2142,8 +2448,8 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 12: 班級弱點分析 ==================== -->
-    <section class="slide" data-slide="12">
+    <!-- ==================== SLIDE 13: 班級弱點分析 ==================== -->
+    <section class="slide" data-slide="13">
       <div class="slide-header">
         <div class="slide-badge">CLASS-LEVEL DIAGNOSTICS</div>
         <h2 class="slide-title">班級弱點巨觀診斷：題型斷層 × PIRLS 歷程剖析</h2>
@@ -2205,8 +2511,8 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 13: 課堂補救策略 ==================== -->
-    <section class="slide" data-slide="13">
+    <!-- ==================== SLIDE 14: 課堂補救策略 ==================== -->
+    <section class="slide" data-slide="14">
       <div class="slide-header">
         <div class="slide-badge">REMEDIAL STRATEGIES</div>
         <h2 class="slide-title">針對性課堂補救策略：AI 專家模型生成的實體教案</h2>
@@ -2257,8 +2563,8 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 14: 成本與多模型 API 設定 ==================== -->
-    <section class="slide" data-slide="14">
+    <!-- ==================== SLIDE 15: 成本與多模型 API 設定 ==================== -->
+    <section class="slide" data-slide="15">
       <div class="slide-header">
         <div class="slide-badge">REALITY &amp; COST OPTIMIZATION</div>
         <h2 class="slide-title">理想很豐滿、現實很骨感：AI 成本與穩定度的務實解方</h2>
@@ -2320,8 +2626,8 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 15: 審閱與後續規劃 ==================== -->
-    <section class="slide" data-slide="15">
+    <!-- ==================== SLIDE 16: 審閱與後續規劃 ==================== -->
+    <section class="slide" data-slide="16">
       <div class="slide-header">
         <div class="slide-badge">REVIEW &amp; NEXT STEPS</div>
         <h2 class="slide-title">大綱審閱與後續章節規劃</h2>
@@ -2397,13 +2703,14 @@
         <div class="jump-item" data-jump="6"><span>06</span> 實踐成果：雲端閱讀認證系統</div>
         <div class="jump-item" data-jump="7"><span>07</span> 出題雙軌模式：AI撰寫 vs 自備文本</div>
         <div class="jump-item" data-jump="8"><span>08</span> 隨時彈性指派任務：單次/多次與期限</div>
-        <div class="jump-item" data-jump="9"><span>09</span> 智慧自動批改：2-5分鐘回饋與基準</div>
-        <div class="jump-item" data-jump="10"><span>10</span> 閱卷規準與二次審閱：人機把關</div>
-        <div class="jump-item" data-jump="11"><span>11</span> 個人診斷報告：611分高基準與雷達圖</div>
-        <div class="jump-item" data-jump="12"><span>12</span> 班級弱點巨觀診斷：題型與歷程</div>
-        <div class="jump-item" data-jump="13"><span>13</span> 課堂補救策略：AI生成實體教案</div>
-        <div class="jump-item" data-jump="14"><span>14</span> 現實與成本：多模型API與極致性價比</div>
-        <div class="jump-item" data-jump="15"><span>15</span> 大綱審閱與後續規劃</div>
+        <div class="jump-item" data-jump="9"><span>09</span> 現場實際實測：學生端登入作答 (QR Code)</div>
+        <div class="jump-item" data-jump="10"><span>10</span> 智慧自動批改：2-5分鐘回饋與基準</div>
+        <div class="jump-item" data-jump="11"><span>11</span> 閱卷規準與二次審閱：人機把關</div>
+        <div class="jump-item" data-jump="12"><span>12</span> 個人診斷報告：611分高基準與雷達圖</div>
+        <div class="jump-item" data-jump="13"><span>13</span> 班級弱點巨觀診斷：題型與歷程</div>
+        <div class="jump-item" data-jump="14"><span>14</span> 課堂補救策略：AI生成實體教案</div>
+        <div class="jump-item" data-jump="15"><span>15</span> 現實與成本：多模型API與極致性價比</div>
+        <div class="jump-item" data-jump="16"><span>16</span> 大綱審閱與後續規劃</div>
       </div>
     </div>
   </div>
