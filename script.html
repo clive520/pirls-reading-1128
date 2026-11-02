@@ -323,7 +323,11 @@
       <a href="#slide-4" class="quick-pill">04 PIRLS 四層次</a>
       <a href="#slide-5" class="quick-pill">05 人機協同</a>
       <a href="#slide-6" class="quick-pill">06 系統實踐</a>
-      <a href="#slide-7" class="quick-pill">07 審閱總結</a>
+      <a href="#slide-7" class="quick-pill">07 雙軌出題</a>
+      <a href="#slide-8" class="quick-pill">08 任務指派</a>
+      <a href="#slide-9" class="quick-pill">09 自動批改</a>
+      <a href="#slide-10" class="quick-pill">10 二次審閱與雷達圖</a>
+      <a href="#slide-11" class="quick-pill">11 審閱總結</a>
     </div>
 
     <!-- ==================== SLIDE 1 講稿 ==================== -->
@@ -525,8 +529,8 @@
     <article class="script-section" id="slide-6">
       <div class="section-header">
         <span class="slide-tag">SLIDE 06</span>
-        <h2 class="slide-topic">實踐成果：雲端閱讀認證系統</h2>
-        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+        <h2 class="slide-topic">實踐成果：雲端閱讀認證系統全貌</h2>
+        <span class="time-badge">⏱️ 建議時間：3 分鐘</span>
       </div>
       <div class="section-body">
         <div class="slide-summary-box">
@@ -548,7 +552,7 @@
             而右邊這張圖，則是我們老師專屬的<strong>「教師管理後台」</strong>。在後台裡，老師可以建立班級、管理題庫與文章、一鍵指派任務，還能隨時切換「學生畫面預覽」。最重要的是「測驗成果檢視」，老師不用翻改 30 本簿子，後台自動把全班的理解分佈圖畫好給你看！
           </p>
           <p>
-            這套系統的核心大腦，正是運用了 <strong>Google AI Studio</strong> 的 API 與強大的 Gemini 模型所驅動。在接下來的章節裡，我就要帶大家逐步看懂：我們是如何在 AI Studio 裡面把 Prompt 調教得如此精準聽話！
+            接下來幾頁，我要帶大家深入看這套系統最核心的三大教學法寶：<strong>「出題」</strong>、<strong>「派卷」</strong>與<strong>「智慧批改」</strong>！
           </p>
         </div>
       </div>
@@ -558,6 +562,170 @@
     <article class="script-section" id="slide-7">
       <div class="section-header">
         <span class="slide-tag">SLIDE 07</span>
+        <h2 class="slide-topic">出題雙軌模式：AI 原創撰文 × 自行提供文章</h2>
+        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 左欄【AI 智慧生成題庫】（主題關鍵字生成文章與題目）、右欄【手動輸入文章】（現有課文剪報貼入解析）、底部三大規格（PIRLS 文學/資訊、年段難度、四層次題型）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 詢問台下老師：「大家平常最常拿來當閱讀測驗的是什麼教材？課本？國語日報？還是繪本？」隨後指向大螢幕的雙軌介面。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            老師們最常問我的問題是：<span class="highlight-phrase">「如果我想給孩子課外閱讀，但找不到適合字數與難度的文章怎麼辦？」</span>或者<span class="highlight-phrase">「我下週想配合南一、康軒、翰林的課文出題，可以嗎？」</span>
+          </p>
+          <p>
+            答案是：通通沒問題！我們的系統專門設計了<strong>「出題雙軌模式」</strong>：
+          </p>
+          <p>
+            第一軌叫做<strong>【模式 A：AI 撰寫文章出題】</strong>。你手邊完全不需要任何現成文章！只要輸入一個主題關鍵字，例如「太陽系的奧秘」或是「環境保護的重要性」，設定國小中年級或高年級，AI 就會在幾秒鐘內，替你寫出一篇符合該年段閱讀長度與字彙深度的原創文章，並且自動依據 PIRLS 四層次，把是非題、選擇題、問答題通通出好！
+          </p>
+          <p>
+            第二軌更是所有國語老師的福音——<strong>【模式 B：自行提供文章出題】</strong>。直接把課本課文、國語日報優良剪報、或是學校校訂閱讀教材貼進去，AI 立刻研讀全文脈絡結構，替這篇現成文章量身打造嚴謹的理解題組！
+          </p>
+          <div class="punchline">
+            📚 不管是想要文學性的故事體驗，還是資訊性的科普邏輯，系統一鍵切換，徹底解放老師的備課枷鎖！
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 8 講稿 ==================== -->
+    <article class="script-section" id="slide-8">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 08</span>
+        <h2 class="slide-topic">隨時彈性指派任務：單次 / 多次 × 期限管理</h2>
+        <span class="time-badge">⏱️ 建議時間：2 ~ 3 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 「指派新測驗任務」介面截圖，右側三大功能卡片（單次 vs 多次測驗、精準時間期限、跨班級一鍵指派）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 微笑與台下班導師互動，聊聊平時學生繳交作業的拖延情況，以及如何用「多次測驗」幫助學習動機低落的孩子重拾成就感。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            題目出好了，接下來怎麼發給學生？請看這個<strong>「指派任務」</strong>功能！
+          </p>
+          <p>
+            這裡有三個非常貼近教學現場的細膩設計：
+          </p>
+          <p>
+            <span class="highlight-phrase">第一點，叫做「單次測驗」與「多次測驗」的彈性切換！</span><br>
+            如果是段考前的正式學力檢測，我們選擇「單次測驗」，學生只能回答一次，真實反映理解現狀；但如果今天是課後自主晨讀或回家作業，我強烈建議大家開啟「多次測驗」！因為孩子在第一次作答看到 AI 的鷹架回饋後，能立刻帶著新的理解再次嘗試、修正語句。這不是為了分數，而是讓孩子在安全的環境裡體驗「從不會到會」的精熟學習！
+          </p>
+          <p>
+            <span class="highlight-phrase">第二點，是「精準時間期限 (Deadline)」！</span><br>
+            年月日、幾點幾分都可以精準設定，時間一到系統自動截止結算，培養國小學童自我時間管理與規律閱讀的好習慣。
+          </p>
+          <p>
+            <span class="highlight-phrase">第三點，是「跨班級一鍵多選指派」！</span><br>
+            很多老師身兼多個班級，甚至整個年段共備，只要勾選班級名單，一次派發全校各班，免去重複操作的繁瑣負擔。
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 9 講稿 ==================== -->
+    <article class="script-section" id="slide-9">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 09</span>
+        <h2 class="slide-topic">後台自行批改：2-5 分鐘極速回饋 × PIRLS 國際基準</h2>
+        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 「測驗成果檢視」後台清單（已批改、87分、PIRLS 國際高/中/低基準徽章、作答時間歷程、查看詳情與 AI 再次批改按鈕）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 語氣轉為興奮、振奮。加重語調強調「2-5 分鐘秒級回饋」以及「作答秒數一眼抓出盲猜學生」，引發全場老師共鳴！
+        </div>
+
+        <div class="speech-script">
+          <p>
+            各位老師，請看大螢幕這張後台清單！這就是我最想跟大家分享、也是全套系統最震撼的核心——<strong>「後台自行智慧批改」</strong>！
+          </p>
+          <p>
+            大家回想一下，過去改全班 30 本閱讀學習單，我們要花多少個下班夜晚？
+          </p>
+          <p>
+            現在，學生在平板上提交答案後，<span class="highlight-phrase">在短短 2 到 5 分鐘之內，後台 AI 就已經全自動批改完畢！</span>學生端當場就能看到分數與具體建議！趁著孩子腦袋裡的記憶還鮮活、思維還熱騰騰的時候，立刻給予即時診斷，這才是最有效的形成性評量！
+          </p>
+          <p>
+            更厲害的是，請看畫面上的藍色、綠色、黃色徽章——系統直接對標<strong>【PIRLS 國際基準】</strong>！<br>
+            它不僅給一個原始分數，還自動幫你換算成國際標準量尺：600 分以上是「高基準」、475 分是「中基準」，誰在「低基準」需要補救教學，老師打開後台一目了然！
+          </p>
+          <p>
+            還有一個現場老師一定會拍手叫好的秘密武器：請看旁邊這欄<strong>【作答時間】</strong>！<br>
+            畫面上這位學生花了 7 分 9 秒認真讀題思考，拿了 87 分高基準；但底下這個學生只花了 14 秒就送出，拿了 20 分——老師一眼就知道他是亂猜交差的！我們不用花時間抓，數據清清楚楚替我們把關！
+          </p>
+          <div class="punchline">
+            🌟 當然，老師永遠是最終的主考官：系統提供「查看詳情」與「AI 再次批改」，老師隨時可以人工微調；學期末一鍵「匯出 CSV」，平時成績就有了！科技真正讓老師從批改勞動中解放出來！
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 10 講稿 ==================== -->
+    <article class="script-section" id="slide-10">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 10</span>
+        <h2 class="slide-topic">AI 智慧評改 × 教師二次審閱（人機雙重把關）</h2>
+        <span class="time-badge">⏱️ 建議時間：3 ~ 4 分鐘</span>
+      </div>
+      <div class="section-body">
+        <div class="slide-summary-box">
+          <strong>投影片畫面：</strong> 左側【PIRLS 閱卷規準與教師評分調整】（0~3分 Rubrics、學生回答、AI 診斷評語、教師點選微調）、右側【PIRLS 國際標準基準落點與雷達圖】（611分高基準常模彩帶、L1~L4 四向度雷達圖、優勢與待加強具體指引）。
+        </div>
+
+        <div class="stage-directions">
+          <strong>🎭 現場身態與互動：</strong> 語氣真摯誠懇，走向大螢幕。指向左側的「教師評分調整按鈕」與右側的「四向度雷達圖」，徹底解除老師對「AI 批改是否可靠、教師是否失去掌控」的疑慮。
+        </div>
+
+        <div class="speech-script">
+          <p>
+            有些老師可能會很謹慎地問我：<span class="highlight-phrase">「AI 真的看得懂小學生天馬行空的童言童語嗎？會不會亂給分？如果改得不準怎麼辦？」</span>
+          </p>
+          <p>
+            各位老師，請看大螢幕！這就是我們系統最嚴謹、也最尊重教師專業的核心架構——<span class="highlight-phrase">【AI 智慧評改 ＋ 教師二次審閱】的人機雙重把關！</span>
+          </p>
+          <p>
+            請看左邊這張圖：當老師點進學生的開放式問答題時，系統絕不是隨便給個分數，而是嚴格參照國際標準的<strong>【PIRLS 閱卷規準 (Rubrics)】</strong>：
+            0 分是離題或空白、1 分是表面單一線索、2 分是因果完整的合理理解、3 分是深刻扣合主旨。
+          </p>
+          <p>
+            AI 會先依照這個規準給予客觀的評估，並產生一段非常細膩的<strong>「評語與補正說明」</strong>；但最關鍵的是——<strong>最後的裁決權完全在老師手中！</strong><br>
+            您只要在畫面上輕鬆點選「✓ 2 分（合理理解）」，或者在文字框裡加上您對這個孩子的專屬鼓勵，成績立刻完成二次覆核。AI 是替我們省下 80% 力氣的貼心助理，而我們老師則是擁有最高溫度的把關者！
+          </p>
+          <p>
+            更令人振奮的是右邊這張圖：當整份作業完成審閱後，系統自動產出極其專業的<strong>【個人化素養診斷報告】</strong>！
+          </p>
+          <p>
+            它不僅直接對標國際常模，標示出「本次落點 611 分，達成高基準」，還自動畫出<strong>【四向度認知歷程雷達圖】</strong>！<br>
+            大家看這個雷達圖多傳神：孩子在 L1 提取特定訊息拿了 85%，L2 推論拿了 80%，但在 L3 詮釋和 L4 批判只有 50 多分——這不就是現場孩子最典型的盲點嗎？字面看得到，深層想不出來！
+          </p>
+          <p>
+            系統甚至自動幫你條列出：『優勢面向（表現亮眼）』與『待加強面向與引導建議』。期末親師座談或個別輔導時，老師手上有這份數據，跟家長、跟孩子對話，指導方向既具體又具說服力！
+          </p>
+          <div class="punchline">
+            🛡️ 這就是真正有深度的 AI 教育應用：AI 先行高效批改，老師精準二次覆核，讓每一份閱讀作業都成為孩子思維成長的明鏡！
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==================== SLIDE 11 講稿 ==================== -->
+    <article class="script-section" id="slide-11">
+      <div class="section-header">
+        <span class="slide-tag">SLIDE 11</span>
         <h2 class="slide-topic">大綱審閱與後續規劃總結</h2>
         <span class="time-badge">⏱️ 建議時間：2 分鐘</span>
       </div>
@@ -572,19 +740,16 @@
 
         <div class="speech-script">
           <p>
-            以上就是我們今天第一階段的導言與前置大綱！
+            以上就是我們今天這套<strong>「AI 賦能閱讀理解系統」</strong>的完整前導展示！
           </p>
           <p>
-            我們從教學的真實痛點出發，錨定了 PIRLS 閱讀理解的四個階梯，確立了人機協同的定位，也帶大家看過實作的系統樣貌。
+            我們從第一線的真實教學痛點出發，錨定了 PIRLS 四大象限的指北針，走過雙軌出題、隨時彈性派卷、2-5 分鐘秒級批改，再到嚴謹的 Rubrics 規準與教師二次審閱雷達圖，把整個閱讀素養的教學流程完全打通了！
           </p>
           <p>
-            在接下來的實作單元，我們會把後台的神秘面紗一層層揭開，讓每一位老師都能學會：如何自己用 Google AI Studio 設定出題指令？如何給予 AI 明確的批改給分規準？以及如何把它融入到你每週的語文課當中。
+            在接下來的實作階段，我們會進一步解密：如何利用 Google AI Studio 設定出如此精準的 Prompt？如何設計防呆與防幻覺機制？
           </p>
           <p>
-            這份簡報我們已經採用 GitHub 進行線上部署，隨時隨地都可以投影使用，老師手上的這份逐字稿手冊也可以隨時列印或在平板上對照。
-          </p>
-          <p>
-            謝謝大家，接下來請大家審閱並提出反饋，我們馬上進入更精采的下一階段！
+            這份簡報已部屬在 GitHub Pages，大家隨時可以在手機或平板對照這份逐字稿。謝謝大家，請各位老師審閱，我們隨時展開後續更深入的討論！
           </p>
         </div>
       </div>
