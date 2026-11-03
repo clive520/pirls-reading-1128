@@ -13,6 +13,8 @@
 - 🎙️ **講者逐字稿手冊（Speaker Script）**：[https://clive520.github.io/pirls-reading-1128/script.html](https://clive520.github.io/pirls-reading-1128/script.html)
 - 🚀 **GitHub Pages 設定教學簡報**：[https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html](https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html)
 - 📝 **GitHub Pages 教學講者逐字稿**：[https://clive520.github.io/pirls-reading-1128/github-pages-script.html](https://clive520.github.io/pirls-reading-1128/github-pages-script.html)
+- 🎮 **AI Studio 小遊戲實作與 Pages 發布簡報**：[https://clive520.github.io/pirls-reading-1128/ai-studio-game-tutorial.html](https://clive520.github.io/pirls-reading-1128/ai-studio-game-tutorial.html)
+- 🎙️ **AI Studio 小遊戲講者逐字稿手冊**：[https://clive520.github.io/pirls-reading-1128/ai-studio-game-script.html](https://clive520.github.io/pirls-reading-1128/ai-studio-game-script.html)
 - 📦 **GitHub 專案儲存庫**：[https://github.com/clive520/pirls-reading-1128](https://github.com/clive520/pirls-reading-1128)
 
 ---
@@ -23,6 +25,8 @@
 - **`script.html`**：講者專用演講逐字稿手冊（附建議時間、現場身態互動指示、完整口語逐字講稿、支援列印與另存 PDF）。
 - **`github-pages-tutorial.html`**：獨立設計之「如何設定 GitHub Repo 為公開 Pages」互動教學簡報（共 7 頁，含完整截圖引導、分支設定、Actions 比較與排錯 CheckList）。
 - **`github-pages-script.html`**：GitHub Pages 設定教學簡報專用「講者演講逐字稿手冊」（含投影片重點、動作提示、口語逐字講稿、支援列印與 PDF）。
+- **`ai-studio-game-tutorial.html`**：全新獨立設計之「Google AI Studio 實作與 GitHub Pages 發布小遊戲」圖文教學簡報（共 8 頁，含 8 款課堂遊戲提示詞一鍵複製寶庫、Gemini 3.8 Flash 設定、Publish 上雲、Pages 3 步公開設定與排錯 Checklist）。
+- **`ai-studio-game-script.html`**：AI Studio 小遊戲教學簡報專用「講者演講逐字稿手冊」（含建議時間、現場操作身態指示、完整口語逐字講稿、支援列印與 PDF）。
 - **`assets/images/`**：
   - `reading_system_login.png`：雲端閱讀認證系統前台入口（師生雙端）。
   - `teacher_dashboard.png`：教師管理後台功能導覽。
