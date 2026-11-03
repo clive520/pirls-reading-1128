@@ -380,11 +380,9 @@
         <a href="#slide-1" class="jump-pill">Slide 01 封面與極速藍圖</a>
         <a href="#slide-2" class="jump-pill">Slide 02 認識 AI Studio (Gemini 3.8 Flash)</a>
         <a href="#slide-3" class="jump-pill">Slide 03 遊戲提示詞庫（直接複製）</a>
-        <a href="#slide-4" class="jump-pill">Slide 04 二次對話微調技巧</a>
-        <a href="#slide-5" class="jump-pill">Slide 05 推送至 GitHub (Publish)</a>
-        <a href="#slide-6" class="jump-pill">Slide 06 GitHub Pages 公開 3 步驟</a>
-        <a href="#slide-7" class="jump-pill">Slide 07 課堂發布與 QR Code 應用</a>
-        <a href="#slide-8" class="jump-pill">Slide 08 零挫折排錯 Checklist</a>
+        <a href="#slide-4" class="jump-pill">Slide 04 推送至 GitHub (Publish)</a>
+        <a href="#slide-5" class="jump-pill">Slide 05 GitHub Pages 公開 3 步驟</a>
+        <a href="#slide-6" class="jump-pill">Slide 06 課堂發布與 QR Code 應用</a>
       </div>
     </div>
 
@@ -518,48 +516,6 @@
     <section class="script-section" id="slide-4">
       <div class="section-header">
         <span class="slide-tag">SLIDE 04</span>
-        <h3 class="slide-topic">調校與微調：AI Studio 即時預覽與「二次對話」技巧</h3>
-        <span class="time-badge">⏱️ 建議時間：2.0 分鐘</span>
-      </div>
-      <div class="section-body">
-        <div class="slide-summary-box">
-          <strong>🎯 本頁核心目標：</strong>
-          消除老師對「生成的遊戲不滿意怎麼辦」的恐慌。傳授「二次對話微調」的三大魔法句（字體放大、音效回饋、重新開始按鈕），建立人機協同的敏捷調校思維。
-        </div>
-
-        <div class="stage-directions">
-          <span class="stage-icon">🎬</span>
-          <div>
-            <strong>【講者動作指示】</strong>
-            指著投影片上的三大微調對比圖：大字體觸控按鈕、叮咚音效彩帶、以及成績重玩按鈕，對照「修改前 vs. 微調後」的清晰差異。提醒老師：「把 AI 當作專屬外包工程師，用通俗的大白話指揮它即可。」
-          </div>
-        </div>
-
-        <div class="spoken-script">
-          <span class="spoken-label">💬 講者口語逐字稿</span>
-          <p>
-            當我們在 AI Studio 貼上提示詞、按下了 Run 之後，右邊的 Live Preview 面板會立刻把遊戲跑出來。這時候很多老師會說：「哇，遊戲動起來了！可是字體好像有點小，坐在教室最後一排的小明看不清楚怎麼辦？」
-          </p>
-          <p>
-            老師千萬不要自己跑去改程式碼！請記住這句話：<mark>「你不需要學程式語言，因為你的母語就是最好的程式語言！」</mark>
-          </p>
-          <p>
-            請看左邊的三大魔法句：
-            如果你想要字體更大、更適合觸控：直接在對話框輸入：<mark>「請幫我把所有題目字體放大 1.5 倍，按鈕加大，底色改為柔和淺藍色。」</mark>
-            如果想要更有遊戲快感：告訴它：<mark>「請加上答對時的清脆叮咚聲，以及彩帶慶祝動畫！」</mark>
-            如果遊戲結束後沒有重新開始按鈕：只要輸入：<mark>「請在最後加上總結算分數，並附上重新挑戰按鈕。」</mark>
-          </p>
-          <p>
-            Gemini 3.8 Flash 會在 3 秒鐘內重新修正程式碼，右邊畫面瞬間煥然一新。這就是現代的「Vibe Coding」氛圍開發，你想怎麼改，它就怎麼改！
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== SLIDE 05 講稿 ==================== -->
-    <section class="script-section" id="slide-5">
-      <div class="section-header">
-        <span class="slide-tag">SLIDE 05</span>
         <h3 class="slide-topic">🚀 一鍵上雲：從 AI Studio 推送到 GitHub（Publish / Push）</h3>
         <span class="time-badge">⏱️ 建議時間：2.5 分鐘</span>
       </div>
@@ -580,10 +536,10 @@
         <div class="spoken-script">
           <span class="spoken-label">💬 講者口語逐字稿</span>
           <p>
-            好！遊戲測試滿意了，接下來就是最關鍵的一步：<mark>怎麼讓全世界、全班的孩子都能連上線？</mark>
+            好！遊戲在 AI Studio 生成並測試滿意之後，接下來就是最關鍵的一步：<mark>怎麼讓全世界、全班的孩子都能連上線？</mark>
           </p>
           <p>
-            請看投影片第 5 頁。在 Google AI Studio 的右上角工具列，大家會看到一隻黑色的貓咪圖示，或者寫著「Publish / Export to GitHub」。
+            請大家看投影片第 4 頁。在 Google AI Studio 的右上角工具列，大家會看到一隻黑色的貓咪圖示，或者寫著「Publish / Export to GitHub」。
             我們點下去之後，流程只有簡單四步：
             第一步，點擊授權「Authorize Google」，讓 Google 連接到你的 GitHub 帳號；
             第二步，給你的遊戲取個名字，<mark>請特別注意：只能用英文字母、數字或連字符（-）</mark>，例如 <code>idiom-game</code> 或 <code>math-101</code>，千萬不要打中文或空格喔！
@@ -594,16 +550,16 @@
             AI Studio 就會像光速快遞一樣，把剛剛寫好的遊戲自動打包並推送到你的 GitHub 上面，連終端機都不用開！
           </p>
           <p>
-            那萬一現場網路卡住、或者你不想授權帳號呢？請看右邊的「極速雙保險」：在 AI Studio 點「Copy Code」複製全部代碼，到 GitHub 點 New 建立新儲存庫，新增檔案名稱精確寫上 <mark><code>index.html</code></mark>，貼上並存檔，效果完全一模一樣！
+            那萬一現場網路卡住、或者你不想授權帳號呢？請看下方為大家準備的「極速雙保險」：在 AI Studio 點「Copy Code」複製全部代碼，到 GitHub 點 New 建立新儲存庫，新增檔案名稱精確寫上 <mark><code>index.html</code></mark>，貼上並存檔，效果完全一模一樣！
           </p>
         </div>
       </div>
     </section>
 
-    <!-- ==================== SLIDE 06 講稿 ==================== -->
-    <section class="script-section" id="slide-6">
+    <!-- ==================== SLIDE 05 講稿 ==================== -->
+    <section class="script-section" id="slide-5">
       <div class="section-header">
-        <span class="slide-tag">SLIDE 06</span>
+        <span class="slide-tag">SLIDE 05</span>
         <h3 class="slide-topic">🌐 點亮全世界：GitHub Pages 公開設定 3 步驟</h3>
         <span class="time-badge">⏱️ 建議時間：2.0 分鐘</span>
       </div>
@@ -624,7 +580,7 @@
         <div class="spoken-script">
           <span class="spoken-label">💬 講者口語逐字稿</span>
           <p>
-            檔案已經上傳到 GitHub 了，最後一步，也是最神奇的魔法：<mark>如何把它變成一個真正的網站？</mark>
+            檔案已經上傳到 GitHub 了，最後一步，也是最神奇的魔法：<mark>如何把它變成一個真正的公開網站？</mark>
           </p>
           <p>
             只要三個點擊動作，大家可以跟著我口訣念一次：<strong>「齒輪 ➔ Pages ➔ main ➔ Save！」</strong>
@@ -642,12 +598,12 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 07 講稿 ==================== -->
-    <section class="script-section" id="slide-7">
+    <!-- ==================== SLIDE 06 講稿 ==================== -->
+    <section class="script-section" id="slide-6">
       <div class="section-header">
-        <span class="slide-tag">SLIDE 07</span>
+        <span class="slide-tag">SLIDE 06</span>
         <h3 class="slide-topic">📲 課堂發布：專屬網址與 QR Code 實戰應用</h3>
-        <span class="time-badge">⏱️ 建議時間：2.0 分鐘</span>
+        <span class="time-badge">⏱️ 建議時間：2.5 分鐘</span>
       </div>
       <div class="section-body">
         <div class="slide-summary-box">
@@ -659,7 +615,7 @@
           <span class="stage-icon">🎬</span>
           <div>
             <strong>【講者動作指示】</strong>
-            指著投影片上的大螢幕 QR Code 投影情境圖，說明平板與 Chromebook 掃碼即玩。可以用手機或現場平板實際示範掃描投影幕上的 QR Code，展現「3 秒進入遊戲」的無縫體驗。
+            指著投影片上的大螢幕 QR Code 投影情境圖，說明平板與 Chromebook 掃碼即玩。可以用手機或現場平板實際示範掃描投影幕上的 QR Code，展現「3 秒進入遊戲」的無縫體驗。最後充滿熱情地做出結語，邀請老師打開電腦現場練習。
           </div>
         </div>
 
@@ -669,7 +625,7 @@
             拿到網址之後，很多老師會問：「這串英文看起來很長，小朋友在平板上很難輸入，怎麼辦？」
           </p>
           <p>
-            大家看左下角，教大家一個 Chrome 瀏覽器的隱藏神技：
+            大家看畫面左側，教大家一個 Chrome 瀏覽器的隱藏神技：
             在你的遊戲網頁上，任意空白處按一下滑鼠右鍵，選單裡就有一個<mark>「以此頁面建立 QR 圖碼」</mark>！
             它會直接在螢幕上跳出一個清晰的 QR Code，你直接把它投影到教室的大黑板或電子白板上。
           </p>
@@ -677,56 +633,10 @@
             學生早自習進教室、或者是課堂最後 10 分鐘，拿起學校配發的生生用平板（iPad）、Chromebook、甚至是借用手機，相機一掃，不用 3 秒鐘，全班就直接進入成語配對大挑戰！
           </p>
           <p>
-            請大家看右側我特別整理的這三大優勢：
+            請大家看畫面右側我特別整理的這三大優勢：
             第一、<strong>學生完全不用註冊或登入任何帳號</strong>，免除忘記密碼或家長個資疑慮；
             第二、<strong>全平台相容</strong>，不管是 iOS、安卓還是電腦螢幕通通完美適應；
             第三、<strong>終身免伺服器費用</strong>！微軟 GitHub 全球邊緣節點免費託管，即使全校 30 個班級同時上線玩，也不用擔心伺服器當機或被收費！
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== SLIDE 08 講稿 ==================== -->
-    <section class="script-section" id="slide-8">
-      <div class="section-header">
-        <span class="slide-tag">SLIDE 08</span>
-        <h3 class="slide-topic">🛠️ 零挫折保證：常見問題排錯檢核表</h3>
-        <span class="time-badge">⏱️ 建議時間：2.0 分鐘</span>
-      </div>
-      <div class="section-body">
-        <div class="slide-summary-box">
-          <strong>🎯 本頁核心目標：</strong>
-          預判現場與課後實作時最常遇到的四大卡關情境（404 錯誤、白屏、按鈕無反應、後續更新同步），提供清晰的排錯 Checklist 與結語鼓勵。
-        </div>
-
-        <div class="stage-directions">
-          <span class="stage-icon">🎬</span>
-          <div>
-            <strong>【講者動作指示】</strong>
-            指著投影片上的 4 象限排錯圖卡（404、白屏、按鈕沒動、更新同步），逐一朗讀四個狀況的速查關鍵字，提醒老師把這頁拍照或存成書籤，課後備課隨時能拿出來對照。
-          </div>
-        </div>
-
-        <div class="spoken-script">
-          <span class="spoken-label">💬 講者口語逐字稿</span>
-          <p>
-            最後，為了確保每一位老師回去都能百分之百實作成功，我特別整理了這張<mark>「零挫折排錯檢核表」</mark>。大家在實際操作時如果遇到小狀況，99% 都是這四件事：
-          </p>
-          <p>
-            第一個狀況：<strong>「點擊網址出現 404 Not Found？」</strong><br>
-            不要慌！這是因為 GitHub 全球快取同步需要 1 到 2 分鐘，請先去喝口水、洗個手，回來重新整理就出來了。另外檢查一下儲存庫是不是不小心設成 Private 了。
-          </p>
-          <p>
-            第二個狀況：<strong>「打開網頁一片空白？」</strong><br>
-            請檢查你的檔案名稱，必須精確叫做全小寫的 <mark><code>index.html</code></mark>！如果是大寫的 <code>Index.html</code> 或 <code>game.html</code>，伺服器會找不到入口。
-          </p>
-          <p>
-            第三個狀況：<strong>「畫面有出來，但按鈕按了沒反應？」</strong><br>
-            把代碼貼回 AI Studio，跟 Gemini 說一句：「按鈕事件未觸發，請重新給我單一可運行的 HTML」，AI 就會立刻幫你除錯修好。
-          </p>
-          <p>
-            第四個狀況：<strong>「我改了題目，怎麼更新？」</strong><br>
-            更簡單了！直接在 GitHub 找到 <code>index.html</code> 按右上角鉛筆圖示編輯，把新的代碼貼上去並點擊 Commit，GitHub 會在 30 秒內自動幫你換上新版本，網址完全不用變！
           </p>
           <p>
             老師們，未來的教學是人機協同的時代。當我們懂得運用 AI 的創造力加上 GitHub 的傳播力，每一位老師都能成為孩子心目中最酷的數位互動魔術師！
