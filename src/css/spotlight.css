@@ -1,0 +1,163 @@
+/* ================= 簡報重點逐項跳出與特大靠中聚焦 (Audience Center Spotlight for Slide 8~14) ================= */
+    .step-item {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+                  opacity 0.28s ease,
+                  box-shadow 0.35s ease,
+                  filter 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* 1. 已揭示但非當前的重點：保持在旁，微縮並柔化，將全場視覺徹底留給中間焦點 */
+    .step-item.revealed:not(.active-step) {
+      opacity: 0.42 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(0.96) !important;
+      filter: saturate(0.8) !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .step-item.revealed:not(.active-step):hover {
+      opacity: 0.85 !important;
+      filter: saturate(1) !important;
+      transform: translateY(-2px) scale(0.99) !important;
+    }
+
+    /* 2. 正在講的那一點：放大約 1.18 倍、大幅靠向畫面中央、壓在左圖上、立體落影與邊框！ */
+    .step-item.revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateX(clamp(-110px, -8vw, -60px)) translateY(-2px) scale(1.18) !important;
+      z-index: 50 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid rgba(62, 75, 53, 0.25) !important;
+      border-left: 7px solid var(--primary) !important;
+      box-shadow: 0 22px 50px rgba(20, 28, 16, 0.22),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(67, 80, 56, 0.45) !important;
+      filter: saturate(1.05) !important;
+    }
+
+    /* 智慧錨點：第一張靠頂展開、最後一張靠底展開，絕不超出上下視窗邊界 */
+    .step-item:first-child.revealed.active-step {
+      transform-origin: top right !important;
+    }
+    .step-item:last-child.revealed.active-step {
+      transform-origin: bottom right !important;
+    }
+    .step-item:not(:first-child):not(:last-child).revealed.active-step {
+      transform-origin: center right !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：橘色系 */
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step,
+    .grading-feature-item:nth-child(3).revealed.active-step,
+    .weakness-card:nth-child(3).revealed.active-step {
+      border-left: 7px solid #C87D25 !important;
+      border-color: rgba(200, 125, 37, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(200, 125, 37, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：藍色系 */
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step,
+    .grading-feature-item:nth-child(2).revealed.active-step {
+      border-left: 7px solid #2B5773 !important;
+      border-color: rgba(43, 87, 115, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(43, 87, 115, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：紅色警示系 */
+    .weakness-card:first-child.revealed.active-step,
+    .cost-card:first-child.revealed.active-step {
+      border-left: 7px solid #D94841 !important;
+      border-color: rgba(217, 72, 65, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(180, 40, 35, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(217, 72, 65, 0.5) !important;
+    }
+
+    /* 聚焦中動態提示徽章 */
+    .step-item.revealed.active-step::after {
+      content: '● 聚焦中';
+      position: absolute;
+      top: 7px;
+      right: 12px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #3E4B35;
+      background: #EAF0E4;
+      padding: 1px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      animation: pulseFocusTag 2s infinite ease-in-out;
+    }
+
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step::after,
+    .grading-feature-item:nth-child(3).revealed.active-step::after,
+    .weakness-card:nth-child(3).revealed.active-step::after {
+      color: #8C5311 !important;
+      background: #FDF3E5 !important;
+    }
+
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step::after,
+    .grading-feature-item:nth-child(2).revealed.active-step::after {
+      color: #254656 !important;
+      background: #EAF0F4 !important;
+    }
+
+    .weakness-card:first-child.revealed.active-step::after,
+    .cost-card:first-child.revealed.active-step::after {
+      color: #901C17 !important;
+      background: #FDF0EF !important;
+    }
+
+    @keyframes pulseFocusTag {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+
+    /* 放大聚焦時，卡片內文字體適度清晰放大，方便遠處觀眾辨識 */
+    .step-item.revealed.active-step :is(.task-feature-title, .g-item-header, .weakness-card-title, .remedial-card-title, .cost-card-title) {
+      font-size: clamp(1.02rem, 1.65vh, 1.2rem) !important;
+      color: #1F2818 !important;
+      margin-bottom: 4px !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-feature-desc, .g-item-text, .weakness-card-desc, .remedial-card-desc, .cost-card-desc) {
+      font-size: clamp(0.82rem, 1.3vh, 0.92rem) !important;
+      color: #283320 !important;
+      line-height: 1.45 !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-highlight-pill, .g-item-tag, .weakness-pill, .remedial-pill, .cost-pill) {
+      font-size: clamp(0.72rem, 1.15vh, 0.8rem) !important;
+      padding: 3px 9px !important;
+      font-weight: 800 !important;
+      margin-top: 5px !important;
+    }
+
+    /* 左側面板當有卡片聚焦時，微調對比與亮度，突顯右側浮空的當前焦點 */
+    .slide:has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
+      filter: brightness(0.97) saturate(0.92);
+      transition: filter 0.35s ease;
+    }
+
+    @media print {
+      .step-item {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .step-item::after {
+        display: none !important;
+      }
+    }

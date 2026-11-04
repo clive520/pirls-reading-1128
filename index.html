@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
+/* ====== style.css ====== */
+:root {
       --primary: #3E4B35;
       --primary-light: #596B4C;
       --primary-dark: #273121;
@@ -1417,169 +1418,7 @@
       font-weight: 600;
     }
 
-    /* ================= 簡報重點逐項跳出與特大靠中聚焦 (Audience Center Spotlight for Slide 8~14) ================= */
-    .step-item {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(14px) scale(0.95);
-      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
-                  opacity 0.28s ease,
-                  box-shadow 0.35s ease,
-                  filter 0.3s ease;
-      cursor: pointer;
-      position: relative;
-    }
-
-    /* 1. 已揭示但非當前的重點：保持在旁，微縮並柔化，將全場視覺徹底留給中間焦點 */
-    .step-item.revealed:not(.active-step) {
-      opacity: 0.42 !important;
-      visibility: visible !important;
-      transform: translateY(0) scale(0.96) !important;
-      filter: saturate(0.8) !important;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
-    }
-
-    .step-item.revealed:not(.active-step):hover {
-      opacity: 0.85 !important;
-      filter: saturate(1) !important;
-      transform: translateY(-2px) scale(0.99) !important;
-    }
-
-    /* 2. 正在講的那一點：放大約 1.18 倍、大幅靠向畫面中央、壓在左圖上、立體落影與邊框！ */
-    .step-item.revealed.active-step {
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: translateX(clamp(-110px, -8vw, -60px)) translateY(-2px) scale(1.18) !important;
-      z-index: 50 !important;
-      background: #FFFFFF !important;
-      border: 1.5px solid rgba(62, 75, 53, 0.25) !important;
-      border-left: 7px solid var(--primary) !important;
-      box-shadow: 0 22px 50px rgba(20, 28, 16, 0.22),
-                  0 8px 18px rgba(0, 0, 0, 0.08),
-                  0 0 0 3.5px rgba(67, 80, 56, 0.45) !important;
-      filter: saturate(1.05) !important;
-    }
-
-    /* 智慧錨點：第一張靠頂展開、最後一張靠底展開，絕不超出上下視窗邊界 */
-    .step-item:first-child.revealed.active-step {
-      transform-origin: top right !important;
-    }
-    .step-item:last-child.revealed.active-step {
-      transform-origin: bottom right !important;
-    }
-    .step-item:not(:first-child):not(:last-child).revealed.active-step {
-      transform-origin: center right !important;
-    }
-
-    /* 特殊色系聚焦光暈配合主題色：橘色系 */
-    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step,
-    .grading-feature-item:nth-child(3).revealed.active-step,
-    .weakness-card:nth-child(3).revealed.active-step {
-      border-left: 7px solid #C87D25 !important;
-      border-color: rgba(200, 125, 37, 0.3) !important;
-      box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
-                  0 8px 18px rgba(0, 0, 0, 0.08),
-                  0 0 0 3.5px rgba(200, 125, 37, 0.5) !important;
-    }
-
-    /* 特殊色系聚焦光暈配合主題色：藍色系 */
-    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step,
-    .grading-feature-item:nth-child(2).revealed.active-step {
-      border-left: 7px solid #2B5773 !important;
-      border-color: rgba(43, 87, 115, 0.3) !important;
-      box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
-                  0 8px 18px rgba(0, 0, 0, 0.08),
-                  0 0 0 3.5px rgba(43, 87, 115, 0.5) !important;
-    }
-
-    /* 特殊色系聚焦光暈配合主題色：紅色警示系 */
-    .weakness-card:first-child.revealed.active-step,
-    .cost-card:first-child.revealed.active-step {
-      border-left: 7px solid #D94841 !important;
-      border-color: rgba(217, 72, 65, 0.3) !important;
-      box-shadow: 0 22px 50px rgba(180, 40, 35, 0.25),
-                  0 8px 18px rgba(0, 0, 0, 0.08),
-                  0 0 0 3.5px rgba(217, 72, 65, 0.5) !important;
-    }
-
-    /* 聚焦中動態提示徽章 */
-    .step-item.revealed.active-step::after {
-      content: '● 聚焦中';
-      position: absolute;
-      top: 7px;
-      right: 12px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #3E4B35;
-      background: #EAF0E4;
-      padding: 1px 7px;
-      border-radius: 99px;
-      letter-spacing: 0.05em;
-      pointer-events: none;
-      animation: pulseFocusTag 2s infinite ease-in-out;
-    }
-
-    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step::after,
-    .grading-feature-item:nth-child(3).revealed.active-step::after,
-    .weakness-card:nth-child(3).revealed.active-step::after {
-      color: #8C5311 !important;
-      background: #FDF3E5 !important;
-    }
-
-    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step::after,
-    .grading-feature-item:nth-child(2).revealed.active-step::after {
-      color: #254656 !important;
-      background: #EAF0F4 !important;
-    }
-
-    .weakness-card:first-child.revealed.active-step::after,
-    .cost-card:first-child.revealed.active-step::after {
-      color: #901C17 !important;
-      background: #FDF0EF !important;
-    }
-
-    @keyframes pulseFocusTag {
-      0%, 100% { opacity: 0.85; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.06); }
-    }
-
-    /* 放大聚焦時，卡片內文字體適度清晰放大，方便遠處觀眾辨識 */
-    .step-item.revealed.active-step :is(.task-feature-title, .g-item-header, .weakness-card-title, .remedial-card-title, .cost-card-title) {
-      font-size: clamp(1.02rem, 1.65vh, 1.2rem) !important;
-      color: #1F2818 !important;
-      margin-bottom: 4px !important;
-    }
-
-    .step-item.revealed.active-step :is(.task-feature-desc, .g-item-text, .weakness-card-desc, .remedial-card-desc, .cost-card-desc) {
-      font-size: clamp(0.82rem, 1.3vh, 0.92rem) !important;
-      color: #283320 !important;
-      line-height: 1.45 !important;
-    }
-
-    .step-item.revealed.active-step :is(.task-highlight-pill, .g-item-tag, .weakness-pill, .remedial-pill, .cost-pill) {
-      font-size: clamp(0.72rem, 1.15vh, 0.8rem) !important;
-      padding: 3px 9px !important;
-      font-weight: 800 !important;
-      margin-top: 5px !important;
-    }
-
-    /* 左側面板當有卡片聚焦時，微調對比與亮度，突顯右側浮空的當前焦點 */
-    .slide:has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
-      filter: brightness(0.97) saturate(0.92);
-      transition: filter 0.35s ease;
-    }
-
-    @media print {
-      .step-item {
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-        box-shadow: none !important;
-      }
-      .step-item::after {
-        display: none !important;
-      }
-    }
+    /* [Spotlight Styles extracted to src/css/spotlight.css] */
 
     /* ================= 底部導覽控制列 ================= */
     #deck-controls {
@@ -1844,7 +1683,174 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
-  </style>
+
+
+/* ====== spotlight.css ====== */
+/* ================= 簡報重點逐項跳出與特大靠中聚焦 (Audience Center Spotlight for Slide 8~14) ================= */
+    .step-item {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+                  opacity 0.28s ease,
+                  box-shadow 0.35s ease,
+                  filter 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* 1. 已揭示但非當前的重點：保持在旁，微縮並柔化，將全場視覺徹底留給中間焦點 */
+    .step-item.revealed:not(.active-step) {
+      opacity: 0.42 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(0.96) !important;
+      filter: saturate(0.8) !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .step-item.revealed:not(.active-step):hover {
+      opacity: 0.85 !important;
+      filter: saturate(1) !important;
+      transform: translateY(-2px) scale(0.99) !important;
+    }
+
+    /* 2. 正在講的那一點：放大約 1.18 倍、大幅靠向畫面中央、壓在左圖上、立體落影與邊框！ */
+    .step-item.revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateX(clamp(-110px, -8vw, -60px)) translateY(-2px) scale(1.18) !important;
+      z-index: 50 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid rgba(62, 75, 53, 0.25) !important;
+      border-left: 7px solid var(--primary) !important;
+      box-shadow: 0 22px 50px rgba(20, 28, 16, 0.22),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(67, 80, 56, 0.45) !important;
+      filter: saturate(1.05) !important;
+    }
+
+    /* 智慧錨點：第一張靠頂展開、最後一張靠底展開，絕不超出上下視窗邊界 */
+    .step-item:first-child.revealed.active-step {
+      transform-origin: top right !important;
+    }
+    .step-item:last-child.revealed.active-step {
+      transform-origin: bottom right !important;
+    }
+    .step-item:not(:first-child):not(:last-child).revealed.active-step {
+      transform-origin: center right !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：橘色系 */
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step,
+    .grading-feature-item:nth-child(3).revealed.active-step,
+    .weakness-card:nth-child(3).revealed.active-step {
+      border-left: 7px solid #C87D25 !important;
+      border-color: rgba(200, 125, 37, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(200, 125, 37, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：藍色系 */
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step,
+    .grading-feature-item:nth-child(2).revealed.active-step {
+      border-left: 7px solid #2B5773 !important;
+      border-color: rgba(43, 87, 115, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(43, 87, 115, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：紅色警示系 */
+    .weakness-card:first-child.revealed.active-step,
+    .cost-card:first-child.revealed.active-step {
+      border-left: 7px solid #D94841 !important;
+      border-color: rgba(217, 72, 65, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(180, 40, 35, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(217, 72, 65, 0.5) !important;
+    }
+
+    /* 聚焦中動態提示徽章 */
+    .step-item.revealed.active-step::after {
+      content: '● 聚焦中';
+      position: absolute;
+      top: 7px;
+      right: 12px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #3E4B35;
+      background: #EAF0E4;
+      padding: 1px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      animation: pulseFocusTag 2s infinite ease-in-out;
+    }
+
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step::after,
+    .grading-feature-item:nth-child(3).revealed.active-step::after,
+    .weakness-card:nth-child(3).revealed.active-step::after {
+      color: #8C5311 !important;
+      background: #FDF3E5 !important;
+    }
+
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step::after,
+    .grading-feature-item:nth-child(2).revealed.active-step::after {
+      color: #254656 !important;
+      background: #EAF0F4 !important;
+    }
+
+    .weakness-card:first-child.revealed.active-step::after,
+    .cost-card:first-child.revealed.active-step::after {
+      color: #901C17 !important;
+      background: #FDF0EF !important;
+    }
+
+    @keyframes pulseFocusTag {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+
+    /* 放大聚焦時，卡片內文字體適度清晰放大，方便遠處觀眾辨識 */
+    .step-item.revealed.active-step :is(.task-feature-title, .g-item-header, .weakness-card-title, .remedial-card-title, .cost-card-title) {
+      font-size: clamp(1.02rem, 1.65vh, 1.2rem) !important;
+      color: #1F2818 !important;
+      margin-bottom: 4px !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-feature-desc, .g-item-text, .weakness-card-desc, .remedial-card-desc, .cost-card-desc) {
+      font-size: clamp(0.82rem, 1.3vh, 0.92rem) !important;
+      color: #283320 !important;
+      line-height: 1.45 !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-highlight-pill, .g-item-tag, .weakness-pill, .remedial-pill, .cost-pill) {
+      font-size: clamp(0.72rem, 1.15vh, 0.8rem) !important;
+      padding: 3px 9px !important;
+      font-weight: 800 !important;
+      margin-top: 5px !important;
+    }
+
+    /* 左側面板當有卡片聚焦時，微調對比與亮度，突顯右側浮空的當前焦點 */
+    .slide:has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
+      filter: brightness(0.97) saturate(0.92);
+      transition: filter 0.35s ease;
+    }
+
+    @media print {
+      .step-item {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .step-item::after {
+        display: none !important;
+      }
+    }
+
+</style>
 </head>
 <body>
 
@@ -1855,6 +1861,7 @@
   <main id="deck">
 
     <!-- ==================== SLIDE 1: 封面 ==================== -->
+        <!-- ==================== SLIDE 1 ==================== -->
     <section class="slide active" data-slide="1">
       <div class="cover-layout">
         <div>
@@ -1879,7 +1886,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 2: 研習藍圖 ==================== -->
+    <!-- ==================== SLIDE 2 ==================== -->
     <section class="slide" data-slide="2">
       <div class="slide-header">
         <div class="slide-badge">ROADMAP</div>
@@ -1926,7 +1933,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 3: 現場痛點 ==================== -->
+    <!-- ==================== SLIDE 3 ==================== -->
     <section class="slide" data-slide="3">
       <div class="slide-header">
         <div class="slide-badge">TEACHING CHALLENGES</div>
@@ -1965,7 +1972,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 4: PIRLS 四層次 (四象限排版) ==================== -->
+    <!-- ==================== SLIDE 4 ==================== -->
     <section class="slide" data-slide="4">
       <div class="slide-header">
         <div class="slide-badge">PIRLS FRAMEWORK</div>
@@ -2044,7 +2051,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 5: 人機協同模式 ==================== -->
+    <!-- ==================== SLIDE 5 ==================== -->
     <section class="slide" data-slide="5">
       <div class="slide-header">
         <div class="slide-badge">PARADIGM SHIFT</div>
@@ -2083,7 +2090,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 6: 系統實踐展示 ==================== -->
+    <!-- ==================== SLIDE 6 ==================== -->
     <section class="slide" data-slide="6">
       <div class="slide-header">
         <div class="slide-badge">SYSTEM PREVIEW</div>
@@ -2106,7 +2113,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 7: 出題雙軌模式 ==================== -->
+    <!-- ==================== SLIDE 7 ==================== -->
     <section class="slide" data-slide="7">
       <div class="slide-header">
         <div class="slide-badge">QUESTION ENGINE</div>
@@ -2163,7 +2170,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 8: 隨時指派任務 ==================== -->
+    <!-- ==================== SLIDE 8 ==================== -->
     <section class="slide" data-slide="8">
       <div class="slide-header">
         <div class="slide-badge">TASK DISPATCH</div>
@@ -2218,7 +2225,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 9: 智慧自動批改與成果 ==================== -->
+    <!-- ==================== SLIDE 9 ==================== -->
     <section class="slide" data-slide="9">
       <div class="slide-header">
         <div class="slide-badge">SMART GRADING &amp; ANALYTICS</div>
@@ -2269,7 +2276,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 10: PIRLS 規準與教師二次審閱 ==================== -->
+    <!-- ==================== SLIDE 10 ==================== -->
     <section class="slide" data-slide="10">
       <div class="slide-header">
         <div class="slide-badge">RUBRICS &amp; SECONDARY REVIEW</div>
@@ -2318,7 +2325,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 11: 個人素養診斷報告與雷達圖 ==================== -->
+    <!-- ==================== SLIDE 11 ==================== -->
     <section class="slide" data-slide="11">
       <div class="slide-header">
         <div class="slide-badge">INDIVIDUAL DIAGNOSTICS &amp; RADAR</div>
@@ -2367,7 +2374,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 12: 班級弱點分析 ==================== -->
+    <!-- ==================== SLIDE 12 ==================== -->
     <section class="slide" data-slide="12">
       <div class="slide-header">
         <div class="slide-badge">CLASS-LEVEL DIAGNOSTICS</div>
@@ -2430,7 +2437,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 13: 課堂補救策略 ==================== -->
+    <!-- ==================== SLIDE 13 ==================== -->
     <section class="slide" data-slide="13">
       <div class="slide-header">
         <div class="slide-badge">REMEDIAL STRATEGIES</div>
@@ -2482,7 +2489,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 14: 成本與多模型 API 設定 ==================== -->
+    <!-- ==================== SLIDE 14 ==================== -->
     <section class="slide" data-slide="14">
       <div class="slide-header">
         <div class="slide-badge">REALITY &amp; COST OPTIMIZATION</div>
@@ -2545,7 +2552,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 15: 現場互動實測 (QR Code 登入體驗) ==================== -->
+    <!-- ==================== SLIDE 15 ==================== -->
     <section class="slide" data-slide="15">
       <div class="slide-header">
         <div class="slide-badge">HANDS-ON INTERACTION</div>
@@ -2626,7 +2633,7 @@
       </div>
     </section>
 
-    <!-- ==================== SLIDE 16: 審閱與後續規劃 ==================== -->
+    <!-- ==================== SLIDE 16 ==================== -->
     <section class="slide" data-slide="16">
       <div class="slide-header">
         <div class="slide-badge">REVIEW &amp; NEXT STEPS</div>
@@ -2669,6 +2676,8 @@
       </div>
     </section>
 
+
+
   </main>
 
   <!-- 底部導覽列 -->
@@ -2696,27 +2705,28 @@
       </div>
       <div class="slide-jump-grid">
         <div class="jump-item" data-jump="1"><span>01</span> 封面：AI 賦能閱讀理解</div>
-        <div class="jump-item" data-jump="2"><span>02</span> 研習六大模組規劃</div>
+        <div class="jump-item" data-jump="2"><span>02</span> 研習藍圖：六大模組規劃</div>
         <div class="jump-item" data-jump="3"><span>03</span> 國小閱讀三大現場痛點</div>
         <div class="jump-item" data-jump="4"><span>04</span> 評量指北針：PIRLS 四層次</div>
         <div class="jump-item" data-jump="5"><span>05</span> 思維轉變：人機協同新模式</div>
         <div class="jump-item" data-jump="6"><span>06</span> 實踐成果：雲端閱讀認證系統</div>
         <div class="jump-item" data-jump="7"><span>07</span> 出題雙軌模式：AI撰寫 vs 自備文本</div>
         <div class="jump-item" data-jump="8"><span>08</span> 隨時彈性指派任務：單次/多次與期限</div>
-        <div class="jump-item" data-jump="9"><span>09</span> 智慧自動批改：2-5分鐘回饋與基準</div>
+        <div class="jump-item" data-jump="9"><span>09</span> 後台自行批改：2-5分極速回饋與基準</div>
         <div class="jump-item" data-jump="10"><span>10</span> 閱卷規準與二次審閱：人機把關</div>
         <div class="jump-item" data-jump="11"><span>11</span> 個人診斷報告：611分高基準與雷達圖</div>
-        <div class="jump-item" data-jump="12"><span>12</span> 班級弱點巨觀診斷：題型與歷程</div>
+        <div class="jump-item" data-jump="12"><span>12</span> 班級弱點巨觀診斷：題型斷層與歷程</div>
         <div class="jump-item" data-jump="13"><span>13</span> 課堂補救策略：AI生成實體教案</div>
-        <div class="jump-item" data-jump="14"><span>14</span> 現實與成本：多模型API與極致性價比</div>
+        <div class="jump-item" data-jump="14"><span>14</span> 理想與現實：多模型API與極致性價比</div>
         <div class="jump-item" data-jump="15"><span>15</span> 現場實際實測：學生端登入作答 (QR Code)</div>
         <div class="jump-item" data-jump="16"><span>16</span> 大綱審閱與後續規劃</div>
       </div>
     </div>
   </div>
+  </div>
 
   <script>
-    const slides = document.querySelectorAll('.slide');
+const slides = document.querySelectorAll('.slide');
     const totalSlides = slides.length;
     let currentSlide = 1;
     let currentStep = 1;
@@ -2908,6 +2918,7 @@
     }, false);
 
     updateSlide(1, 1);
-  </script>
+
+</script>
 </body>
 </html>

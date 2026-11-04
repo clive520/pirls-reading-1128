@@ -19,30 +19,61 @@
 
 ---
 
-## 📂 專案檔案結構
+## 🧩 模組化源碼結構與日常維護指南 (Modular Architecture)
 
-- **`index.html`**：演講投影片主頁（共 15 頁，極簡重點大字級、大地綠與象牙白風格、鍵盤與觸控翻頁、全螢幕播放、目錄彈窗）。
-- **`script.html`**：講者專用演講逐字稿手冊（附建議時間、現場身態互動指示、完整口語逐字講稿、支援列印與另存 PDF）。
-- **`github-pages-tutorial.html`**：獨立設計之「如何設定 GitHub Repo 為公開 Pages」互動教學簡報（共 7 頁，含完整截圖引導、分支設定、Actions 比較與排錯 CheckList）。
-- **`github-pages-script.html`**：GitHub Pages 設定教學簡報專用「講者演講逐字稿手冊」（含投影片重點、動作提示、口語逐字講稿、支援列印與 PDF）。
-- **`ai-studio-game-tutorial.html`**：全新獨立設計之「Google AI Studio 實作與 GitHub Pages 發布小遊戲」精準圖形簡報（共 6 頁，含 8 款課堂遊戲提示詞一鍵複製寶庫、Gemini 3.8 Flash 設定、Publish 上雲、Pages 3 步公開設定與課堂 QR Code 實戰應用）。
-- **`ai-studio-game-script.html`**：AI Studio 小遊戲教學簡報專用「講者演講逐字稿手冊」（含建議時間、現場操作身態指示、完整口語逐字講稿、支援列印與 PDF）。
-- **`assets/images/`**：
-  - `reading_system_login.png`：雲端閱讀認證系統前台入口（師生雙端）。
-  - `teacher_dashboard.png`：教師管理後台功能導覽。
-  - `ai_generate_article.png`：AI 智慧生成題庫（主題撰寫文章）。
-  - `manual_input_article.png`：手動輸入文章導入生成題庫（課本教材）。
-  - `assign_task.png`：隨時指派新測驗任務（單次/多次、期限、跨班）。
-  - `results_review.png`：測驗成果檢視（2-5分鐘秒級回饋、PIRLS國際基準、作答歷程防猜）。
-  - `rubric_teacher_review.png`：PIRLS 0~3分 Rubrics 閱卷規準與教師評分調整。
-  - `pirls_benchmark_radar.png`：個人素養診斷報告（611分高基準與四向度雷達圖）。
-  - `class_weakness_analysis.png`：班級弱點巨觀診斷（題型得分率斷層、PIRLS 四認知歷程階梯）。
-  - `remedial_strategies.png`：針對性課堂教學與補救策略（AI 專家模型生成的三大實體教案）。
-  - `api_provider_settings.png`：系統與 API 設定（Gemini / DeepSeek / OpenRouter 多模型極致性價比）。
+為解決單一 HTML 檔案過於龐大（近 3,000 行）、修改不易且容易誤觸其他頁面的問題，本專案已全面升級為**「模組化拆分 ＋ 零依賴一鍵組裝」**架構：
+
+```text
+pirls-reading-1128/
+├── src/                                  # ──【源碼修改區】──
+│   ├── css/
+│   │   ├── style.css                     # 全域基礎、配色主題、自適應版面
+│   │   ├── spotlight.css                 # 簡報重點逐項跳出與特大靠中聚焦動畫
+│   │   └── script.css                    # 講者逐字稿專用樣式
+│   ├── js/
+│   │   └── presentation.js               # 鍵盤導航、步驟步進、全螢幕與跳轉
+│   ├── slides/                           # ──【各頁投影片獨立檔案】──
+│   │   ├── 01-cover.html                 # 封面 (約 30 行)
+│   │   ├── ...
+│   │   ├── 15-live-test.html             # 現場實測與 QR Code
+│   │   └── 16-summary.html
+│   ├── script-sections/                  # ──【逐字稿各頁獨立檔案】──
+│   │   ├── 01-cover.html
+│   │   └── ...
+│   └── templates/                        # 骨架樣板 (自動注入 CSS/JS/內容)
+│
+├── build.py                              # 一鍵自動組裝工具 (零第三方套件依賴)
+├── index.html                            # 組裝完成的正式簡報 (發布與雙擊離線開啟)
+└── script.html                           # 組裝完成的講者逐字稿
+```
+
+### 🛠️ 常見維護指令
+
+1. **修改單頁內容**：
+   - 直接開啟 `src/slides/XX-name.html`（僅幾十行），修改完成後執行：
+     ```bash
+     python build.py
+     ```
+   - 系統會在 **0.2 秒**內自動重新組裝出正式的 `index.html`。
+
+2. **存檔自動更新 (Watch 模式)**：
+   - 編輯時在終端機啟動：
+     ```bash
+     python build.py --watch
+     ```
+   - 只要儲存任何 CSS / JS / 投影片小檔案，系統將即時自動重新組裝，體驗極為流暢！
+
+3. **構建並同步至雙雲端硬碟 (G 槽 / H 槽)**：
+   ```bash
+   python build.py --sync
+   ```
+
+4. **調整頁面順序**：
+   - 只要直接重命名 `src/slides/` 中的檔案序號（例如將 `15-live-test.html` 移到 `09-live-test.html`），執行 `python build.py`，系統將**自動重新編排 `data-slide`、總頁數與跳轉選單**！
 
 ---
 
-## 📑 簡報完整大綱與架構（共 15 頁）
+## 📑 簡報完整大綱與架構（共 16 頁）
 
 - **Slide 01 封面**：`AI 賦能閱讀理解：PIRLS 提問 × 智慧批改實踐`
 - **Slide 02 研習藍圖**：六大模組規劃總覽
@@ -58,14 +89,15 @@
 - **Slide 12 班級弱點巨觀診斷**：**題型斷層（問答題僅17%）** × **PIRLS 四歷程斷崖（L3/L4）** × **時間預警**
 - **Slide 13 針對性課堂補救策略**：**AI 專家模型生成 3 大實體教案**（雙段落比對學習單、三級式標記法、詩意辨析）
 - **Slide 14 現實與成本考量**：**理想很豐滿、現實很骨感** × **DeepSeek 極致性價比 API** × **OpenRouter 多元生態**
-- **Slide 15 大綱審閱與後續規劃**：三大步驟（前導架構確認、後續章節擴充、GitHub 部署與現場演講）
+- **Slide 15 現場實際實測 📱**：**手機掃碼進入學生端體驗（QR Code + 專屬網址 + 登入指引）**
+- **Slide 16 大綱審閱與後續規劃**：三大步驟（前導架構確認、後續章節擴充、GitHub 部署與現場演講）
 
 ---
 
 ## 🖥️ 簡報操作快捷鍵
 
-- **下一頁**：鍵盤 `→` / `Space` / `PageDown`，或點擊下方「下一頁」
-- **上一頁**：鍵盤 `←` / `PageUp`，或點擊下方「上一頁」
+- **下一頁 / 下一步**：鍵盤 `→` / `Space` / `PageDown`，或點擊下方「下一頁」
+- **上一頁 / 上一步**：鍵盤 `←` / `PageUp`，或點擊下方「上一頁」
 - **全螢幕模式**：按鍵盤 `F` 鍵，或點擊下方「⛶ 全螢幕」
 - **快速跳轉目錄**：按鍵盤 `M` 鍵，或點擊下方「📑 目錄」
 - **打開講者逐字稿**：點擊下方橘色按鈕「🎙️ 講者逐字稿」（在新分頁開啟）

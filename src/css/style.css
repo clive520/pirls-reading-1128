@@ -1,0 +1,1674 @@
+:root {
+      --primary: #3E4B35;
+      --primary-light: #596B4C;
+      --primary-dark: #273121;
+      --accent: #C87D25;
+      --accent-red: #D94841;
+      --bg-cream: #F7F6F1;
+      --card-bg: #FFFFFF;
+      --text-main: #20241D;
+      --text-muted: #5F6659;
+      --border-color: #E2DFD4;
+      --tag-bg: #E7EEE0;
+      --tag-text: #34422B;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* 頂部進度條 */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3E4B35, #7D976A);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    #deck {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: clamp(14px, 2.2vh, 26px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98);
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      transform: scale(1.02);
+    }
+
+    /* 標題與標籤 - 精簡有力 */
+    .slide-header {
+      margin-bottom: clamp(8px, 1.6vh, 16px);
+      flex-shrink: 0;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-weight: 800;
+      font-size: clamp(0.72rem, 1.2vh, 0.82rem);
+      padding: clamp(2px, 0.5vh, 4px) clamp(8px, 1vw, 12px);
+      border-radius: 999px;
+      letter-spacing: 0.08em;
+      margin-bottom: clamp(3px, 0.6vh, 6px);
+    }
+
+    .slide-title {
+      font-size: clamp(1.55rem, 2.7vh, 2.2rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .slide-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ================= Slide 1: 封面 (大器乾淨) ================= */
+    .cover-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .cover-hero-title {
+      font-size: 3.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .cover-hero-title span {
+      display: block;
+      color: #637754;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .cover-punchline {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #384230;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      border-left: 5px solid var(--accent);
+      padding-left: 18px;
+    }
+
+    .cover-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag-item {
+      background: white;
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .cover-card-preview {
+      background: white;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 16px 36px rgba(46, 56, 38, 0.12);
+      border: 1px solid #E2E6DC;
+      text-align: center;
+    }
+
+    .cover-card-preview img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    /* ================= Slide 2: 研習藍圖 (模組化大字) ================= */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .agenda-box {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      position: relative;
+    }
+
+    .agenda-box.highlight {
+      border: 2px solid #738864;
+      background: #FDFAF4;
+    }
+
+    .agenda-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #798D6C;
+      margin-bottom: 8px;
+    }
+
+    .agenda-box h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .agenda-box p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ================= Slide 3: 現場痛點 (高對比大字) ================= */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pain-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 26px;
+      border-top: 6px solid var(--accent-red);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .pain-tag {
+      background: #FDF0EF;
+      color: var(--accent-red);
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 4px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pain-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #262924;
+      margin-bottom: 12px;
+    }
+
+    .pain-desc {
+      font-size: 1.1rem;
+      color: #555A50;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .pain-summary-bar {
+      margin-top: 26px;
+      background: #2D3627;
+      color: #FFF;
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    /* ================= Slide 4: PIRLS 四象限排版 (2x2 矩陣) ================= */
+    .quadrant-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: clamp(8px, 1.3vh, 14px);
+      align-content: stretch;
+      min-height: 0;
+    }
+
+    .quadrant-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(12px, 1.8vh, 22px) clamp(16px, 1.8vw, 26px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      min-height: 0;
+    }
+
+    .quadrant-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(62, 75, 53, 0.1);
+    }
+
+    .quadrant-card.q1 {
+      border-left: 6px solid #536E46;
+    }
+    .quadrant-card.q2 {
+      border-left: 6px solid #3B5F71;
+    }
+    .quadrant-card.q3 {
+      border-left: 6px solid #9C6C2E;
+    }
+    .quadrant-card.q4 {
+      border-left: 6px solid #994441;
+    }
+
+    .q-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+    }
+
+    .q-pill {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(0.82rem, 1.3vh, 0.94rem);
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .q1 .q-pill { background: #EBF1E6; color: #364C2E; }
+    .q2 .q-pill { background: #E9F1F5; color: #264757; }
+    .q3 .q-pill { background: #F8F0E4; color: #724A18; }
+    .q4 .q-pill { background: #FBEBEA; color: #752927; }
+
+    .q-level-tag {
+      font-size: clamp(0.8rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .q-title {
+      font-size: clamp(1.4rem, 2.3vh, 1.85rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+      letter-spacing: -0.01em;
+    }
+
+    .q-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.45vh, 1.08rem);
+      font-weight: 800;
+      padding: clamp(3px, 0.5vh, 6px) clamp(10px, 1.1vw, 14px);
+      border-radius: 8px;
+      margin-bottom: clamp(6px, 1vh, 10px);
+      width: fit-content;
+    }
+
+    .q1 .q-action-pill { background: #F1F6EE; color: #2C4223; }
+    .q2 .q-action-pill { background: #EEF5F8; color: #1D3E4F; }
+    .q3 .q-action-pill { background: #FBF4EB; color: #613C0F; }
+    .q4 .q-action-pill { background: #FBEEEE; color: #691E1C; }
+
+    .q-desc {
+      font-size: clamp(0.96rem, 1.55vh, 1.15rem);
+      color: #2D3724;
+      line-height: 1.55;
+      font-weight: 600;
+      margin-bottom: clamp(8px, 1.2vh, 14px);
+    }
+
+    .q-example-box {
+      background: #F8F9F5;
+      border-radius: 9px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.4vw, 16px);
+      font-size: clamp(0.9rem, 1.4vh, 1.05rem);
+      color: #2F382A;
+      border-left: 4px solid #BAC4B2;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .q1 .q-example-box { border-left-color: #536E46; background: #F5F9F3; }
+    .q2 .q-example-box { border-left-color: #3B5F71; background: #F2F7FA; }
+    .q3 .q-example-box { border-left-color: #9C6C2E; background: #FAF5ED; }
+    .q4 .q-example-box { border-left-color: #994441; background: #FAF2F2; }
+
+    .quadrant-center-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2C3524;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(0.82rem, 1.3vh, 0.95rem);
+      padding: clamp(5px, 0.8vh, 8px) clamp(12px, 1.4vw, 18px);
+      border-radius: 99px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+      border: 3px solid var(--bg-cream);
+      z-index: 10;
+      pointer-events: none;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    /* ================= Slide 5: 人機協同對比 ================= */
+    .split-contrast {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .contrast-box {
+      border-radius: 22px;
+      padding: 32px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .contrast-old {
+      background: #EFEFEA;
+      border: 1px solid #DEDDD6;
+    }
+
+    .contrast-ai {
+      background: #FFFFFF;
+      border: 3px solid #637754;
+      box-shadow: 0 14px 30px rgba(62, 75, 53, 0.1);
+    }
+
+    .contrast-header {
+      font-size: 1.7rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contrast-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contrast-list li {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .golden-rule {
+      margin-top: 22px;
+      background: #EAF0E4;
+      border-left: 5px solid var(--primary);
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 6: 系統實例展示 ================= */
+    .system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .preview-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .preview-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .preview-caption {
+      margin-top: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .preview-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ================= Slide 7: 出題雙軌模式 ================= */
+    .dual-engine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .dual-engine-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 24px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .dual-engine-card.ai-mode {
+      border-top: 6px solid #435038;
+    }
+
+    .dual-engine-card.manual-mode {
+      border-top: 6px solid #C87D25;
+    }
+
+    .engine-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .engine-badge {
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .ai-mode .engine-badge { background: #EAF0E4; color: #35472B; }
+    .manual-mode .engine-badge { background: #FDF3E5; color: #8C5311; }
+
+    .engine-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+
+    .engine-preview-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #E5E7DF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      object-fit: cover;
+      max-height: 220px;
+      display: block;
+    }
+
+    .engine-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .engine-points li {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #384033;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .engine-footer-bar {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 24px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+    }
+
+    .param-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 8: 任務指派機制 ================= */
+    .task-assign-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .task-preview-panel {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .task-preview-panel img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .task-features-column {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .task-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border-left: 5px solid var(--primary);
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease;
+    }
+
+    .task-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .task-feature-card.c2 { border-left-color: #C87D25; }
+    .task-feature-card.c3 { border-left-color: #3B5F71; }
+
+    .task-feature-title {
+      font-size: clamp(0.95rem, 1.5vh, 1.1rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .task-feature-desc {
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .task-highlight-pill {
+      display: inline-block;
+      margin-top: 3px;
+      background: #F2F5EF;
+      color: var(--primary);
+      font-size: clamp(0.68rem, 1.1vh, 0.76rem);
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    /* ================= Slide: 現場互動實測 (Live Testing QR Code) ================= */
+    .live-test-layout {
+      display: grid;
+      grid-template-columns: 1.12fr 1fr;
+      gap: clamp(14px, 2.2vw, 28px);
+      align-items: center;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .live-test-qr-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 22px) clamp(16px, 2vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: clamp(8px, 1.2vh, 14px);
+    }
+
+    .live-qr-wrapper {
+      position: relative;
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      border: 2px solid #D6DDCF;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .live-qr-wrapper:hover {
+      transform: scale(1.03);
+    }
+
+    .live-qr-img {
+      width: clamp(150px, 22vh, 205px);
+      height: clamp(150px, 22vh, 205px);
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .live-qr-scan-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EAF0E4;
+      color: #354B2A;
+      font-size: clamp(0.78rem, 1.25vh, 0.88rem);
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+
+    .live-url-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #F6F8F3;
+      border: 1.5px solid #CCD8C3;
+      padding: clamp(6px, 1vh, 9px) clamp(12px, 1.4vw, 18px);
+      border-radius: 10px;
+      text-decoration: none;
+      color: #26381C;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-weight: 800;
+      font-size: clamp(0.85rem, 1.35vh, 1.02rem);
+      transition: all 0.2s ease;
+      word-break: break-all;
+    }
+
+    .live-url-pill:hover {
+      background: #E8F0E2;
+      border-color: #557245;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(62, 75, 53, 0.15);
+    }
+
+    .live-credentials-box {
+      background: #FDFBF5;
+      border: 1.5px solid #EFE4D0;
+      border-radius: 11px;
+      padding: clamp(8px, 1.1vh, 11px) clamp(12px, 1.2vw, 16px);
+      width: 100%;
+      text-align: left;
+    }
+
+    .live-cred-title {
+      font-size: clamp(0.82rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: #8C5311;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-cred-row {
+      font-size: clamp(0.78rem, 1.15vh, 0.86rem);
+      color: #4C5246;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* 右側操作流程卡片 */
+    .live-test-guide-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 20px) clamp(16px, 1.8vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.3vh, 14px);
+      justify-content: space-between;
+    }
+
+    .live-preview-box {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: #FAFBF8;
+      border-radius: 12px;
+      padding: clamp(8px, 1.2vh, 12px);
+      border: 1px solid var(--border-color);
+    }
+
+    .live-preview-img {
+      width: clamp(95px, 14vh, 130px);
+      border-radius: 9px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .live-preview-text h4 {
+      font-size: clamp(0.96rem, 1.5vh, 1.12rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+
+    .live-preview-text p {
+      font-size: clamp(0.76rem, 1.15vh, 0.84rem);
+      color: var(--text-muted);
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .live-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1vh, 10px);
+    }
+
+    .live-step-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(10px, 1.2vw, 14px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+
+    .live-step-item:hover {
+      transform: translateX(4px);
+      border-color: #7D976A;
+    }
+
+    .live-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .live-step-content {
+      flex: 1;
+    }
+
+    .live-step-content strong {
+      font-size: clamp(0.85rem, 1.35vh, 0.96rem);
+      color: var(--primary-dark);
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .live-step-content span {
+      font-size: clamp(0.74rem, 1.1vh, 0.82rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      display: block;
+    }
+
+    .live-bottom-notice {
+      background: linear-gradient(135deg, #EEF4E8, #E2ECD8);
+      border: 1.5px solid #BACFB0;
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(12px, 1.2vw, 16px);
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: #2D4421;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ================= Slide: 智慧成果與批改 ================= */
+    .grading-results-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .grading-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .grading-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .grading-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .grading-feature-item {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .grading-feature-item:nth-child(1) { border-left-color: #435038; }
+    .grading-feature-item:nth-child(2) { border-left-color: #2B5773; }
+    .grading-feature-item:nth-child(3) { border-left-color: #C87D25; }
+    .grading-feature-item:nth-child(4) { border-left-color: #435038; }
+
+    .grading-feature-item:hover {
+      transform: translateX(4px);
+      border-color: #8FA47F;
+    }
+
+    .g-item-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .g-item-text {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .g-item-tag {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #F1F4EE;
+      color: #38492E;
+    }
+
+    /* ================= Slide 10: Rubrics 規準與二次審閱 ================= */
+    .rubric-review-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .rubric-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .rubric-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .rubric-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .rubric-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .rubric-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .rubric-feature-card.c-rubric { border-left-color: #C87D25; }
+    .rubric-feature-card.c-teacher { border-left-color: #435038; }
+    .rubric-feature-card.c-feedback { border-left-color: #2B5773; }
+
+    /* ================= Slide 11: 個人素養診斷與雷達圖 ================= */
+    .radar-report-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .radar-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .radar-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .radar-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .radar-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid #2B5773;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .radar-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .radar-feature-card.c-scale { border-left-color: #2B5773; }
+    .radar-feature-card.c-radar { border-left-color: #C87D25; }
+    .radar-feature-card.c-guide { border-left-color: #435038; }
+
+    /* ================= Slide 12: 班級弱點分析 ================= */
+    .class-analytics-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .class-analytics-screenshot {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .class-analytics-screenshot img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .class-weakness-cards {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .weakness-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .weakness-card:hover {
+      transform: translateX(4px);
+    }
+
+    .weakness-card.radar { border-left-color: #C87D25; }
+    .weakness-card.action { border-left-color: #435038; }
+
+    .weakness-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .weakness-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .weakness-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 13: 課堂補救策略 ================= */
+    .remedial-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .remedial-screenshot {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .remedial-screenshot img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .remedial-cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .remedial-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .remedial-card:hover {
+      transform: translateX(4px);
+    }
+
+    .remedial-card.s1 { border-left-color: #435038; }
+    .remedial-card.s2 { border-left-color: #2B5773; }
+    .remedial-card.s3 { border-left-color: #C87D25; }
+
+    .remedial-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .remedial-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .remedial-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 14: 成本與多模型 API 設定 ================= */
+    .api-cost-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .api-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .api-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .api-cost-cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .cost-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .cost-card:hover {
+      transform: translateX(4px);
+    }
+
+    .cost-card.c-gemini { border-left-color: #435038; }
+    .cost-card.c-deepseek { border-left-color: #C87D25; }
+    .cost-card.c-openrouter { border-left-color: #2B5773; }
+
+    .cost-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cost-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .cost-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 15: 審閱與下一步 ================= */
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(14px, 1.8vw, 24px);
+      min-height: 0;
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(16px, 2.2vh, 26px) clamp(16px, 1.8vw, 22px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+    }
+
+    .step-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.6rem, 2.5vh, 2.2rem);
+      font-weight: 900;
+      color: #637754;
+      margin-bottom: 6px;
+    }
+
+    .step-card h3 {
+      font-size: clamp(1.2rem, 1.8vh, 1.4rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .step-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: clamp(0.85rem, 1.3vh, 0.98rem);
+      color: #4C5246;
+      font-weight: 600;
+    }
+
+    /* [Spotlight Styles extracted to src/css/spotlight.css] */
+
+    /* ================= 底部導覽控制列 ================= */
+    #deck-controls {
+      position: relative;
+      height: 54px;
+      flex-shrink: 0;
+      background: rgba(247, 246, 241, 0.98);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 3vw, 40px);
+      z-index: 50;
+    }
+
+    .control-info {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-indicator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--primary-dark);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: #E8ECE2;
+      border-color: #A6B898;
+    }
+
+    .btn-nav.primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .btn-nav.primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-nav.script-btn {
+      background: #C87D25;
+      color: #FFF;
+      border-color: #B26E1D;
+    }
+
+    .btn-nav.script-btn:hover {
+      background: #B26E1D;
+    }
+
+    /* 目錄跳轉彈窗 */
+    #agenda-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #agenda-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 650px;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #EEE;
+      padding-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .slide-jump-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .jump-item {
+      padding: 12px 16px;
+      border: 1px solid #E5E5DF;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #FAFAFA;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .jump-item:hover {
+      background: #EBF1E6;
+      border-color: #798D6C;
+      color: var(--primary);
+    }
+
+    /* ================= 筆電全螢幕與高度受限自適應 (@media max-height) ================= */
+    @media (max-height: 850px) {
+      .slide {
+        padding: 14px clamp(20px, 3.5vw, 44px);
+      }
+      .slide-header {
+        margin-bottom: 8px;
+      }
+      .slide-title {
+        font-size: 1.75rem;
+      }
+      .slide-badge {
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+      }
+      .cover-hero-title {
+        font-size: 2.8rem;
+        margin-bottom: 12px;
+      }
+      .cover-hero-title span {
+        font-size: 2rem;
+      }
+      .cover-punchline {
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+      }
+      .pain-card {
+        padding: 16px 18px;
+      }
+      .agenda-box {
+        padding: 12px 16px;
+      }
+      .step-card {
+        padding: 14px 18px;
+      }
+      .step-num {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+      }
+      .step-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+      }
+      .step-card ul {
+        font-size: 0.88rem;
+        gap: 4px;
+      }
+    }
+
+    @media (max-height: 720px) {
+      .slide {
+        padding: 10px clamp(16px, 3vw, 36px);
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .slide-header {
+        margin-bottom: 6px;
+      }
+      .g-item-text, .weakness-card-desc, .cost-card-desc, .remedial-card-desc, .task-feature-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .quadrant-card {
+        padding: 10px 16px;
+      }
+      .q-desc {
+        margin-bottom: 6px;
+      }
+      .q-example-box {
+        padding: 6px 12px;
+      }
+      .grading-screenshot-card img,
+      .class-analytics-screenshot img,
+      .api-screenshot-card img,
+      .rubric-screenshot-card img,
+      .radar-screenshot-card img,
+      .remedial-screenshot img,
+      .task-preview-panel img {
+        max-height: min(340px, calc(100vh - 160px));
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 20px 24px;
+      }
+      .cover-layout {
+        grid-template-columns: 1fr;
+      }
+      .cover-card-preview {
+        display: none;
+      }
+      .quadrant-wrapper {
+        gap: 10px;
+      }
+      .quadrant-center-badge {
+        display: none;
+      }
+      .agenda-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
