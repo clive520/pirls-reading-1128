@@ -1672,3 +1672,754 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+
+/* ==========================================================================
+   2026 研習全新主題樣式 (鹿陽國小 閱讀理解策略與 AI 結合)
+   ========================================================================== */
+
+/* ===== SLIDE 1: 封面升級 ===== */
+.cover-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: clamp(24px, 3.5vw, 48px);
+  align-items: center;
+  height: 100%;
+}
+
+.cover-main-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cover-speaker-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  padding: 12px 22px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(62, 75, 53, 0.06);
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.speaker-avatar-icon {
+  font-size: 2.2rem;
+  background: var(--tag-bg);
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #BAC9AE;
+}
+
+.speaker-card-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.speaker-role-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.speaker-full-name {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.2;
+}
+
+.speaker-affiliation {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.cover-blueprint-card {
+  background: white;
+  border-radius: 24px;
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 16px 36px rgba(46, 56, 38, 0.08);
+  padding: clamp(20px, 2.8vh, 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+.blueprint-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #F0EEE6;
+}
+
+.blueprint-title-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3E4B35;
+  box-shadow: 0 0 0 4px #DCE5D5;
+}
+
+.blueprint-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.03em;
+}
+
+.blueprint-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.blueprint-step-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-cream);
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid #EAE7DC;
+}
+
+.blueprint-step-box.highlight {
+  background: #F4F8F0;
+  border: 1.5px solid #738864;
+  box-shadow: 0 4px 12px rgba(99, 119, 84, 0.1);
+}
+
+.b-step-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #6A825B;
+  flex-shrink: 0;
+}
+
+.b-step-content strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--primary-dark);
+  margin-bottom: 2px;
+}
+
+.b-step-content p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.blueprint-step-arrow {
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #8C9982;
+  letter-spacing: 0.05em;
+  padding: 2px 0;
+}
+
+.blueprint-footer {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: #273121;
+  color: #FFF;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ===== SLIDE 2: 講師簡介與經歷時間軸 ===== */
+.speaker-profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.5vh, 18px);
+  height: 100%;
+}
+
+.speaker-hero-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  padding: clamp(12px, 1.6vh, 18px) clamp(18px, 2.2vw, 28px);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+.speaker-bio-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.avatar-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3E4B35, #637754);
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(62, 75, 53, 0.25);
+  border: 3px solid #FFF;
+  flex-shrink: 0;
+}
+
+.speaker-display-name {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.2;
+}
+
+.speaker-display-school {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.speaker-metrics-group {
+  display: flex;
+  gap: 12px;
+}
+
+.metric-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-cream);
+  border: 1px solid #E5E2D8;
+  padding: 6px 16px;
+  border-radius: 12px;
+  min-width: 95px;
+}
+
+.metric-pill.highlight {
+  background: #FAF5EB;
+  border: 1.5px solid #C87D25;
+}
+
+.m-val {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.metric-pill.highlight .m-val {
+  color: #C87D25;
+}
+
+.m-val small {
+  font-size: 0.82rem;
+  margin-left: 2px;
+}
+
+.m-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.experience-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  flex: 1;
+}
+
+.exp-card {
+  background: white;
+  border-radius: 18px;
+  border: 1.5px solid var(--border-color);
+  padding: clamp(12px, 1.8vh, 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.exp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(62, 75, 53, 0.1);
+}
+
+.exp-card.exp-tech-highlight {
+  border: 2px solid #3B5F71;
+  background: #F7FAFC;
+}
+
+.exp-card.exp-current-now {
+  border: 2px solid var(--accent);
+  background: #FDFAF5;
+}
+
+.exp-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.exp-icon {
+  font-size: 1.5rem;
+}
+
+.exp-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.tag-edu {
+  background: #E8EFE5;
+  color: #38502E;
+}
+
+.tag-school {
+  background: #EAEFF2;
+  color: #2F4D5F;
+}
+
+.tag-tech {
+  background: #E1ECF4;
+  color: #1D5377;
+  font-weight: 900;
+}
+
+.tag-now {
+  background: #FCEFD8;
+  color: #A35E0F;
+  font-weight: 900;
+}
+
+.exp-title {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.exp-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 600;
+  flex: 1;
+}
+
+.exp-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed #E5E2D8;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #6A7961;
+}
+
+/* ===== SLIDE 3: 臺灣 PIRLS 國際成績圖表儀表板 ===== */
+.pirls-dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.2vh, 14px);
+  height: 100%;
+}
+
+.pirls-notice-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F3F6EF;
+  border-left: 5px solid #4D683E;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #2B3425;
+}
+
+.notice-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.pirls-charts-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.05fr 1.3fr;
+  gap: clamp(10px, 1.4vw, 16px);
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 18px;
+  border: 1.5px solid var(--border-color);
+  padding: clamp(12px, 1.6vh, 18px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+
+.chart-header {
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid #F0EEE7;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chart-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.chart-subtitle {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* 圖表 1: 垂直分數條 */
+.score-bars-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex: 1;
+  padding: 8px 4px;
+  gap: 12px;
+}
+
+.score-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.score-meta-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.rank-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: #E8ECE4;
+  color: #344729;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.rank-badge.gold {
+  background: #FBF0DD;
+  color: #9C6010;
+  font-weight: 900;
+  border: 1px solid #ECC88F;
+}
+
+.score-val {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #3E4B35;
+}
+
+.score-val.accent {
+  color: #C87D25;
+  font-size: 1.4rem;
+}
+
+.bar-track {
+  width: 42px;
+  height: 110px;
+  background: #EEEDE7;
+  border-radius: 10px 10px 4px 4px;
+  display: flex;
+  align-items: flex-end;
+  padding: 3px;
+}
+
+.bar-fill {
+  width: 100%;
+  border-radius: 8px 8px 3px 3px;
+  background: #738864;
+  transition: height 0.6s ease;
+}
+
+.bar-fill.highest {
+  background: #48613A;
+}
+
+.bar-fill.current {
+  background: linear-gradient(180deg, #D48833, #AD6518);
+  box-shadow: 0 4px 12px rgba(200, 125, 37, 0.25);
+}
+
+.score-meta-bottom {
+  margin-top: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.score-meta-bottom strong {
+  font-size: 0.92rem;
+  color: var(--primary-dark);
+}
+
+.score-meta-bottom small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.chart-footnote {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  background: var(--bg-cream);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.chart-footnote.alert-note {
+  background: #FDF3E7;
+  color: #8C5311;
+  font-weight: 700;
+}
+
+/* 圖表 2: 文體橫條圖 */
+.genre-gap-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.genre-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.genre-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genre-name {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.genre-score {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.genre-score.high {
+  color: #385B2D;
+}
+
+.genre-score.low {
+  color: #B83A35;
+}
+
+.h-bar-track {
+  width: 100%;
+  height: 16px;
+  background: #EAE8E0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.h-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.high-fill {
+  background: linear-gradient(90deg, #537545, #35522A);
+}
+
+.low-fill {
+  background: linear-gradient(90deg, #D96560, #B83A35);
+}
+
+.genre-detail {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.gap-indicator-pill {
+  background: #FDF0EF;
+  border: 1px dashed #D94841;
+  color: #BA332C;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* 圖表 3: 2023–2025 三年演進流 */
+.tri-year-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.year-flow-item {
+  background: var(--bg-cream);
+  border: 1px solid #EAE7DC;
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.year-flow-item.current-year {
+  background: #F3F8EF;
+  border: 1.5px solid #637B53;
+  box-shadow: 0 4px 10px rgba(99, 123, 83, 0.08);
+}
+
+.year-tag {
+  align-self: flex-start;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.tag-2023 {
+  background: #E4ECE0;
+  color: #35492C;
+}
+
+.tag-2024 {
+  background: #EAE6D9;
+  color: #615842;
+}
+
+.tag-2025 {
+  background: #2D3926;
+  color: #FFF;
+}
+
+.year-topic {
+  font-size: 0.94rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.year-points {
+  list-style: none;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.year-points li {
+  position: relative;
+  padding-left: 10px;
+}
+
+.year-points li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #7B8B70;
+  font-weight: bold;
+}
+
+/* 底部橋接提示條 */
+.pirls-bridge-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #232B1E;
+  color: #F7F6F1;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.bridge-tag {
+  background: #C87D25;
+  color: #FFF;
+  font-weight: 900;
+  font-size: 0.74rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.bridge-text {
+  color: #E2DFD4;
+}
+
+.bridge-text strong {
+  color: #FFDE9E;
+}
+
+@media (max-width: 1024px) {
+  .experience-timeline-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pirls-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .speaker-hero-strip {
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+}

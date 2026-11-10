@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>講者演講逐字稿手冊 • AI 賦能閱讀理解教學</title>
+  <title>講者演講逐字稿手冊 • 鹿陽國民小學「閱讀理解策略與 AI 的結合」</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
   <header class="top-bar">
     <div class="brand">
       <h1>🎙️ 講者演講逐字稿手冊</h1>
-      <span class="brand-badge">國小教師增能研習專用</span>
+      <span class="brand-badge">鹿陽國民小學研習 • 講師高志賢</span>
     </div>
     <div class="top-actions">
       <button class="btn" onclick="window.print()">🖨️ 列印 / 另存 PDF</button>

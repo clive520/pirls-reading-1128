@@ -1,0 +1,2924 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 賦能閱讀理解：從 PIRLS 架構到智慧化課堂實踐</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+/* ====== style.css ====== */
+:root {
+      --primary: #3E4B35;
+      --primary-light: #596B4C;
+      --primary-dark: #273121;
+      --accent: #C87D25;
+      --accent-red: #D94841;
+      --bg-cream: #F7F6F1;
+      --card-bg: #FFFFFF;
+      --text-main: #20241D;
+      --text-muted: #5F6659;
+      --border-color: #E2DFD4;
+      --tag-bg: #E7EEE0;
+      --tag-text: #34422B;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* 頂部進度條 */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3E4B35, #7D976A);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    #deck {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: clamp(14px, 2.2vh, 26px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98);
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      transform: scale(1.02);
+    }
+
+    /* 標題與標籤 - 精簡有力 */
+    .slide-header {
+      margin-bottom: clamp(8px, 1.6vh, 16px);
+      flex-shrink: 0;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-weight: 800;
+      font-size: clamp(0.72rem, 1.2vh, 0.82rem);
+      padding: clamp(2px, 0.5vh, 4px) clamp(8px, 1vw, 12px);
+      border-radius: 999px;
+      letter-spacing: 0.08em;
+      margin-bottom: clamp(3px, 0.6vh, 6px);
+    }
+
+    .slide-title {
+      font-size: clamp(1.55rem, 2.7vh, 2.2rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .slide-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ================= Slide 1: 封面 (大器乾淨) ================= */
+    .cover-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .cover-hero-title {
+      font-size: 3.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .cover-hero-title span {
+      display: block;
+      color: #637754;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .cover-punchline {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #384230;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      border-left: 5px solid var(--accent);
+      padding-left: 18px;
+    }
+
+    .cover-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag-item {
+      background: white;
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .cover-card-preview {
+      background: white;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 16px 36px rgba(46, 56, 38, 0.12);
+      border: 1px solid #E2E6DC;
+      text-align: center;
+    }
+
+    .cover-card-preview img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    /* ================= Slide 2: 研習藍圖 (模組化大字) ================= */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .agenda-box {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      position: relative;
+    }
+
+    .agenda-box.highlight {
+      border: 2px solid #738864;
+      background: #FDFAF4;
+    }
+
+    .agenda-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #798D6C;
+      margin-bottom: 8px;
+    }
+
+    .agenda-box h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .agenda-box p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ================= Slide 3: 現場痛點 (高對比大字) ================= */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pain-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 26px;
+      border-top: 6px solid var(--accent-red);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .pain-tag {
+      background: #FDF0EF;
+      color: var(--accent-red);
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 4px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pain-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #262924;
+      margin-bottom: 12px;
+    }
+
+    .pain-desc {
+      font-size: 1.1rem;
+      color: #555A50;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .pain-summary-bar {
+      margin-top: 26px;
+      background: #2D3627;
+      color: #FFF;
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    /* ================= Slide 4: PIRLS 四象限排版 (2x2 矩陣) ================= */
+    .quadrant-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: clamp(8px, 1.3vh, 14px);
+      align-content: stretch;
+      min-height: 0;
+    }
+
+    .quadrant-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(12px, 1.8vh, 22px) clamp(16px, 1.8vw, 26px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      min-height: 0;
+    }
+
+    .quadrant-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(62, 75, 53, 0.1);
+    }
+
+    .quadrant-card.q1 {
+      border-left: 6px solid #536E46;
+    }
+    .quadrant-card.q2 {
+      border-left: 6px solid #3B5F71;
+    }
+    .quadrant-card.q3 {
+      border-left: 6px solid #9C6C2E;
+    }
+    .quadrant-card.q4 {
+      border-left: 6px solid #994441;
+    }
+
+    .q-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+    }
+
+    .q-pill {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(0.82rem, 1.3vh, 0.94rem);
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .q1 .q-pill { background: #EBF1E6; color: #364C2E; }
+    .q2 .q-pill { background: #E9F1F5; color: #264757; }
+    .q3 .q-pill { background: #F8F0E4; color: #724A18; }
+    .q4 .q-pill { background: #FBEBEA; color: #752927; }
+
+    .q-level-tag {
+      font-size: clamp(0.8rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .q-title {
+      font-size: clamp(1.4rem, 2.3vh, 1.85rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+      letter-spacing: -0.01em;
+    }
+
+    .q-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.45vh, 1.08rem);
+      font-weight: 800;
+      padding: clamp(3px, 0.5vh, 6px) clamp(10px, 1.1vw, 14px);
+      border-radius: 8px;
+      margin-bottom: clamp(6px, 1vh, 10px);
+      width: fit-content;
+    }
+
+    .q1 .q-action-pill { background: #F1F6EE; color: #2C4223; }
+    .q2 .q-action-pill { background: #EEF5F8; color: #1D3E4F; }
+    .q3 .q-action-pill { background: #FBF4EB; color: #613C0F; }
+    .q4 .q-action-pill { background: #FBEEEE; color: #691E1C; }
+
+    .q-desc {
+      font-size: clamp(0.96rem, 1.55vh, 1.15rem);
+      color: #2D3724;
+      line-height: 1.55;
+      font-weight: 600;
+      margin-bottom: clamp(8px, 1.2vh, 14px);
+    }
+
+    .q-example-box {
+      background: #F8F9F5;
+      border-radius: 9px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.4vw, 16px);
+      font-size: clamp(0.9rem, 1.4vh, 1.05rem);
+      color: #2F382A;
+      border-left: 4px solid #BAC4B2;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .q1 .q-example-box { border-left-color: #536E46; background: #F5F9F3; }
+    .q2 .q-example-box { border-left-color: #3B5F71; background: #F2F7FA; }
+    .q3 .q-example-box { border-left-color: #9C6C2E; background: #FAF5ED; }
+    .q4 .q-example-box { border-left-color: #994441; background: #FAF2F2; }
+
+    .quadrant-center-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2C3524;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(0.82rem, 1.3vh, 0.95rem);
+      padding: clamp(5px, 0.8vh, 8px) clamp(12px, 1.4vw, 18px);
+      border-radius: 99px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+      border: 3px solid var(--bg-cream);
+      z-index: 10;
+      pointer-events: none;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    /* ================= Slide 5: 人機協同對比 ================= */
+    .split-contrast {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .contrast-box {
+      border-radius: 22px;
+      padding: 32px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .contrast-old {
+      background: #EFEFEA;
+      border: 1px solid #DEDDD6;
+    }
+
+    .contrast-ai {
+      background: #FFFFFF;
+      border: 3px solid #637754;
+      box-shadow: 0 14px 30px rgba(62, 75, 53, 0.1);
+    }
+
+    .contrast-header {
+      font-size: 1.7rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contrast-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contrast-list li {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .golden-rule {
+      margin-top: 22px;
+      background: #EAF0E4;
+      border-left: 5px solid var(--primary);
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 6: 系統實例展示 ================= */
+    .system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .preview-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .preview-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .preview-caption {
+      margin-top: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .preview-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ================= Slide 7: 出題雙軌模式 ================= */
+    .dual-engine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .dual-engine-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 24px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .dual-engine-card.ai-mode {
+      border-top: 6px solid #435038;
+    }
+
+    .dual-engine-card.manual-mode {
+      border-top: 6px solid #C87D25;
+    }
+
+    .engine-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .engine-badge {
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .ai-mode .engine-badge { background: #EAF0E4; color: #35472B; }
+    .manual-mode .engine-badge { background: #FDF3E5; color: #8C5311; }
+
+    .engine-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+
+    .engine-preview-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #E5E7DF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      object-fit: cover;
+      max-height: 220px;
+      display: block;
+    }
+
+    .engine-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .engine-points li {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #384033;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .engine-footer-bar {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 24px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+    }
+
+    .param-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 8: 任務指派機制 ================= */
+    .task-assign-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .task-preview-panel {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .task-preview-panel img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .task-features-column {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .task-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border-left: 5px solid var(--primary);
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease;
+    }
+
+    .task-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .task-feature-card.c2 { border-left-color: #C87D25; }
+    .task-feature-card.c3 { border-left-color: #3B5F71; }
+
+    .task-feature-title {
+      font-size: clamp(0.95rem, 1.5vh, 1.1rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .task-feature-desc {
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .task-highlight-pill {
+      display: inline-block;
+      margin-top: 3px;
+      background: #F2F5EF;
+      color: var(--primary);
+      font-size: clamp(0.68rem, 1.1vh, 0.76rem);
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    /* ================= Slide: 現場互動實測 (Live Testing QR Code) ================= */
+    .live-test-layout {
+      display: grid;
+      grid-template-columns: 1.12fr 1fr;
+      gap: clamp(14px, 2.2vw, 28px);
+      align-items: center;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .live-test-qr-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 22px) clamp(16px, 2vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: clamp(8px, 1.2vh, 14px);
+    }
+
+    .live-qr-wrapper {
+      position: relative;
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      border: 2px solid #D6DDCF;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .live-qr-wrapper:hover {
+      transform: scale(1.03);
+    }
+
+    .live-qr-img {
+      width: clamp(150px, 22vh, 205px);
+      height: clamp(150px, 22vh, 205px);
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .live-qr-scan-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EAF0E4;
+      color: #354B2A;
+      font-size: clamp(0.78rem, 1.25vh, 0.88rem);
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+
+    .live-url-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #F6F8F3;
+      border: 1.5px solid #CCD8C3;
+      padding: clamp(6px, 1vh, 9px) clamp(12px, 1.4vw, 18px);
+      border-radius: 10px;
+      text-decoration: none;
+      color: #26381C;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-weight: 800;
+      font-size: clamp(0.85rem, 1.35vh, 1.02rem);
+      transition: all 0.2s ease;
+      word-break: break-all;
+    }
+
+    .live-url-pill:hover {
+      background: #E8F0E2;
+      border-color: #557245;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(62, 75, 53, 0.15);
+    }
+
+    .live-credentials-box {
+      background: #FDFBF5;
+      border: 1.5px solid #EFE4D0;
+      border-radius: 11px;
+      padding: clamp(8px, 1.1vh, 11px) clamp(12px, 1.2vw, 16px);
+      width: 100%;
+      text-align: left;
+    }
+
+    .live-cred-title {
+      font-size: clamp(0.82rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: #8C5311;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-cred-row {
+      font-size: clamp(0.78rem, 1.15vh, 0.86rem);
+      color: #4C5246;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* 右側操作流程卡片 */
+    .live-test-guide-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 20px) clamp(16px, 1.8vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.3vh, 14px);
+      justify-content: space-between;
+    }
+
+    .live-preview-box {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: #FAFBF8;
+      border-radius: 12px;
+      padding: clamp(8px, 1.2vh, 12px);
+      border: 1px solid var(--border-color);
+    }
+
+    .live-preview-img {
+      width: clamp(95px, 14vh, 130px);
+      border-radius: 9px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .live-preview-text h4 {
+      font-size: clamp(0.96rem, 1.5vh, 1.12rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+
+    .live-preview-text p {
+      font-size: clamp(0.76rem, 1.15vh, 0.84rem);
+      color: var(--text-muted);
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .live-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1vh, 10px);
+    }
+
+    .live-step-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(10px, 1.2vw, 14px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+
+    .live-step-item:hover {
+      transform: translateX(4px);
+      border-color: #7D976A;
+    }
+
+    .live-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .live-step-content {
+      flex: 1;
+    }
+
+    .live-step-content strong {
+      font-size: clamp(0.85rem, 1.35vh, 0.96rem);
+      color: var(--primary-dark);
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .live-step-content span {
+      font-size: clamp(0.74rem, 1.1vh, 0.82rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      display: block;
+    }
+
+    .live-bottom-notice {
+      background: linear-gradient(135deg, #EEF4E8, #E2ECD8);
+      border: 1.5px solid #BACFB0;
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(12px, 1.2vw, 16px);
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: #2D4421;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ================= Slide: 智慧成果與批改 ================= */
+    .grading-results-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .grading-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .grading-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .grading-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .grading-feature-item {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .grading-feature-item:nth-child(1) { border-left-color: #435038; }
+    .grading-feature-item:nth-child(2) { border-left-color: #2B5773; }
+    .grading-feature-item:nth-child(3) { border-left-color: #C87D25; }
+    .grading-feature-item:nth-child(4) { border-left-color: #435038; }
+
+    .grading-feature-item:hover {
+      transform: translateX(4px);
+      border-color: #8FA47F;
+    }
+
+    .g-item-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .g-item-text {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .g-item-tag {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #F1F4EE;
+      color: #38492E;
+    }
+
+    /* ================= Slide 10: Rubrics 規準與二次審閱 ================= */
+    .rubric-review-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .rubric-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .rubric-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .rubric-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .rubric-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .rubric-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .rubric-feature-card.c-rubric { border-left-color: #C87D25; }
+    .rubric-feature-card.c-teacher { border-left-color: #435038; }
+    .rubric-feature-card.c-feedback { border-left-color: #2B5773; }
+
+    /* ================= Slide 11: 個人素養診斷與雷達圖 ================= */
+    .radar-report-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .radar-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .radar-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .radar-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .radar-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid #2B5773;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .radar-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .radar-feature-card.c-scale { border-left-color: #2B5773; }
+    .radar-feature-card.c-radar { border-left-color: #C87D25; }
+    .radar-feature-card.c-guide { border-left-color: #435038; }
+
+    /* ================= Slide 12: 班級弱點分析 ================= */
+    .class-analytics-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .class-analytics-screenshot {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .class-analytics-screenshot img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .class-weakness-cards {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .weakness-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .weakness-card:hover {
+      transform: translateX(4px);
+    }
+
+    .weakness-card.radar { border-left-color: #C87D25; }
+    .weakness-card.action { border-left-color: #435038; }
+
+    .weakness-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .weakness-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .weakness-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 13: 課堂補救策略 ================= */
+    .remedial-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .remedial-screenshot {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .remedial-screenshot img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .remedial-cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .remedial-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .remedial-card:hover {
+      transform: translateX(4px);
+    }
+
+    .remedial-card.s1 { border-left-color: #435038; }
+    .remedial-card.s2 { border-left-color: #2B5773; }
+    .remedial-card.s3 { border-left-color: #C87D25; }
+
+    .remedial-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .remedial-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .remedial-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 14: 成本與多模型 API 設定 ================= */
+    .api-cost-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .api-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .api-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .api-cost-cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .cost-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .cost-card:hover {
+      transform: translateX(4px);
+    }
+
+    .cost-card.c-gemini { border-left-color: #435038; }
+    .cost-card.c-deepseek { border-left-color: #C87D25; }
+    .cost-card.c-openrouter { border-left-color: #2B5773; }
+
+    .cost-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cost-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .cost-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 15: 審閱與下一步 ================= */
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(14px, 1.8vw, 24px);
+      min-height: 0;
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(16px, 2.2vh, 26px) clamp(16px, 1.8vw, 22px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+    }
+
+    .step-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.6rem, 2.5vh, 2.2rem);
+      font-weight: 900;
+      color: #637754;
+      margin-bottom: 6px;
+    }
+
+    .step-card h3 {
+      font-size: clamp(1.2rem, 1.8vh, 1.4rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .step-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: clamp(0.85rem, 1.3vh, 0.98rem);
+      color: #4C5246;
+      font-weight: 600;
+    }
+
+    /* [Spotlight Styles extracted to src/css/spotlight.css] */
+
+    /* ================= 底部導覽控制列 ================= */
+    #deck-controls {
+      position: relative;
+      height: 54px;
+      flex-shrink: 0;
+      background: rgba(247, 246, 241, 0.98);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 3vw, 40px);
+      z-index: 50;
+    }
+
+    .control-info {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-indicator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--primary-dark);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: #E8ECE2;
+      border-color: #A6B898;
+    }
+
+    .btn-nav.primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .btn-nav.primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-nav.script-btn {
+      background: #C87D25;
+      color: #FFF;
+      border-color: #B26E1D;
+    }
+
+    .btn-nav.script-btn:hover {
+      background: #B26E1D;
+    }
+
+    /* 目錄跳轉彈窗 */
+    #agenda-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #agenda-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 650px;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #EEE;
+      padding-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .slide-jump-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .jump-item {
+      padding: 12px 16px;
+      border: 1px solid #E5E5DF;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #FAFAFA;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .jump-item:hover {
+      background: #EBF1E6;
+      border-color: #798D6C;
+      color: var(--primary);
+    }
+
+    /* ================= 筆電全螢幕與高度受限自適應 (@media max-height) ================= */
+    @media (max-height: 850px) {
+      .slide {
+        padding: 14px clamp(20px, 3.5vw, 44px);
+      }
+      .slide-header {
+        margin-bottom: 8px;
+      }
+      .slide-title {
+        font-size: 1.75rem;
+      }
+      .slide-badge {
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+      }
+      .cover-hero-title {
+        font-size: 2.8rem;
+        margin-bottom: 12px;
+      }
+      .cover-hero-title span {
+        font-size: 2rem;
+      }
+      .cover-punchline {
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+      }
+      .pain-card {
+        padding: 16px 18px;
+      }
+      .agenda-box {
+        padding: 12px 16px;
+      }
+      .step-card {
+        padding: 14px 18px;
+      }
+      .step-num {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+      }
+      .step-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+      }
+      .step-card ul {
+        font-size: 0.88rem;
+        gap: 4px;
+      }
+    }
+
+    @media (max-height: 720px) {
+      .slide {
+        padding: 10px clamp(16px, 3vw, 36px);
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .slide-header {
+        margin-bottom: 6px;
+      }
+      .g-item-text, .weakness-card-desc, .cost-card-desc, .remedial-card-desc, .task-feature-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .quadrant-card {
+        padding: 10px 16px;
+      }
+      .q-desc {
+        margin-bottom: 6px;
+      }
+      .q-example-box {
+        padding: 6px 12px;
+      }
+      .grading-screenshot-card img,
+      .class-analytics-screenshot img,
+      .api-screenshot-card img,
+      .rubric-screenshot-card img,
+      .radar-screenshot-card img,
+      .remedial-screenshot img,
+      .task-preview-panel img {
+        max-height: min(340px, calc(100vh - 160px));
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 20px 24px;
+      }
+      .cover-layout {
+        grid-template-columns: 1fr;
+      }
+      .cover-card-preview {
+        display: none;
+      }
+      .quadrant-wrapper {
+        gap: 10px;
+      }
+      .quadrant-center-badge {
+        display: none;
+      }
+      .agenda-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+
+/* ====== spotlight.css ====== */
+/* ================= 簡報重點逐項跳出與特大靠中聚焦 (Audience Center Spotlight for Slide 8~14) ================= */
+    .step-item {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+                  opacity 0.28s ease,
+                  box-shadow 0.35s ease,
+                  filter 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* 1. 已揭示但非當前的重點：保持在旁，微縮並柔化，將全場視覺徹底留給中間焦點 */
+    .step-item.revealed:not(.active-step) {
+      opacity: 0.42 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(0.96) !important;
+      filter: saturate(0.8) !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .step-item.revealed:not(.active-step):hover {
+      opacity: 0.85 !important;
+      filter: saturate(1) !important;
+      transform: translateY(-2px) scale(0.99) !important;
+    }
+
+    /* 2. 正在講的那一點：放大約 1.18 倍、大幅靠向畫面中央、壓在左圖上、立體落影與邊框！ */
+    .step-item.revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateX(clamp(-110px, -8vw, -60px)) translateY(-2px) scale(1.18) !important;
+      z-index: 50 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid rgba(62, 75, 53, 0.25) !important;
+      border-left: 7px solid var(--primary) !important;
+      box-shadow: 0 22px 50px rgba(20, 28, 16, 0.22),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(67, 80, 56, 0.45) !important;
+      filter: saturate(1.05) !important;
+    }
+
+    /* 智慧錨點：第一張靠頂展開、最後一張靠底展開，絕不超出上下視窗邊界 */
+    .step-item:first-child.revealed.active-step {
+      transform-origin: top right !important;
+    }
+    .step-item:last-child.revealed.active-step {
+      transform-origin: bottom right !important;
+    }
+    .step-item:not(:first-child):not(:last-child).revealed.active-step {
+      transform-origin: center right !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：橘色系 */
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step,
+    .grading-feature-item:nth-child(3).revealed.active-step,
+    .weakness-card:nth-child(3).revealed.active-step {
+      border-left: 7px solid #C87D25 !important;
+      border-color: rgba(200, 125, 37, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(200, 125, 37, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：藍色系 */
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step,
+    .grading-feature-item:nth-child(2).revealed.active-step {
+      border-left: 7px solid #2B5773 !important;
+      border-color: rgba(43, 87, 115, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(43, 87, 115, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：紅色警示系 */
+    .weakness-card:first-child.revealed.active-step,
+    .cost-card:first-child.revealed.active-step {
+      border-left: 7px solid #D94841 !important;
+      border-color: rgba(217, 72, 65, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(180, 40, 35, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(217, 72, 65, 0.5) !important;
+    }
+
+    /* 聚焦中動態提示徽章 */
+    .step-item.revealed.active-step::after {
+      content: '● 聚焦中';
+      position: absolute;
+      top: 7px;
+      right: 12px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #3E4B35;
+      background: #EAF0E4;
+      padding: 1px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      animation: pulseFocusTag 2s infinite ease-in-out;
+    }
+
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step::after,
+    .grading-feature-item:nth-child(3).revealed.active-step::after,
+    .weakness-card:nth-child(3).revealed.active-step::after {
+      color: #8C5311 !important;
+      background: #FDF3E5 !important;
+    }
+
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step::after,
+    .grading-feature-item:nth-child(2).revealed.active-step::after {
+      color: #254656 !important;
+      background: #EAF0F4 !important;
+    }
+
+    .weakness-card:first-child.revealed.active-step::after,
+    .cost-card:first-child.revealed.active-step::after {
+      color: #901C17 !important;
+      background: #FDF0EF !important;
+    }
+
+    @keyframes pulseFocusTag {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+
+    /* 放大聚焦時，卡片內文字體適度清晰放大，方便遠處觀眾辨識 */
+    .step-item.revealed.active-step :is(.task-feature-title, .g-item-header, .weakness-card-title, .remedial-card-title, .cost-card-title) {
+      font-size: clamp(1.02rem, 1.65vh, 1.2rem) !important;
+      color: #1F2818 !important;
+      margin-bottom: 4px !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-feature-desc, .g-item-text, .weakness-card-desc, .remedial-card-desc, .cost-card-desc) {
+      font-size: clamp(0.82rem, 1.3vh, 0.92rem) !important;
+      color: #283320 !important;
+      line-height: 1.45 !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-highlight-pill, .g-item-tag, .weakness-pill, .remedial-pill, .cost-pill) {
+      font-size: clamp(0.72rem, 1.15vh, 0.8rem) !important;
+      padding: 3px 9px !important;
+      font-weight: 800 !important;
+      margin-top: 5px !important;
+    }
+
+    /* 左側面板當有卡片聚焦時，微調對比與亮度，突顯右側浮空的當前焦點 */
+    .slide:has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
+      filter: brightness(0.97) saturate(0.92);
+      transition: filter 0.35s ease;
+    }
+
+    @media print {
+      .step-item {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .step-item::after {
+        display: none !important;
+      }
+    }
+
+</style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div id="progress-bar"></div>
+
+  <!-- 簡報容器 -->
+  <main id="deck">
+
+    <!-- ==================== SLIDE 1: 封面 ==================== -->
+        <!-- ==================== SLIDE 1 ==================== -->
+    <section class="slide active" data-slide="1">
+      <div class="cover-layout">
+        <div>
+          <div class="slide-badge">國小教師增能研習</div>
+          <h1 class="cover-hero-title">
+            AI 賦能閱讀理解
+            <span>PIRLS 提問 × 智慧批改實踐</span>
+          </h1>
+          <p class="cover-punchline">
+            把繁重出題批改交給 AI，把深度思維對話還給課堂
+          </p>
+          <div class="cover-tags">
+            <div class="tag-item">🎯 PIRLS 閱讀理解四層次</div>
+            <div class="tag-item">⚡ Google AI Studio 實戰</div>
+            <div class="tag-item">💻 雲端閱讀認證系統</div>
+          </div>
+        </div>
+
+        <div class="cover-card-preview">
+          <img src="assets/images/reading_system_login.png" alt="雲端閱讀認證系統入口">
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 2 ==================== -->
+    <section class="slide" data-slide="2">
+      <div class="slide-header">
+        <div class="slide-badge">ROADMAP</div>
+        <h2 class="slide-title">研習六大模組規劃</h2>
+      </div>
+      <div class="slide-body">
+        <div class="agenda-grid">
+          <div class="agenda-box highlight">
+            <div class="agenda-num">01</div>
+            <h3>現場痛點分析</h3>
+            <p>傳統閱讀教學的三大難題</p>
+          </div>
+
+          <div class="agenda-box highlight">
+            <div class="agenda-num">02</div>
+            <h3>PIRLS 四層次思維</h3>
+            <p>從訊息提取到批判評估</p>
+          </div>
+
+          <div class="agenda-box highlight">
+            <div class="agenda-num">03</div>
+            <h3>雲端閱讀認證系統</h3>
+            <p>師生雙端實作介面展示</p>
+          </div>
+
+          <div class="agenda-box">
+            <div class="agenda-num">04</div>
+            <h3>Google AI Studio 出題</h3>
+            <p>結構化提示詞與批改標準</p>
+          </div>
+
+          <div class="agenda-box">
+            <div class="agenda-num">05</div>
+            <h3>課堂三階段落地</h3>
+            <p>課前自學、課中對話、課後扶助</p>
+          </div>
+
+          <div class="agenda-box">
+            <div class="agenda-num">06</div>
+            <h3>現場體驗與實作</h3>
+            <p>教師動手體驗與 Q&amp;A</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 3 ==================== -->
+    <section class="slide" data-slide="3">
+      <div class="slide-header">
+        <div class="slide-badge">TEACHING CHALLENGES</div>
+        <h2 class="slide-title">國小閱讀教學的三大現場痛點</h2>
+      </div>
+      <div class="slide-body">
+        <div class="pain-grid">
+          <div class="pain-card">
+            <div class="pain-tag">痛點 1</div>
+            <div class="pain-title">出題難</div>
+            <div class="pain-desc">
+              好問題難生！常停留在表面「找人名、找時間」，缺乏高層次思維提問。
+            </div>
+          </div>
+
+          <div class="pain-card">
+            <div class="pain-tag">痛點 2</div>
+            <div class="pain-title">批改累</div>
+            <div class="pain-desc">
+              全班 30 本開放式簡答，字字推敲，耗費大量下班時間批閱。
+            </div>
+          </div>
+
+          <div class="pain-card">
+            <div class="pain-tag">痛點 3</div>
+            <div class="pain-title">回饋慢</div>
+            <div class="pain-desc">
+              批改發回已隔數日，學生早忘光當初想法，錯失認知修正最佳時機。
+            </div>
+          </div>
+        </div>
+
+        <div class="pain-summary-bar">
+          🚨 核心瓶頸：老師時間被繁重批改卡住，無法聚焦個別化引導！
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 4 ==================== -->
+    <section class="slide" data-slide="4">
+      <div class="slide-header">
+        <div class="slide-badge">PIRLS FRAMEWORK</div>
+        <h2 class="slide-title">評量指北針：PIRLS 閱讀理解四層次 (四象限)</h2>
+      </div>
+      <div class="slide-body">
+        <div class="quadrant-wrapper">
+          <!-- 中央核心徽章 -->
+          <div class="quadrant-center-badge">PIRLS 閱讀素養核心</div>
+
+          <!-- 第一象限：左上 -->
+          <div class="quadrant-card q1">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第一象限 • 基礎</span>
+                <span class="q-level-tag">LEVEL 1 • 字面檢索</span>
+              </div>
+              <h3 class="q-title">提取特定訊息</h3>
+              <div class="q-action-pill">🔍 找得到 • 字面直接陳述</div>
+              <p class="q-desc">在文章中搜尋並找出直接清楚陳述的事實、人物、時間與地點。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「故事的主角在森林裡遇到了誰？」
+            </div>
+          </div>
+
+          <!-- 第二象限：右上 -->
+          <div class="quadrant-card q2">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第二象限 • 進階</span>
+                <span class="q-level-tag">LEVEL 2 • 文意推論</span>
+              </div>
+              <h3 class="q-title">推論與延伸</h3>
+              <div class="q-action-pill">🔗 連得起 • 前後文因果</div>
+              <p class="q-desc">連結前後文句，推敲字面未直接明說的因果關係、角色動機或心境轉折。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「主角為什麼會做出這個決定？從哪裡看出來？」
+            </div>
+          </div>
+
+          <!-- 第三象限：左下 -->
+          <div class="quadrant-card q3">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第三象限 • 高階</span>
+                <span class="q-level-tag">LEVEL 3 • 篇章統整</span>
+              </div>
+              <h3 class="q-title">詮釋與整合</h3>
+              <div class="q-action-pill">💡 想得深 • 篇章主旨寓意</div>
+              <p class="q-desc">貫穿整篇文章，統整不同段落訊息，理解作者的寫作意圖、核心價值或隱喻。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「這篇寓言故事想要傳達給我們什麼道理？」
+            </div>
+          </div>
+
+          <!-- 第四象限：右下 -->
+          <div class="quadrant-card q4">
+            <div>
+              <div class="q-header-row">
+                <span class="q-pill">第四象限 • 批判</span>
+                <span class="q-level-tag">LEVEL 4 • 批判省思</span>
+              </div>
+              <h3 class="q-title">檢驗與評估</h3>
+              <div class="q-action-pill">⚖️ 說得明 • 批判與生活連結</div>
+              <p class="q-desc">跳脫文本視角，省思作者觀點與寫作手法，並結合生活經驗提出批判與評價。</p>
+            </div>
+            <div class="q-example-box">
+              💬 <strong>提問範例：</strong>「如果是你，你會採取主角的做法嗎？請說明理由。」
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 5 ==================== -->
+    <section class="slide" data-slide="5">
+      <div class="slide-header">
+        <div class="slide-badge">PARADIGM SHIFT</div>
+        <h2 class="slide-title">思維轉變：人機協同的新教學模式</h2>
+      </div>
+      <div class="slide-body">
+        <div class="split-contrast">
+          <div class="contrast-box contrast-old">
+            <div>
+              <div class="contrast-header" style="color: #646860;">❌ 傳統閱讀模式</div>
+              <ul class="contrast-list">
+                <li>• 老師包辦出題，容易偏頗重事實</li>
+                <li>• 批改耗費 3~5 天，回饋嚴重滯後</li>
+                <li>• 只打勾打叉，缺乏具體引導話語</li>
+              </ul>
+            </div>
+            <div style="font-weight: 700; color: #7A7F75; margin-top: 16px;">
+              老師累得精疲力竭，學生收效有限
+            </div>
+          </div>
+
+          <div class="contrast-box contrast-ai">
+            <div>
+              <div class="contrast-header" style="color: var(--primary);">✅ AI 賦能協同模式</div>
+              <ul class="contrast-list">
+                <li>• <strong>AI 智慧出題：</strong>依 PIRLS 4 維度瞬間出題</li>
+                <li>• <strong>AI 秒級診斷：</strong>即時鷹架提示與給分</li>
+                <li>• <strong>數據化報表：</strong>全班弱點掌握一目了然</li>
+              </ul>
+            </div>
+            <div class="golden-rule">
+              💡 核心原則：讓 AI 處理繁複瑣事，讓老師專注深刻對話
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 6 ==================== -->
+    <section class="slide" data-slide="6">
+      <div class="slide-header">
+        <div class="slide-badge">SYSTEM PREVIEW</div>
+        <h2 class="slide-title">實踐成果：雲端閱讀認證系統</h2>
+      </div>
+      <div class="slide-body">
+        <div class="system-grid">
+          <div class="preview-card">
+            <img src="assets/images/reading_system_login.png" alt="雲端閱讀認證系統學生與老師入口">
+            <div class="preview-caption">學生端入口</div>
+            <div class="preview-sub">乾淨無干擾 • 即時作答與智慧回饋</div>
+          </div>
+
+          <div class="preview-card">
+            <img src="assets/images/teacher_dashboard.png" alt="教師管理後台">
+            <div class="preview-caption">教師管理後台</div>
+            <div class="preview-sub">班級管理 • 題庫管理 • 任務指派 • 成果數據</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 7 ==================== -->
+    <section class="slide" data-slide="7">
+      <div class="slide-header">
+        <div class="slide-badge">QUESTION ENGINE</div>
+        <h2 class="slide-title">出題雙軌模式：AI 原創撰文 × 自行提供文章</h2>
+      </div>
+      <div class="slide-body">
+        <div class="dual-engine-grid">
+          <!-- 模式一：AI 撰寫文章出題 -->
+          <div class="dual-engine-card ai-mode">
+            <div class="engine-header">
+              <span class="engine-badge">模式 A • 主題生成</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #5F6659;">Gemini 1.5 Flash 驅動</span>
+            </div>
+            <h3 class="engine-title">AI 撰寫文章出題</h3>
+            <img src="assets/images/ai_generate_article.png" alt="AI智慧生成題庫介面" class="engine-preview-img">
+            <ul class="engine-points">
+              <li>💡 <strong>免找文章：</strong>只需輸入主題關鍵字（如：環保、宇宙）</li>
+              <li>📝 <strong>量身撰寫：</strong>AI 自動生出符合年段與字數的原創文章</li>
+              <li>🎯 <strong>秒級出題：</strong>同步產出涵蓋 PIRLS 四層次的完整考題</li>
+            </ul>
+          </div>
+
+          <!-- 模式二：自行提供文章出題 -->
+          <div class="dual-engine-card manual-mode">
+            <div class="engine-header">
+              <span class="engine-badge">模式 B • 文本導入</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #5F6659;">課文教材無縫串接</span>
+            </div>
+            <h3 class="engine-title">自行提供文章出題</h3>
+            <img src="assets/images/manual_input_article.png" alt="手動輸入文章生成題目介面" class="engine-preview-img">
+            <ul class="engine-points">
+              <li>📋 <strong>直接貼文：</strong>貼上現行國語課文、校訂文本或剪報時事</li>
+              <li>🔍 <strong>深度研讀：</strong>AI 自動掌握全文結構、脈絡與核心意旨</li>
+              <li>⚡ <strong>客製配置：</strong>自由設定是非、選擇、問答題數與難易度</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 底部三大核心規格 -->
+        <div class="engine-footer-bar">
+          <div class="param-item">
+            <span>📚</span>
+            <div><strong>PIRLS 雙文本：</strong>文學性（情節體驗） / 資訊性（客觀邏輯）</div>
+          </div>
+          <div class="param-item">
+            <span>🎒</span>
+            <div><strong>分齡難度：</strong>中年級（清楚敘事） / 高年級（複合因果） / 國中進階</div>
+          </div>
+          <div class="param-item">
+            <span>⚙️</span>
+            <div><strong>四層次覆蓋：</strong>L1 提取 ➔ L2 推論 ➔ L3 詮釋 ➔ L4 檢驗評估</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 8 ==================== -->
+    <section class="slide" data-slide="8">
+      <div class="slide-header">
+        <div class="slide-badge">TASK DISPATCH</div>
+        <h2 class="slide-title">隨時彈性指派任務：單次 / 多次 × 期限管理</h2>
+      </div>
+      <div class="slide-body">
+        <div class="task-assign-layout">
+          <!-- 左側截圖面板 -->
+          <div class="task-preview-panel">
+            <img src="assets/images/assign_task.png" alt="指派新測驗任務介面">
+          </div>
+
+          <!-- 右側三大機制解析 -->
+          <div class="task-features-column">
+            <!-- 特色 1 -->
+            <div class="task-feature-card step-item" data-step="1">
+              <div class="task-feature-title">
+                <span>🎯</span> 單次測驗 vs. 多次測驗
+              </div>
+              <p class="task-feature-desc">
+                • <strong>單次測驗（限答一次）：</strong>正式閱讀學力評量、檢測真實能力<br>
+                • <strong>多次測驗（重複作答）：</strong>自主精熟學習，依 AI 引導即時修正
+              </p>
+              <span class="task-highlight-pill">兼顧「總結評量」與「形成性學習」</span>
+            </div>
+
+            <!-- 特色 2 -->
+            <div class="task-feature-card c2 step-item" data-step="2">
+              <div class="task-feature-title">
+                <span>⏱️</span> 精準時間期限 (Deadline)
+              </div>
+              <p class="task-feature-desc">
+                • 支援年月日與精確時分設定，截止後自動關閉<br>
+                • 培養國小學童閱讀自我管理與規律學習習慣
+              </p>
+              <span class="task-highlight-pill" style="background: #FDF3E5; color: #8C5311;">時間到期自動結算</span>
+            </div>
+
+            <!-- 特色 3 -->
+            <div class="task-feature-card c3 step-item" data-step="3">
+              <div class="task-feature-title">
+                <span>👥</span> 跨班級一鍵指派 (可多選)
+              </div>
+              <p class="task-feature-desc">
+                • 勾選「六年一班」、「大同國小」等不同班別<br>
+                • 科任教師、導師或學年共備，一鍵完成派卷
+              </p>
+              <span class="task-highlight-pill" style="background: #EAF0F4; color: #254656;">免重複操作，效率極大化</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 9 ==================== -->
+    <section class="slide" data-slide="9">
+      <div class="slide-header">
+        <div class="slide-badge">SMART GRADING &amp; ANALYTICS</div>
+        <h2 class="slide-title">後台自行批改：2-5 分鐘極速回饋 × PIRLS 國際基準</h2>
+      </div>
+      <div class="slide-body">
+        <div class="grading-results-layout">
+          <!-- 左側截圖展示 -->
+          <div class="grading-screenshot-card">
+            <img src="assets/images/results_review.png" alt="測驗成果檢視與自動批改列表">
+          </div>
+
+          <!-- 右側四大亮點卡片 -->
+          <div class="grading-features-list">
+            <div class="grading-feature-item step-item" data-step="1">
+              <div class="g-item-header">
+                <span>⚡</span> 2-5 分鐘內極速回饋
+              </div>
+              <p class="g-item-text">學生送出後 AI 立即自動批閱，在記憶猶新時獲得回饋與修正指引。</p>
+              <span class="g-item-tag">告別傳統 3-5 天批改延遲</span>
+            </div>
+
+            <div class="grading-feature-item step-item" data-step="2">
+              <div class="g-item-header">
+                <span>📊</span> 對標 PIRLS 國際基準
+              </div>
+              <p class="g-item-text">自動換算並標註「高基準 (600+)」、「中基準 (475+)」、「低基準 (400+)」。</p>
+              <span class="g-item-tag" style="background: #E8F0F8; color: #1E4467;">精準定位閱讀學力落點</span>
+            </div>
+
+            <div class="grading-feature-item step-item" data-step="3">
+              <div class="g-item-header">
+                <span>⏱️</span> 作答歷程防猜檢視
+              </div>
+              <p class="g-item-text">精確記錄作答時間（7分鐘認真思索 vs 14秒亂猜），一眼看穿學習投入度。</p>
+              <span class="g-item-tag" style="background: #FFF5E8; color: #7F4D14;">輔導弱勢與態度把關</span>
+            </div>
+
+            <div class="grading-feature-item step-item" data-step="4">
+              <div class="g-item-header">
+                <span>🔄</span> AI 再次批改與匯出
+              </div>
+              <p class="g-item-text">支援「AI 再次批改」與查看詳情，教師握有把關權；一鍵匯出 CSV 班級成績冊。</p>
+              <span class="g-item-tag" style="background: #F1F5ED; color: #354B2A;">人機協作最佳實踐</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 10 ==================== -->
+    <section class="slide" data-slide="10">
+      <div class="slide-header">
+        <div class="slide-badge">RUBRICS &amp; SECONDARY REVIEW</div>
+        <h2 class="slide-title">AI 智慧初評 × 教師二次審閱（人機雙重把關）</h2>
+      </div>
+      <div class="slide-body">
+        <div class="rubric-review-layout">
+          <!-- 左側截圖展示 -->
+          <div class="rubric-screenshot-card">
+            <img src="assets/images/rubric_teacher_review.png" alt="PIRLS 閱卷規準與教師評分調整介面">
+          </div>
+
+          <!-- 右側三大機制解析 -->
+          <div class="rubric-features-col">
+            <div class="rubric-feature-card c-rubric step-item" data-step="1">
+              <div class="g-item-header">
+                <span>🎯</span> PIRLS 0~3 分閱卷規準 (Rubrics)
+              </div>
+              <p class="g-item-text">
+                0分(離題空白) / 1分(單一線索) / 2分(因果完整) / 3分(深刻扣題)，量化標竿擺脫主觀憑感覺。
+              </p>
+              <span class="g-item-tag" style="background: #FDF3E5; color: #8C5311;">客觀量化評閱標竿</span>
+            </div>
+
+            <div class="rubric-feature-card c-feedback step-item" data-step="2">
+              <div class="g-item-header">
+                <span>🤖</span> AI 智能初評與診斷草稿
+              </div>
+              <p class="g-item-text">
+                自動精準辨析學生答案中的歷史事實與修辭隱喻，秒級產出溫柔診斷與補正說明草稿。
+              </p>
+              <span class="g-item-tag" style="background: #E8F0F8; color: #1E4467;">省下 80% 批改心力</span>
+            </div>
+
+            <div class="rubric-feature-card c-teacher step-item" data-step="3">
+              <div class="g-item-header">
+                <span>✍️</span> 教師主控二次審閱
+              </div>
+              <p class="g-item-text">
+                老師隨時一鍵點選「✓ 2 分」進行微調，或補充個別化評語；決定權與教育溫度永遠在老師手中。
+              </p>
+              <span class="g-item-tag" style="background: #EBF2E6; color: #354B2A;">教師保有最高裁量權</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 11 ==================== -->
+    <section class="slide" data-slide="11">
+      <div class="slide-header">
+        <div class="slide-badge">INDIVIDUAL DIAGNOSTICS &amp; RADAR</div>
+        <h2 class="slide-title">個人素養診斷報告：PIRLS 國際常模基準 × 四向度雷達圖</h2>
+      </div>
+      <div class="slide-body">
+        <div class="radar-report-layout">
+          <!-- 左側截圖展示 -->
+          <div class="radar-screenshot-card">
+            <img src="assets/images/pirls_benchmark_radar.png" alt="PIRLS 國際標準基準落點與四向度雷達圖">
+          </div>
+
+          <!-- 右側三大機制解析 -->
+          <div class="radar-features-col">
+            <div class="radar-feature-card c-scale step-item" data-step="1">
+              <div class="g-item-header">
+                <span>🌈</span> PIRLS 國際常模量尺落點
+              </div>
+              <p class="g-item-text">
+                自動換算常模分數（如：<strong>611 分 • 高基準 High</strong>），清晰彩帶標尺一眼掌握學力水準。
+              </p>
+              <span class="g-item-tag" style="background: #E8F0F8; color: #1E4467;">對標國際權威標準</span>
+            </div>
+
+            <div class="radar-feature-card c-radar step-item" data-step="2">
+              <div class="g-item-header">
+                <span>🕸️</span> 四向度認知歷程雷達圖
+              </div>
+              <p class="g-item-text">
+                L1 提取 85% / L2 推論 80% / L3 詮釋 60% / L4 批判 55%，清楚看見「字面強、高階需鷹架」盲點。
+              </p>
+              <span class="g-item-tag" style="background: #FDF3E5; color: #8C5311;">思維強弱向度立現</span>
+            </div>
+
+            <div class="radar-feature-card c-guide step-item" data-step="3">
+              <div class="g-item-header">
+                <span>💡</span> 具體雙向指引清單
+              </div>
+              <p class="g-item-text">
+                自動生成「表現亮眼優勢」與「待加強引導建議」，成為個別化輔導與親師座談的最佳利器。
+              </p>
+              <span class="g-item-tag" style="background: #EBF2E6; color: #354B2A;">親師溝通專業有據</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 12 ==================== -->
+    <section class="slide" data-slide="12">
+      <div class="slide-header">
+        <div class="slide-badge">CLASS-LEVEL DIAGNOSTICS</div>
+        <h2 class="slide-title">班級弱點巨觀診斷：題型斷層 × PIRLS 歷程剖析</h2>
+      </div>
+      <div class="slide-body">
+        <div class="class-analytics-layout">
+          <!-- 左側截圖展示 -->
+          <div class="class-analytics-screenshot">
+            <img src="assets/images/class_weakness_analysis.png" alt="班級弱點分析診斷報告介面">
+          </div>
+
+          <!-- 右側四大教學洞察 -->
+          <div class="class-weakness-cards">
+            <!-- 洞察 1 -->
+            <div class="weakness-card step-item" data-step="1">
+              <div class="weakness-card-title">
+                <span>🚨</span> 題型斷層：會選不會寫！
+              </div>
+              <p class="weakness-card-desc">
+                選擇題達 68%，但<strong>簡答問答題得分率僅 17%</strong>（全班僅得 4/24 分）！精準抓出學生文字表達與論述瓶頸。
+              </p>
+              <span class="weakness-pill" style="background: #FDF0EF; color: #D94841;">主觀題組織力嚴重不足</span>
+            </div>
+
+            <!-- 洞察 2 -->
+            <div class="weakness-card radar step-item" data-step="2">
+              <div class="weakness-card-title">
+                <span>📉</span> PIRLS 四認知歷程斷崖
+              </div>
+              <p class="weakness-card-desc">
+                基礎思維 L1(74%)、L2(64%) 尚稱穩定，但高階思維 <strong>L3 詮釋(35%)、L4 評估(26%) 懸崖式下跌</strong>！
+              </p>
+              <span class="weakness-pill" style="background: #FFF7EC; color: #9C5708;">高階批判思維亟需鷹架</span>
+            </div>
+
+            <!-- 洞察 3 -->
+            <div class="weakness-card step-item" data-step="3">
+              <div class="weakness-card-title">
+                <span>⏱️</span> 班級常模與時間預警
+              </div>
+              <p class="weakness-card-desc">
+                全班平均 45 分，落於<strong>低基準 (Low)</strong>；平均作答僅 2 分 15 秒，反映學生閱讀過於倉促，需引導深度精讀。
+              </p>
+              <span class="weakness-pill" style="background: #FDF3E5; color: #8C5311;">作答過快 • 需全面補救</span>
+            </div>
+
+            <!-- 洞察 4 -->
+            <div class="weakness-card action step-item" data-step="4">
+              <div class="weakness-card-title">
+                <span>🎯</span> 數據驅動精準教學 (Data-Driven)
+              </div>
+              <p class="weakness-card-desc">
+                告別瞎子摸象！次週國語課立刻對症下藥，聚焦「L3/L4 篇章深意與理由陳述」；一鍵匯出 CSV 報表共備討論。
+              </p>
+              <span class="weakness-pill" style="background: #EAF0E4; color: #35472B;">以評促教 • 差異化扶助</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 13 ==================== -->
+    <section class="slide" data-slide="13">
+      <div class="slide-header">
+        <div class="slide-badge">REMEDIAL STRATEGIES</div>
+        <h2 class="slide-title">針對性課堂補救策略：AI 專家模型生成的實體教案</h2>
+      </div>
+      <div class="slide-body">
+        <div class="remedial-layout">
+          <!-- 左側截圖展示 -->
+          <div class="remedial-screenshot">
+            <img src="assets/images/remedial_strategies.png" alt="AI 班級教學診斷與課堂補救指引介面">
+          </div>
+
+          <!-- 右側三大具體補救教案 -->
+          <div class="remedial-cards-col">
+            <!-- 策略 1 -->
+            <div class="remedial-card s1 step-item" data-step="1">
+              <div class="remedial-card-title">
+                <span>📋</span> 策略 1（針對 L3 詮釋）：雙段落比對單
+              </div>
+              <p class="remedial-card-desc">
+                分組摘錄兩首詩末段場景（廟口 vs 街巷），以表格梳理「場景描寫 ➔ 文化意義」因果鏈，嚴格要求列出雙項文本證據。
+              </p>
+              <span class="remedial-pill" style="background: #EAF0E4; color: #35472B;">架設詮釋因果鏈</span>
+            </div>
+
+            <!-- 策略 2 -->
+            <div class="remedial-card s2 step-item" data-step="2">
+              <div class="remedial-card-title">
+                <span>🖍️</span> 策略 2（針對 L4 評估）：證據三級書寫法
+              </div>
+              <p class="remedial-card-desc">
+                以多色螢光筆標記感官、歷史與情感詞，問答題依「證據 ➔ 推論 ➔ 結論」三段式書寫，徹底根除空泛無據回答。
+              </p>
+              <span class="remedial-pill" style="background: #E8F1F7; color: #1E4663;">告別憑空猜想</span>
+            </div>
+
+            <!-- 策略 3 -->
+            <div class="remedial-card s3 step-item" data-step="3">
+              <div class="remedial-card-title">
+                <span>💡</span> 策略 3（針對意象）：詩句改寫與對照辨析
+              </div>
+              <p class="remedial-card-desc">
+                將「山珍海味擠在這小小的圓」改寫為白話明示句，引導討論詩人隱喻：「若只寫碗的形狀，會失去什麼？」深化詩意解讀。
+              </p>
+              <span class="remedial-pill" style="background: #FDF3E5; color: #8C5311;">解構修辭與隱喻</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 14 ==================== -->
+    <section class="slide" data-slide="14">
+      <div class="slide-header">
+        <div class="slide-badge">REALITY &amp; COST OPTIMIZATION</div>
+        <h2 class="slide-title">理想很豐滿、現實很骨感：AI 成本與穩定度的務實解方</h2>
+      </div>
+      <div class="slide-body">
+        <div class="api-cost-layout">
+          <!-- 左側截圖展示 -->
+          <div class="api-screenshot-card">
+            <img src="assets/images/api_provider_settings.png" alt="系統與 API 設定介面">
+          </div>
+
+          <!-- 右側四大策略卡片 -->
+          <div class="api-cost-cards-col">
+            <!-- 痛點 1 -->
+            <div class="cost-card step-item" data-step="1">
+              <div class="cost-card-title">
+                <span>⚠️</span> 現實瓶頸：免費額度常卡關
+              </div>
+              <p class="cost-card-desc">
+                免費 AI 常面臨額度上限（Rate Limit）與反應過慢問題，全班同時繳卷極易塞車斷線。
+              </p>
+              <span class="cost-pill" style="background: #FDF0EF; color: #D94841;">尖峰塞車 • 額度不足痛點</span>
+            </div>
+
+            <!-- 解方 2: DeepSeek -->
+            <div class="cost-card c-deepseek step-item" data-step="2">
+              <div class="cost-card-title">
+                <span>⚡</span> DeepSeek 官方 API：極致性價比
+              </div>
+              <p class="cost-card-desc">
+                批改全班 30 份作業花費不到幾毛錢台幣！秒級極速反應，解決學校長期經費考量。
+              </p>
+              <span class="cost-pill" style="background: #FDF3E5; color: #8C5311;">超平價 • 秒級反應 • 性價比之王</span>
+            </div>
+
+            <!-- 解方 3: OpenRouter -->
+            <div class="cost-card c-openrouter step-item" data-step="3">
+              <div class="cost-card-title">
+                <span>🌐</span> OpenRouter：頂級模型隨選
+              </div>
+              <p class="cost-card-desc">
+                一鍵調用 Claude 3.5、GPT-4o、DeepSeek 等多元模型，不被單一廠商技術綁定。
+              </p>
+              <span class="cost-pill" style="background: #E8F1F7; color: #1E4663;">多元生態 • 隨時無縫切換</span>
+            </div>
+
+            <!-- 解方 4: Google Gemini -->
+            <div class="cost-card c-gemini step-item" data-step="4">
+              <div class="cost-card-title">
+                <span>🔒</span> 預設 Gemini ＋ 安全本地儲存
+              </div>
+              <p class="cost-card-desc">
+                內建 Google AI 額度零門檻即開即用；自備金鑰安全加密，學校教學長久穩定運作。
+              </p>
+              <span class="cost-pill" style="background: #EAF0E4; color: #35472B;">零門檻起步 • 彈性永續</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 15 ==================== -->
+    <section class="slide" data-slide="15">
+      <div class="slide-header">
+        <div class="slide-badge">HANDS-ON INTERACTION</div>
+        <h2 class="slide-title">現場實際實測：手機掃碼進入學生端體驗</h2>
+      </div>
+      <div class="slide-body">
+        <div class="live-test-layout">
+          <!-- 左側：QR Code 掃描與網址入口 -->
+          <div class="live-test-qr-card">
+            <div class="live-qr-scan-badge">📱 手機 / 平板 掃描 QR Code 立即進入</div>
+            
+            <div class="live-qr-wrapper">
+              <img src="assets/images/reading_system_qrcode.png" alt="學生端測驗 QR Code" class="live-qr-img">
+            </div>
+
+            <!-- 可點擊網址 -->
+            <a href="https://clive520-lyps.github.io/Reading/" target="_blank" class="live-url-pill" title="點擊在新分頁開啟學生端系統">
+              🌐 https://clive520-lyps.github.io/Reading/
+            </a>
+
+            <!-- 登入資訊提示 -->
+            <div class="live-credentials-box">
+              <div class="live-cred-title">
+                <span>🔑</span> 研習現場測試帳號指引
+              </div>
+              <div class="live-cred-row">
+                • <strong>學生帳號：</strong>例如 <code>S10101</code>（或自訂任意學生代號）<br>
+                • <strong>學生密碼：</strong>請輸入任意密碼後點擊「登入系統」
+              </div>
+            </div>
+          </div>
+
+          <!-- 右側：學生端介面展示與體驗步驟 -->
+          <div class="live-test-guide-card">
+            <!-- 學生端登入預覽 -->
+            <div class="live-preview-box">
+              <img src="assets/images/student_login.png" alt="學生端登入介面" class="live-preview-img">
+              <div class="live-preview-text">
+                <h4>IEA PIRLS 閱讀認證</h4>
+                <p>化身為國小學童視角，親身體驗四層次素養評量作答情境！</p>
+              </div>
+            </div>
+
+            <!-- 三大實測步驟 -->
+            <div class="live-steps-list">
+              <div class="live-step-item">
+                <div class="live-step-num">1</div>
+                <div class="live-step-content">
+                  <strong>手機掃描或點擊網址</strong>
+                  <span>開啟學生端登入頁面，無須安裝任何 App</span>
+                </div>
+              </div>
+
+              <div class="live-step-item">
+                <div class="live-step-num">2</div>
+                <div class="live-step-content">
+                  <strong>輸入帳號並點選測驗任務</strong>
+                  <span>進入剛才第 8 頁指派的閱讀文章，開始作答</span>
+                </div>
+              </div>
+
+              <div class="live-step-item">
+                <div class="live-step-num">3</div>
+                <div class="live-step-content">
+                  <strong>完成是非、選擇與問答並送出</strong>
+                  <span>體驗 PIRLS L1~L4 提問架構與作答歷程</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 底部銜接提示 -->
+            <div class="live-bottom-notice">
+              <span>⚡</span>
+              <div><strong>即時批改體驗：</strong>大家送出後，系統 AI 將於 2-5 分鐘內完成批改，可即時查看剛剛介紹的個人素養診斷與全班弱點分析！</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 16 ==================== -->
+    <section class="slide" data-slide="16">
+      <div class="slide-header">
+        <div class="slide-badge">REVIEW &amp; NEXT STEPS</div>
+        <h2 class="slide-title">大綱審閱與後續章節規劃</h2>
+      </div>
+      <div class="slide-body">
+        <div class="step-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h3>確認前導架構</h3>
+            <ul>
+              <li>• 痛點喚醒切入</li>
+              <li>• PIRLS 四層次象限</li>
+              <li>• 雙軌出題、派卷、自動批改</li>
+              <li>• 規準調分、診斷雷達圖</li>
+              <li>• 弱點分析、課堂補救、成本解方</li>
+            </ul>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h3>後續章節擴充</h3>
+            <ul>
+              <li>• AI Studio 提示詞配方</li>
+              <li>• 學生作答 AI 即時回饋範例</li>
+              <li>• 課堂 3 階段教學活動設計</li>
+            </ul>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h3>部署與現場演講</h3>
+            <ul>
+              <li>• 搭配獨立逐字稿網頁</li>
+              <li>• 一鍵推送到 GitHub Pages</li>
+              <li>• 隨時隨地開啟投影演講</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <!-- 底部導覽列 -->
+  <footer id="deck-controls">
+    <div class="control-info">
+      <span>AI 協助國小閱讀理解 • PIRLS 專題研習</span>
+      <span class="page-indicator" id="page-num">1 / 15</span>
+    </div>
+
+    <div class="control-buttons">
+      <a href="script.html" target="_blank" class="btn-nav script-btn" title="在新分頁開啟講者逐字稿網頁">🎙️ 講者逐字稿</a>
+      <button class="btn-nav" id="btn-agenda" title="查看目錄">📑 目錄</button>
+      <button class="btn-nav" id="btn-prev" title="上一頁 (←)">上一頁</button>
+      <button class="btn-nav primary" id="btn-next" title="下一頁 (→)">下一頁</button>
+      <button class="btn-nav" id="btn-fullscreen" title="全螢幕 (F)">⛶ 全螢幕</button>
+    </div>
+  </footer>
+
+  <!-- 目錄跳轉彈窗 -->
+  <div id="agenda-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">快速跳轉至投影片</h3>
+        <button class="close-btn" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="slide-jump-grid">
+        <div class="jump-item" data-jump="1"><span>01</span> 封面：AI 賦能閱讀理解</div>
+        <div class="jump-item" data-jump="2"><span>02</span> 研習藍圖：六大模組規劃</div>
+        <div class="jump-item" data-jump="3"><span>03</span> 國小閱讀三大現場痛點</div>
+        <div class="jump-item" data-jump="4"><span>04</span> 評量指北針：PIRLS 四層次</div>
+        <div class="jump-item" data-jump="5"><span>05</span> 思維轉變：人機協同新模式</div>
+        <div class="jump-item" data-jump="6"><span>06</span> 實踐成果：雲端閱讀認證系統</div>
+        <div class="jump-item" data-jump="7"><span>07</span> 出題雙軌模式：AI撰寫 vs 自備文本</div>
+        <div class="jump-item" data-jump="8"><span>08</span> 隨時彈性指派任務：單次/多次與期限</div>
+        <div class="jump-item" data-jump="9"><span>09</span> 後台自行批改：2-5分極速回饋與基準</div>
+        <div class="jump-item" data-jump="10"><span>10</span> 閱卷規準與二次審閱：人機把關</div>
+        <div class="jump-item" data-jump="11"><span>11</span> 個人診斷報告：611分高基準與雷達圖</div>
+        <div class="jump-item" data-jump="12"><span>12</span> 班級弱點巨觀診斷：題型斷層與歷程</div>
+        <div class="jump-item" data-jump="13"><span>13</span> 課堂補救策略：AI生成實體教案</div>
+        <div class="jump-item" data-jump="14"><span>14</span> 理想與現實：多模型API與極致性價比</div>
+        <div class="jump-item" data-jump="15"><span>15</span> 現場實際實測：學生端登入作答 (QR Code)</div>
+        <div class="jump-item" data-jump="16"><span>16</span> 大綱審閱與後續規劃</div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+    let currentStep = 1;
+
+    const pageIndicator = document.getElementById('page-num');
+    const progressBar = document.getElementById('progress-bar');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const btnAgenda = document.getElementById('btn-agenda');
+    const agendaModal = document.getElementById('agenda-modal');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    const jumpItems = document.querySelectorAll('.jump-item');
+
+    function getSlideStepItems(slideEl) {
+      if (!slideEl) return [];
+      return Array.from(slideEl.querySelectorAll('.step-item'));
+    }
+
+    function applySlideSteps(slideEl, activeStepIndex) {
+      const items = getSlideStepItems(slideEl);
+      if (items.length === 0) return;
+
+      currentStep = Math.max(1, Math.min(activeStepIndex, items.length));
+
+      items.forEach((item, idx) => {
+        const itemStep = idx + 1;
+        if (itemStep < currentStep) {
+          // 上一點已講過：保留顯示但縮小、輕柔對比
+          item.classList.add('revealed');
+          item.classList.remove('active-step');
+        } else if (itemStep === currentStep) {
+          // 正在講的那一點：跳出放大、光暈聚焦！
+          item.classList.add('revealed', 'active-step');
+        } else {
+          // 尚未輪到的點：隱藏
+          item.classList.remove('revealed', 'active-step');
+        }
+      });
+
+      pageIndicator.textContent = `${currentSlide} / ${totalSlides} • 重點 ${currentStep}/${items.length}`;
+      btnPrev.disabled = (currentSlide === 1 && currentStep <= 1);
+      btnNext.disabled = (currentSlide === totalSlides && currentStep >= items.length);
+    }
+
+    function updateSlide(targetIndex, initialStep = 1) {
+      if (targetIndex < 1) targetIndex = 1;
+      if (targetIndex > totalSlides) targetIndex = totalSlides;
+
+      slides.forEach((slide, idx) => {
+        const slideIndex = idx + 1;
+        slide.classList.remove('active', 'prev');
+        if (slideIndex === targetIndex) {
+          slide.classList.add('active');
+        } else if (slideIndex < targetIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      currentSlide = targetIndex;
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      if (items.length > 0) {
+        applySlideSteps(activeSlideEl, initialStep);
+      } else {
+        currentStep = 1;
+        pageIndicator.textContent = `${currentSlide} / ${totalSlides}`;
+        btnPrev.disabled = (currentSlide === 1);
+        btnNext.disabled = (currentSlide === totalSlides);
+      }
+    }
+
+    function goNext() {
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      if (items.length > 0 && currentStep < items.length) {
+        // 在當前頁面推進到下一個重點
+        applySlideSteps(activeSlideEl, currentStep + 1);
+      } else {
+        // 當前頁面的重點已全部講完，推進到下一頁
+        if (currentSlide < totalSlides) {
+          updateSlide(currentSlide + 1, 1);
+        }
+      }
+    }
+
+    function goPrev() {
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      if (items.length > 0 && currentStep > 1) {
+        // 在當前頁面返回上一個重點
+        applySlideSteps(activeSlideEl, currentStep - 1);
+      } else {
+        // 返回上一頁（若上一頁有重點，直接進入上一頁的最後一個重點）
+        if (currentSlide > 1) {
+          const prevSlideEl = slides[currentSlide - 2];
+          const prevItems = getSlideStepItems(prevSlideEl);
+          updateSlide(currentSlide - 1, prevItems.length > 0 ? prevItems.length : 1);
+        }
+      }
+    }
+
+    btnPrev.addEventListener('click', goPrev);
+    btnNext.addEventListener('click', goNext);
+
+    // 點擊任何重點卡片，可直接切換聚焦該重點
+    document.querySelectorAll('.step-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const slideEl = item.closest('.slide');
+        if (!slideEl || !slideEl.classList.contains('active')) return;
+        const items = getSlideStepItems(slideEl);
+        const clickedIndex = items.indexOf(item);
+        if (clickedIndex !== -1) {
+          applySlideSteps(slideEl, clickedIndex + 1);
+        }
+      });
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (agendaModal.classList.contains('active')) {
+        if (e.key === 'Escape') agendaModal.classList.remove('active');
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          goNext();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          goPrev();
+          break;
+        case 'Home':
+          updateSlide(1, 1);
+          break;
+        case 'End':
+          updateSlide(totalSlides, 1);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'm':
+        case 'M':
+          agendaModal.classList.toggle('active');
+          break;
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    btnAgenda.addEventListener('click', () => agendaModal.classList.add('active'));
+    btnCloseModal.addEventListener('click', () => agendaModal.classList.remove('active'));
+    agendaModal.addEventListener('click', (e) => {
+      if (e.target === agendaModal) agendaModal.classList.remove('active');
+    });
+
+    jumpItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = parseInt(item.getAttribute('data-jump'), 10);
+        updateSlide(target, 1);
+        agendaModal.classList.remove('active');
+      });
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    window.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) goNext();
+      if (touchEndX > touchStartX + 50) goPrev();
+    }, false);
+
+    updateSlide(1, 1);
+
+</script>
+</body>
+</html>

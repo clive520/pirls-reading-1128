@@ -1,96 +1,86 @@
-# AI 賦能閱讀理解：從 PIRLS 架構到智慧化課堂實踐
+# 鹿陽國民小學「閱讀理解策略與 AI 的結合」教學研習簡報
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-emerald?style=flat&logo=github)](https://clive520.github.io/pirls-reading-1128/)
 [![Speaker Script](https://img.shields.io/badge/Speaker%20Script-講者逐字稿手冊-orange?style=flat)](https://clive520.github.io/pirls-reading-1128/script.html)
 
-專為國小教師增能研習打造的 HTML 互動簡報與講者逐字稿手冊，結合 PIRLS 國際閱讀素養四層次架構與 Google AI Studio / Gemini 技術，實現智慧提問、即時批改、素養診斷與實體課堂補救。
+專為國小教師專業成長研習打造之高質感 HTML 互動網頁簡報與講者逐字稿手冊。
+**主講人：高志賢 老師（鹿陽國民小學）**
+**研習核心探討：當我們進行閱讀理解測驗的時候，我們會怎麼做？**
 
 ---
 
-## 🌐 線上預覽與講稿連結
+## 🌐 線上展示與講稿連結 (GitHub Pages)
 
-- 🖥️ **線上簡報（Slide Deck）**：[https://clive520.github.io/pirls-reading-1128/](https://clive520.github.io/pirls-reading-1128/)
+- 🖥️ **線上簡報網頁（Slide Deck）**：[https://clive520.github.io/pirls-reading-1128/](https://clive520.github.io/pirls-reading-1128/)
 - 🎙️ **講者逐字稿手冊（Speaker Script）**：[https://clive520.github.io/pirls-reading-1128/script.html](https://clive520.github.io/pirls-reading-1128/script.html)
-- 🚀 **GitHub Pages 設定教學簡報**：[https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html](https://clive520.github.io/pirls-reading-1128/github-pages-tutorial.html)
-- 📝 **GitHub Pages 教學講者逐字稿**：[https://clive520.github.io/pirls-reading-1128/github-pages-script.html](https://clive520.github.io/pirls-reading-1128/github-pages-script.html)
-- 🎮 **AI Studio 小遊戲實作與 Pages 發布簡報**：[https://clive520.github.io/pirls-reading-1128/ai-studio-game-tutorial.html](https://clive520.github.io/pirls-reading-1128/ai-studio-game-tutorial.html)
-- 🎙️ **AI Studio 小遊戲講者逐字稿手冊**：[https://clive520.github.io/pirls-reading-1128/ai-studio-game-script.html](https://clive520.github.io/pirls-reading-1128/ai-studio-game-script.html)
 - 📦 **GitHub 專案儲存庫**：[https://github.com/clive520/pirls-reading-1128](https://github.com/clive520/pirls-reading-1128)
 
 ---
 
-## 🧩 模組化源碼結構與日常維護指南 (Modular Architecture)
+## 📑 目前簡報大綱（第一階段：前三頁，支援後續高度擴充）
 
-為解決單一 HTML 檔案過於龐大（近 3,000 行）、修改不易且容易誤觸其他頁面的問題，本專案已全面升級為**「模組化拆分 ＋ 零依賴一鍵組裝」**架構：
+1. **Slide 01 首頁**：
+   - 鹿陽國民小學「閱讀理解策略與 AI 的結合」
+   - 講師：高志賢老師
+   - 核心問題：當我們進行閱讀理解測驗時，我們會怎麼做？
+2. **Slide 02 講師經歷**：
+   - 國立新竹師範學院畢業
+   - 臺中市僑光國小 任職 19 年
+   - 東海大學 資訊工程學系畢業（跨領域進修）
+   - 臺中市霧峰區四德國小 任職 7 年
+   - 臺中市鹿陽國民小學（目前第二年）
+   - 跨領域優勢：28 年國小教學深耕 × 資訊工程科技思維
+3. **Slide 03 臺灣 PIRLS 國際成績調查與趨勢圖表（2023–2025 深度剖析）**：
+   - **國際評量週期**：PIRLS 每 5 年評量一次，最新 PIRLS 2021 成績於 **2023 年 5 月 16 日正式發布**（全面改為數位線上評量）。
+   - **成績圖表**：臺灣平均 544 分，全球排名第 7 名（與瑞典並列，歷屆排名最高）。
+   - **文體斷崖**：說明文 549 分（全球第 7）vs 故事體 533 分（全球第 17），落差高達 16 分！
+   - **歷程瓶頸**：L1 提取與 L2 推論穩定，但 L3 詮釋整合與 L4 檢驗評估出現認知斷層。
+   - **2023–2025 演進對照**：2023 成績發布 ➔ 2024 歷程診斷 ➔ 2025 雙閱讀素養推動與備戰 2026 PIRLS 數位評量。
+   - **測驗現場反思**：傳統出題偏向表層提取，藉由 AI 賦能快速生成 PIRLS 四歷程深度理解題。
+
+---
+
+## 🧩 模組化源碼結構與日常擴增指南 (Modular Architecture)
+
+本專案採用**「模組化拆分 ＋ 零依賴一鍵組裝」**架構，未來要增加第 4 頁、第 5 頁極為簡單：
 
 ```text
 pirls-reading-1128/
 ├── src/                                  # ──【源碼修改區】──
 │   ├── css/
-│   │   ├── style.css                     # 全域基礎、配色主題、自適應版面
-│   │   ├── spotlight.css                 # 簡報重點逐項跳出與特大靠中聚焦動畫
+│   │   ├── style.css                     # 全域主題、字體、版面配置、時間軸與圖表樣式
+│   │   ├── spotlight.css                 # 簡報重點逐項跳出與聚焦動畫
 │   │   └── script.css                    # 講者逐字稿專用樣式
 │   ├── js/
-│   │   └── presentation.js               # 鍵盤導航、步驟步進、全螢幕與跳轉
+│   │   └── presentation.js               # 鍵盤導航、全螢幕、目錄跳轉、進度條
 │   ├── slides/                           # ──【各頁投影片獨立檔案】──
-│   │   ├── 01-cover.html                 # 封面 (約 30 行)
-│   │   ├── ...
-│   │   ├── 15-live-test.html             # 現場實測與 QR Code
-│   │   └── 16-summary.html
+│   │   ├── 01-cover.html                 # 封面 (約 50 行)
+│   │   ├── 02-speaker.html               # 講師經歷
+│   │   └── 03-pirls-taiwan.html          # PIRLS 國際成績圖表與分析
 │   ├── script-sections/                  # ──【逐字稿各頁獨立檔案】──
 │   │   ├── 01-cover.html
-│   │   └── ...
+│   │   ├── 02-speaker.html
+│   │   └── 03-pirls-taiwan.html
 │   └── templates/                        # 骨架樣板 (自動注入 CSS/JS/內容)
 │
+├── archive/                              # ──【歷史版本安全封存區】──
+│   └── v1-16slides/                      # 先前 16 頁版本的完整備份
+│
 ├── build.py                              # 一鍵自動組裝工具 (零第三方套件依賴)
-├── index.html                            # 組裝完成的正式簡報 (發布與雙擊離線開啟)
+├── index.html                            # 組裝完成的正式簡報 (可直接雙擊離線開啟)
 └── script.html                           # 組裝完成的講者逐字稿
 ```
 
-### 🛠️ 常見維護指令
+### 🛠️ 日常擴充投影片方式
 
-1. **修改單頁內容**：
-   - 直接開啟 `src/slides/XX-name.html`（僅幾十行），修改完成後執行：
-     ```bash
-     python build.py
-     ```
-   - 系統會在 **0.2 秒**內自動重新組裝出正式的 `index.html`。
-
-2. **存檔自動更新 (Watch 模式)**：
-   - 編輯時在終端機啟動：
-     ```bash
-     python build.py --watch
-     ```
-   - 只要儲存任何 CSS / JS / 投影片小檔案，系統將即時自動重新組裝，體驗極為流暢！
-
-3. **構建並同步至雙雲端硬碟 (G 槽 / H 槽)**：
+1. **新增投影片**：
+   - 在 `src/slides/` 目錄下建立新檔案，例如 `04-strategy.html`。
+   - 在 `src/script-sections/` 目錄下建立對應講稿，例如 `04-strategy.html`。
+2. **執行編譯**：
    ```bash
-   python build.py --sync
+   python build.py
    ```
-
-4. **調整頁面順序**：
-   - 只要直接重命名 `src/slides/` 中的檔案序號（例如將 `15-live-test.html` 移到 `09-live-test.html`），執行 `python build.py`，系統將**自動重新編排 `data-slide`、總頁數與跳轉選單**！
-
----
-
-## 📑 簡報完整大綱與架構（共 16 頁）
-
-- **Slide 01 封面**：`AI 賦能閱讀理解：PIRLS 提問 × 智慧批改實踐`
-- **Slide 02 研習藍圖**：六大模組規劃總覽
-- **Slide 03 現場痛點**：國小閱讀三大難題（**出題難**、**批改累**、**回饋慢**）
-- **Slide 04 評量指北針**：PIRLS 閱讀理解四層次（**2×2 四象限矩陣排版**）
-- **Slide 05 思維轉變**：傳統人工作業 vs. 人機協同模式對比
-- **Slide 06 系統實踐**：雲端閱讀認證系統（師生雙端入口與管理總覽）
-- **Slide 07 出題雙軌模式**：**AI 原創撰文出題** × **自行提供文章出題**
-- **Slide 08 隨時彈性指派任務**：**單次/多次測驗** × **時間期限** × **跨班多選派卷**
-- **Slide 09 智慧自動批改**：**2-5 分鐘秒級回饋** × **PIRLS 國際基準對標** × **作答歷程防猜檢視**
-- **Slide 10 閱卷規準與二次審閱**：**PIRLS 0~3分 Rubrics 規準參照** × **教師主控微調點選**（人機雙重把關）
-- **Slide 11 個人素養診斷報告**：**611分高基準國際常模彩帶** × **四向度認知歷程雷達圖** × **雙向指引**
-- **Slide 12 班級弱點巨觀診斷**：**題型斷層（問答題僅17%）** × **PIRLS 四歷程斷崖（L3/L4）** × **時間預警**
-- **Slide 13 針對性課堂補救策略**：**AI 專家模型生成 3 大實體教案**（雙段落比對學習單、三級式標記法、詩意辨析）
-- **Slide 14 現實與成本考量**：**理想很豐滿、現實很骨感** × **DeepSeek 極致性價比 API** × **OpenRouter 多元生態**
-- **Slide 15 現場實際實測 📱**：**手機掃碼進入學生端體驗（QR Code + 專屬網址 + 登入指引）**
-- **Slide 16 大綱審閱與後續規劃**：三大步驟（前導架構確認、後續章節擴充、GitHub 部署與現場演講）
+   系統會在 **0.05 秒**內自動重新組裝 `index.html` 與 `script.html`，並自動更新目錄跳轉彈窗、頁碼與快捷列！
 
 ---
 
@@ -98,6 +88,6 @@ pirls-reading-1128/
 
 - **下一頁 / 下一步**：鍵盤 `→` / `Space` / `PageDown`，或點擊下方「下一頁」
 - **上一頁 / 上一步**：鍵盤 `←` / `PageUp`，或點擊下方「上一頁」
-- **全螢幕模式**：按鍵盤 `F` 鍵，或點擊下方「⛶ 全螢幕」
-- **快速跳轉目錄**：按鍵盤 `M` 鍵，或點擊下方「📑 目錄」
-- **打開講者逐字稿**：點擊下方橘色按鈕「🎙️ 講者逐字稿」（在新分頁開啟）
+- **全螢幕播放**：鍵盤 `F` 鍵，或點擊下方「⛶ 全螢幕」
+- **快速目錄**：點擊下方「📑 目錄」按鈕，可即時彈出全域選單跳轉任意頁面
+- **講者逐字稿**：點擊「🎙️ 講者逐字稿」，在新分頁開啟同步講稿備忘錄
