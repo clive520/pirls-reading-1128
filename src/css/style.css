@@ -2472,3 +2472,385 @@
     align-items: flex-start;
   }
 }
+
+
+/* ==========================================================================
+   SLIDE 3: 個人獲獎與專業榮譽樣式
+   ========================================================================== */
+.awards-dashboard-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1.6fr;
+  gap: clamp(14px, 1.8vw, 24px);
+  height: 100%;
+  min-height: 0;
+}
+
+/* 左側：殿堂級首獎專區 */
+.awards-hall-of-fame {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vh, 16px);
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: clamp(14px, 1.8vh, 20px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+.hof-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.96rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #F0EEE7;
+}
+
+.award-hero-card {
+  display: flex;
+  gap: 16px;
+  background: var(--bg-cream);
+  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1.5px solid #E5E1D6;
+  flex: 1;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.award-hero-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(62, 75, 53, 0.08);
+}
+
+.award-hero-card.gold-border {
+  border: 2px solid #D4A137;
+  background: linear-gradient(135deg, #FFFDF8 0%, #FAF4E4 100%);
+}
+
+.award-hero-card.rose-border {
+  border: 2px solid #D97E7E;
+  background: linear-gradient(135deg, #FFFDFD 0%, #FAEEEE 100%);
+}
+
+.award-hero-img-wrap {
+  width: 105px;
+  height: 125px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.08);
+  position: relative;
+  cursor: pointer;
+  background: white;
+}
+
+.award-hero-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.award-hero-img-wrap:hover img {
+  transform: scale(1.08);
+}
+
+.zoom-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 40, 25, 0.65);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.award-hero-img-wrap:hover .zoom-overlay {
+  opacity: 1;
+}
+
+.award-hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.award-badge-pill {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.pill-gold {
+  background: #FCEBC7;
+  color: #94640A;
+  border: 1px solid #ECC880;
+}
+
+.pill-rose {
+  background: #FCE8E8;
+  color: #A33535;
+  border: 1px solid #ECC4C4;
+}
+
+.award-hero-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.25;
+}
+
+.award-hero-subtitle {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.award-meta-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.meta-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #55634D;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1px 7px;
+  border-radius: 4px;
+  border: 1px solid #E0DED5;
+}
+
+/* 右側：六大獎項網格 */
+.awards-grid-panel {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: clamp(12px, 1.6vh, 18px) clamp(16px, 1.8vw, 22px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+  min-height: 0;
+}
+
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #F0EEE7;
+}
+
+.panel-title {
+  font-size: 0.94rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.click-hint {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #7B8A72;
+}
+
+.awards-sub-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: clamp(8px, 1.2vh, 12px);
+  flex: 1;
+}
+
+.award-sub-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-cream);
+  border: 1px solid #EAE7DC;
+  border-radius: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.award-sub-card:hover {
+  background: #F4F8F0;
+  border-color: #7A916C;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(62, 75, 53, 0.08);
+}
+
+.award-sub-card.highlight-tech-card {
+  border: 1.5px solid #3B6B8A;
+  background: #F2F7FA;
+}
+
+.sub-card-thumb {
+  width: 54px;
+  height: 68px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.06);
+  background: white;
+}
+
+.sub-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sub-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sub-pill {
+  align-self: flex-start;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
+.pill-emerald { background: #E5F3E8; color: #2D6B3B; }
+.pill-blue    { background: #E3EEF7; color: #1C547A; }
+.pill-tech    { background: #E9EDF5; color: #2A4877; }
+.pill-amber   { background: #FBF0DC; color: #8F570B; }
+
+.sub-card-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub-card-award {
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.sub-card-year {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* 獎狀放大彈窗 */
+.cert-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 26, 16, 0.78);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.cert-modal-backdrop.active {
+  display: flex;
+  animation: fadeInModal 0.25s ease;
+}
+
+.cert-modal-box {
+  background: white;
+  border-radius: 20px;
+  max-width: 820px;
+  width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+  overflow: hidden;
+  border: 1.5px solid #E2DFD4;
+}
+
+.cert-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border-bottom: 1.5px solid #F0EEE7;
+  background: var(--bg-cream);
+}
+
+.cert-modal-header h4 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.cert-close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: #6C7564;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.cert-close-btn:hover {
+  color: var(--accent-red);
+}
+
+.cert-modal-img-wrap {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #252A22;
+  overflow: auto;
+}
+
+.cert-modal-img-wrap img {
+  max-width: 100%;
+  max-height: calc(85vh - 90px);
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 1024px) {
+  .awards-dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  .awards-sub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

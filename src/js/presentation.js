@@ -189,4 +189,34 @@ const slides = document.querySelectorAll('.slide');
       if (touchEndX > touchStartX + 50) goPrev();
     }, false);
 
+    // 獎狀彈窗操作
+    window.openCertModal = function(imgSrc, title) {
+      const modal = document.getElementById('cert-modal');
+      const modalImg = document.getElementById('cert-modal-img');
+      const modalTitle = document.getElementById('cert-modal-title');
+      if (modal && modalImg && modalTitle) {
+        modalImg.src = imgSrc;
+        modalTitle.textContent = title || '教育部獎狀證書';
+        modal.classList.add('active');
+      }
+    };
+
+    window.closeCertModal = function(e) {
+      if (e && e.target && e.target.id === 'cert-modal') {
+        const modal = document.getElementById('cert-modal');
+        if (modal) modal.classList.remove('active');
+      }
+    };
+
+    window.closeCertModalDirect = function() {
+      const modal = document.getElementById('cert-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        window.closeCertModalDirect();
+      }
+    });
+
     updateSlide(1, 1);

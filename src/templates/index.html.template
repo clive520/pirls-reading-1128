@@ -29,7 +29,7 @@
   <footer id="deck-controls">
     <div class="control-info">
       <span>鹿陽國民小學 • 閱讀理解策略與 AI 的結合</span>
-      <span class="page-indicator" id="page-num">1 / 3</span>
+      <span class="page-indicator" id="page-num">1 / 4</span>
     </div>
 
     <div class="control-buttons">
@@ -53,6 +53,18 @@
       </div>
     </div>
   </div>
+
+  <!-- 獎狀放大預覽彈窗 -->
+  <div id="cert-modal" class="cert-modal-backdrop" onclick="closeCertModal(event)">
+    <div class="cert-modal-box">
+      <div class="cert-modal-header">
+        <h4 id="cert-modal-title">教育部獎狀證書</h4>
+        <button class="cert-close-btn" onclick="closeCertModalDirect()">&times;</button>
+      </div>
+      <div class="cert-modal-img-wrap">
+        <img id="cert-modal-img" src="" alt="獎狀原圖">
+      </div>
+    </div>
   </div>
 
   <script>

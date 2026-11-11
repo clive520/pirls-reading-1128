@@ -161,3 +161,42 @@
         display: none !important;
       }
     }
+
+    /* ================= 橫向經歷卡片網格專屬 (徹底修復裁切破版問題) ================= */
+    .experience-timeline-grid .step-item {
+      opacity: 0.45 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(0.98) !important;
+      transform-origin: center center !important;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2) !important;
+    }
+
+    .experience-timeline-grid .step-item.revealed:not(.active-step) {
+      opacity: 0.75 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(1) !important;
+      transform-origin: center center !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+      filter: none !important;
+    }
+
+    .experience-timeline-grid .step-item.revealed.active-step,
+    .experience-timeline-grid .step-item:first-child.revealed.active-step,
+    .experience-timeline-grid .step-item:last-child.revealed.active-step,
+    .experience-timeline-grid .step-item:not(:first-child):not(:last-child).revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(-8px) scale(1.05) !important; /* 垂直微浮 8px，完全原地放大，絕對禁止 translateX 橫向位移 */
+      transform-origin: center center !important; /* 強制以正中央為基準，禁止 top right */
+      z-index: 25 !important;
+      background: #FFFFFF !important;
+      border: 2px solid var(--accent) !important;
+      border-left: 2px solid var(--accent) !important; /* 覆蓋 border-left: 7px */
+      box-shadow: 0 16px 36px rgba(62, 75, 53, 0.16),
+                  0 0 0 3px rgba(200, 125, 37, 0.35) !important;
+      filter: saturate(1.05) !important;
+    }
+
+    .experience-timeline-grid .step-item.revealed.active-step::after {
+      display: none !important; /* 隱藏右上方 ● 聚焦中 標籤，維持卡片整潔 */
+    }
