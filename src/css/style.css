@@ -2854,3 +2854,179 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+
+/* ==========================================================================
+   SLIDE 5: 研習初衷（不教怎麼教，而是給診斷工具）
+   ========================================================================== */
+.mission-split-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1.35fr;
+  gap: clamp(16px, 2.5vw, 36px);
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.mission-card {
+  border-radius: 22px;
+  padding: clamp(24px, 3.5vh, 40px) clamp(20px, 2.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.25s ease;
+}
+
+/* 左側：不講教法 (柔和收斂) */
+.mission-card.mission-not {
+  background: #EFEFEA;
+  border: 1.5px dashed #D3D1C7;
+  align-items: center;
+  text-align: center;
+}
+
+.mission-card.mission-not .mission-main-topic {
+  font-size: clamp(2rem, 3.8vh, 2.8rem);
+  font-weight: 900;
+  color: #63685E;
+  line-height: 1.35;
+  margin: 18px 0;
+  text-decoration: line-through;
+  text-decoration-color: rgba(217, 72, 65, 0.6);
+  text-decoration-thickness: 4px;
+}
+
+.mission-sub-badge {
+  background: white;
+  border: 1px solid #D5D3C8;
+  color: #7A8074;
+  font-size: clamp(0.95rem, 1.5vh, 1.15rem);
+  font-weight: 800;
+  padding: 8px 18px;
+  border-radius: 999px;
+}
+
+/* 右側：給予診斷工具 (光鮮高亮、聚焦) */
+.mission-card.mission-target {
+  background: #FFFFFF;
+  border: 3px solid #5A704D;
+  box-shadow: 0 16px 40px rgba(62, 75, 53, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mission-card.mission-target .mission-main-topic {
+  font-size: clamp(2.2rem, 4.2vh, 3.1rem);
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.25;
+  margin: 12px 0 20px 0;
+}
+
+.mission-status-pill {
+  align-self: flex-start;
+  font-size: clamp(0.85rem, 1.3vh, 1rem);
+  font-weight: 900;
+  padding: 5px 14px;
+  border-radius: 8px;
+  letter-spacing: 0.05em;
+}
+
+.pill-cross {
+  background: #FCE8E7;
+  color: #A32D26;
+  border: 1px solid #F0C4C2;
+}
+
+.pill-check {
+  background: #E9F2E4;
+  color: #2F591E;
+  border: 1.5px solid #8BA878;
+}
+
+/* 兩大核心卡片 */
+.mission-duo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.6vw, 20px);
+}
+
+.duo-box {
+  background: var(--bg-cream);
+  border: 1.5px solid #E2DFD4;
+  border-radius: 16px;
+  padding: clamp(14px, 2vh, 20px);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: all 0.25s ease;
+}
+
+.duo-box:hover {
+  transform: translateY(-3px);
+  background: #FFFFFF;
+  border-color: #6A825B;
+  box-shadow: 0 8px 20px rgba(62, 75, 53, 0.08);
+}
+
+.duo-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.duo-text h4 {
+  font-size: clamp(1.2rem, 2vh, 1.45rem);
+  font-weight: 900;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+
+.duo-text p {
+  font-size: clamp(0.92rem, 1.4vh, 1.05rem);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.duo-text p strong {
+  color: #C87D25;
+  font-weight: 900;
+}
+
+/* 底部總結金句條 */
+.mission-bottom-strip {
+  margin-top: clamp(12px, 1.8vh, 20px);
+  background: #232B1E;
+  color: #FFFFFF;
+  padding: clamp(10px, 1.4vh, 16px) clamp(16px, 2vw, 28px);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.m-strip-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.m-strip-text {
+  font-size: clamp(0.95rem, 1.5vh, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #E2DFD4;
+}
+
+.m-strip-text strong {
+  color: #FFDF99;
+}
+
+@media (max-width: 1024px) {
+  .mission-split-layout {
+    grid-template-columns: 1fr;
+  }
+}

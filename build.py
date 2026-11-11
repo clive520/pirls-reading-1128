@@ -84,6 +84,7 @@ LUYANG_CUSTOM_TITLES = {
     2: "講師經歷：高志賢老師簡介",
     3: "個人獲獎：教育部教學大獎肯定",
     4: "數據指標：臺灣 PIRLS 成績與趨勢洞察",
+    5: "研習初衷：不教怎麼教，而是給診斷工具",
 }
 
 LUYANG_CUSTOM_SCRIPT_PILLS = {
@@ -91,6 +92,7 @@ LUYANG_CUSTOM_SCRIPT_PILLS = {
     2: "02 講師經歷",
     3: "03 個人獲獎",
     4: "04 PIRLS 國際成績",
+    5: "05 研習初衷",
 }
 
 def clean_tag(text):
