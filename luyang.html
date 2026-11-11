@@ -1,0 +1,3849 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鹿陽國民小學「閱讀理解策略與 AI 的結合」- 講師高志賢老師</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+/* ====== style.css ====== */
+:root {
+      --primary: #3E4B35;
+      --primary-light: #596B4C;
+      --primary-dark: #273121;
+      --accent: #C87D25;
+      --accent-red: #D94841;
+      --bg-cream: #F7F6F1;
+      --card-bg: #FFFFFF;
+      --text-main: #20241D;
+      --text-muted: #5F6659;
+      --border-color: #E2DFD4;
+      --tag-bg: #E7EEE0;
+      --tag-text: #34422B;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* 頂部進度條 */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3E4B35, #7D976A);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    #deck {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: clamp(14px, 2.2vh, 26px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98);
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      transform: scale(1.02);
+    }
+
+    /* 標題與標籤 - 精簡有力 */
+    .slide-header {
+      margin-bottom: clamp(8px, 1.6vh, 16px);
+      flex-shrink: 0;
+    }
+
+    .slide-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-weight: 800;
+      font-size: clamp(0.72rem, 1.2vh, 0.82rem);
+      padding: clamp(2px, 0.5vh, 4px) clamp(8px, 1vw, 12px);
+      border-radius: 999px;
+      letter-spacing: 0.08em;
+      margin-bottom: clamp(3px, 0.6vh, 6px);
+    }
+
+    .slide-title {
+      font-size: clamp(1.55rem, 2.7vh, 2.2rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .slide-body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ================= Slide 1: 封面 (大器乾淨) ================= */
+    .cover-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .cover-hero-title {
+      font-size: 3.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .cover-hero-title span {
+      display: block;
+      color: #637754;
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .cover-punchline {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #384230;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      border-left: 5px solid var(--accent);
+      padding-left: 18px;
+    }
+
+    .cover-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag-item {
+      background: white;
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .cover-card-preview {
+      background: white;
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 16px 36px rgba(46, 56, 38, 0.12);
+      border: 1px solid #E2E6DC;
+      text-align: center;
+    }
+
+    .cover-card-preview img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      display: block;
+    }
+
+    /* ================= Slide 2: 研習藍圖 (模組化大字) ================= */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .agenda-box {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      position: relative;
+    }
+
+    .agenda-box.highlight {
+      border: 2px solid #738864;
+      background: #FDFAF4;
+    }
+
+    .agenda-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #798D6C;
+      margin-bottom: 8px;
+    }
+
+    .agenda-box h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+    }
+
+    .agenda-box p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ================= Slide 3: 現場痛點 (高對比大字) ================= */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pain-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 26px;
+      border-top: 6px solid var(--accent-red);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .pain-tag {
+      background: #FDF0EF;
+      color: var(--accent-red);
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 4px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pain-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #262924;
+      margin-bottom: 12px;
+    }
+
+    .pain-desc {
+      font-size: 1.1rem;
+      color: #555A50;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .pain-summary-bar {
+      margin-top: 26px;
+      background: #2D3627;
+      color: #FFF;
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    /* ================= Slide 4: PIRLS 四象限排版 (2x2 矩陣) ================= */
+    .quadrant-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: clamp(8px, 1.3vh, 14px);
+      align-content: stretch;
+      min-height: 0;
+    }
+
+    .quadrant-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(12px, 1.8vh, 22px) clamp(16px, 1.8vw, 26px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      min-height: 0;
+    }
+
+    .quadrant-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(62, 75, 53, 0.1);
+    }
+
+    .quadrant-card.q1 {
+      border-left: 6px solid #536E46;
+    }
+    .quadrant-card.q2 {
+      border-left: 6px solid #3B5F71;
+    }
+    .quadrant-card.q3 {
+      border-left: 6px solid #9C6C2E;
+    }
+    .quadrant-card.q4 {
+      border-left: 6px solid #994441;
+    }
+
+    .q-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+    }
+
+    .q-pill {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(0.82rem, 1.3vh, 0.94rem);
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .q1 .q-pill { background: #EBF1E6; color: #364C2E; }
+    .q2 .q-pill { background: #E9F1F5; color: #264757; }
+    .q3 .q-pill { background: #F8F0E4; color: #724A18; }
+    .q4 .q-pill { background: #FBEBEA; color: #752927; }
+
+    .q-level-tag {
+      font-size: clamp(0.8rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .q-title {
+      font-size: clamp(1.4rem, 2.3vh, 1.85rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+      letter-spacing: -0.01em;
+    }
+
+    .q-action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.45vh, 1.08rem);
+      font-weight: 800;
+      padding: clamp(3px, 0.5vh, 6px) clamp(10px, 1.1vw, 14px);
+      border-radius: 8px;
+      margin-bottom: clamp(6px, 1vh, 10px);
+      width: fit-content;
+    }
+
+    .q1 .q-action-pill { background: #F1F6EE; color: #2C4223; }
+    .q2 .q-action-pill { background: #EEF5F8; color: #1D3E4F; }
+    .q3 .q-action-pill { background: #FBF4EB; color: #613C0F; }
+    .q4 .q-action-pill { background: #FBEEEE; color: #691E1C; }
+
+    .q-desc {
+      font-size: clamp(0.96rem, 1.55vh, 1.15rem);
+      color: #2D3724;
+      line-height: 1.55;
+      font-weight: 600;
+      margin-bottom: clamp(8px, 1.2vh, 14px);
+    }
+
+    .q-example-box {
+      background: #F8F9F5;
+      border-radius: 9px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.4vw, 16px);
+      font-size: clamp(0.9rem, 1.4vh, 1.05rem);
+      color: #2F382A;
+      border-left: 4px solid #BAC4B2;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .q1 .q-example-box { border-left-color: #536E46; background: #F5F9F3; }
+    .q2 .q-example-box { border-left-color: #3B5F71; background: #F2F7FA; }
+    .q3 .q-example-box { border-left-color: #9C6C2E; background: #FAF5ED; }
+    .q4 .q-example-box { border-left-color: #994441; background: #FAF2F2; }
+
+    .quadrant-center-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2C3524;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(0.82rem, 1.3vh, 0.95rem);
+      padding: clamp(5px, 0.8vh, 8px) clamp(12px, 1.4vw, 18px);
+      border-radius: 99px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+      border: 3px solid var(--bg-cream);
+      z-index: 10;
+      pointer-events: none;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    /* ================= Slide 5: 人機協同對比 ================= */
+    .split-contrast {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .contrast-box {
+      border-radius: 22px;
+      padding: 32px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .contrast-old {
+      background: #EFEFEA;
+      border: 1px solid #DEDDD6;
+    }
+
+    .contrast-ai {
+      background: #FFFFFF;
+      border: 3px solid #637754;
+      box-shadow: 0 14px 30px rgba(62, 75, 53, 0.1);
+    }
+
+    .contrast-header {
+      font-size: 1.7rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contrast-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contrast-list li {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .golden-rule {
+      margin-top: 22px;
+      background: #EAF0E4;
+      border-left: 5px solid var(--primary);
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 6: 系統實例展示 ================= */
+    .system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .preview-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .preview-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .preview-caption {
+      margin-top: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .preview-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ================= Slide 7: 出題雙軌模式 ================= */
+    .dual-engine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .dual-engine-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 24px;
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .dual-engine-card.ai-mode {
+      border-top: 6px solid #435038;
+    }
+
+    .dual-engine-card.manual-mode {
+      border-top: 6px solid #C87D25;
+    }
+
+    .engine-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .engine-badge {
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .ai-mode .engine-badge { background: #EAF0E4; color: #35472B; }
+    .manual-mode .engine-badge { background: #FDF3E5; color: #8C5311; }
+
+    .engine-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+
+    .engine-preview-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #E5E7DF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      object-fit: cover;
+      max-height: 220px;
+      display: block;
+    }
+
+    .engine-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .engine-points li {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #384033;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .engine-footer-bar {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 24px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+    }
+
+    .param-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    /* ================= Slide 8: 任務指派機制 ================= */
+    .task-assign-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .task-preview-panel {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .task-preview-panel img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .task-features-column {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .task-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border-left: 5px solid var(--primary);
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      transition: transform 0.2s ease;
+    }
+
+    .task-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .task-feature-card.c2 { border-left-color: #C87D25; }
+    .task-feature-card.c3 { border-left-color: #3B5F71; }
+
+    .task-feature-title {
+      font-size: clamp(0.95rem, 1.5vh, 1.1rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .task-feature-desc {
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .task-highlight-pill {
+      display: inline-block;
+      margin-top: 3px;
+      background: #F2F5EF;
+      color: var(--primary);
+      font-size: clamp(0.68rem, 1.1vh, 0.76rem);
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    /* ================= Slide: 現場互動實測 (Live Testing QR Code) ================= */
+    .live-test-layout {
+      display: grid;
+      grid-template-columns: 1.12fr 1fr;
+      gap: clamp(14px, 2.2vw, 28px);
+      align-items: center;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .live-test-qr-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 22px) clamp(16px, 2vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: clamp(8px, 1.2vh, 14px);
+    }
+
+    .live-qr-wrapper {
+      position: relative;
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      border: 2px solid #D6DDCF;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.25s ease;
+    }
+
+    .live-qr-wrapper:hover {
+      transform: scale(1.03);
+    }
+
+    .live-qr-img {
+      width: clamp(150px, 22vh, 205px);
+      height: clamp(150px, 22vh, 205px);
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .live-qr-scan-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EAF0E4;
+      color: #354B2A;
+      font-size: clamp(0.78rem, 1.25vh, 0.88rem);
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+
+    .live-url-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #F6F8F3;
+      border: 1.5px solid #CCD8C3;
+      padding: clamp(6px, 1vh, 9px) clamp(12px, 1.4vw, 18px);
+      border-radius: 10px;
+      text-decoration: none;
+      color: #26381C;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-weight: 800;
+      font-size: clamp(0.85rem, 1.35vh, 1.02rem);
+      transition: all 0.2s ease;
+      word-break: break-all;
+    }
+
+    .live-url-pill:hover {
+      background: #E8F0E2;
+      border-color: #557245;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(62, 75, 53, 0.15);
+    }
+
+    .live-credentials-box {
+      background: #FDFBF5;
+      border: 1.5px solid #EFE4D0;
+      border-radius: 11px;
+      padding: clamp(8px, 1.1vh, 11px) clamp(12px, 1.2vw, 16px);
+      width: 100%;
+      text-align: left;
+    }
+
+    .live-cred-title {
+      font-size: clamp(0.82rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      color: #8C5311;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-cred-row {
+      font-size: clamp(0.78rem, 1.15vh, 0.86rem);
+      color: #4C5246;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* 右側操作流程卡片 */
+    .live-test-guide-card {
+      background: white;
+      border-radius: 18px;
+      padding: clamp(14px, 2vh, 20px) clamp(16px, 1.8vw, 24px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(46, 56, 38, 0.07);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.3vh, 14px);
+      justify-content: space-between;
+    }
+
+    .live-preview-box {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: #FAFBF8;
+      border-radius: 12px;
+      padding: clamp(8px, 1.2vh, 12px);
+      border: 1px solid var(--border-color);
+    }
+
+    .live-preview-img {
+      width: clamp(95px, 14vh, 130px);
+      border-radius: 9px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .live-preview-text h4 {
+      font-size: clamp(0.96rem, 1.5vh, 1.12rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+
+    .live-preview-text p {
+      font-size: clamp(0.76rem, 1.15vh, 0.84rem);
+      color: var(--text-muted);
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .live-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(7px, 1vh, 10px);
+    }
+
+    .live-step-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(10px, 1.2vw, 14px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+
+    .live-step-item:hover {
+      transform: translateX(4px);
+      border-color: #7D976A;
+    }
+
+    .live-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .live-step-content {
+      flex: 1;
+    }
+
+    .live-step-content strong {
+      font-size: clamp(0.85rem, 1.35vh, 0.96rem);
+      color: var(--primary-dark);
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .live-step-content span {
+      font-size: clamp(0.74rem, 1.1vh, 0.82rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      display: block;
+    }
+
+    .live-bottom-notice {
+      background: linear-gradient(135deg, #EEF4E8, #E2ECD8);
+      border: 1.5px solid #BACFB0;
+      border-radius: 10px;
+      padding: clamp(7px, 1vh, 10px) clamp(12px, 1.2vw, 16px);
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      color: #2D4421;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ================= Slide: 智慧成果與批改 ================= */
+    .grading-results-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .grading-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .grading-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .grading-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .grading-feature-item {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .grading-feature-item:nth-child(1) { border-left-color: #435038; }
+    .grading-feature-item:nth-child(2) { border-left-color: #2B5773; }
+    .grading-feature-item:nth-child(3) { border-left-color: #C87D25; }
+    .grading-feature-item:nth-child(4) { border-left-color: #435038; }
+
+    .grading-feature-item:hover {
+      transform: translateX(4px);
+      border-color: #8FA47F;
+    }
+
+    .g-item-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .g-item-text {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .g-item-tag {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #F1F4EE;
+      color: #38492E;
+    }
+
+    /* ================= Slide 10: Rubrics 規準與二次審閱 ================= */
+    .rubric-review-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .rubric-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .rubric-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .rubric-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .rubric-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .rubric-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .rubric-feature-card.c-rubric { border-left-color: #C87D25; }
+    .rubric-feature-card.c-teacher { border-left-color: #435038; }
+    .rubric-feature-card.c-feedback { border-left-color: #2B5773; }
+
+    /* ================= Slide 11: 個人素養診斷與雷達圖 ================= */
+    .radar-report-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .radar-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .radar-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .radar-features-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .radar-feature-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid #2B5773;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .radar-feature-card:hover {
+      transform: translateX(4px);
+    }
+
+    .radar-feature-card.c-scale { border-left-color: #2B5773; }
+    .radar-feature-card.c-radar { border-left-color: #C87D25; }
+    .radar-feature-card.c-guide { border-left-color: #435038; }
+
+    /* ================= Slide 12: 班級弱點分析 ================= */
+    .class-analytics-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .class-analytics-screenshot {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .class-analytics-screenshot img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .class-weakness-cards {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .weakness-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .weakness-card:hover {
+      transform: translateX(4px);
+    }
+
+    .weakness-card.radar { border-left-color: #C87D25; }
+    .weakness-card.action { border-left-color: #435038; }
+
+    .weakness-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .weakness-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .weakness-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 13: 課堂補救策略 ================= */
+    .remedial-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .remedial-screenshot {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .remedial-screenshot img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .remedial-cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 12px);
+    }
+
+    .remedial-card {
+      background: white;
+      border-radius: 13px;
+      padding: clamp(9px, 1.3vh, 13px) clamp(12px, 1.2vw, 16px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+      border-left: 5px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .remedial-card:hover {
+      transform: translateX(4px);
+    }
+
+    .remedial-card.s1 { border-left-color: #435038; }
+    .remedial-card.s2 { border-left-color: #2B5773; }
+    .remedial-card.s3 { border-left-color: #C87D25; }
+
+    .remedial-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .remedial-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .remedial-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 14: 成本與多模型 API 設定 ================= */
+    .api-cost-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: clamp(14px, 2vw, 24px);
+      align-items: center;
+      min-height: 0;
+    }
+
+    .api-screenshot-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 14px);
+      border: 1.5px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .api-screenshot-card img {
+      width: 100%;
+      max-height: min(440px, calc(100vh - 200px));
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .api-cost-cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 0.9vh, 9px);
+    }
+
+    .cost-card {
+      background: white;
+      border-radius: 12px;
+      padding: clamp(7px, 1.1vh, 11px) clamp(10px, 1.2vw, 15px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-left: 5px solid #D94841;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .cost-card:hover {
+      transform: translateX(4px);
+    }
+
+    .cost-card.c-gemini { border-left-color: #435038; }
+    .cost-card.c-deepseek { border-left-color: #C87D25; }
+    .cost-card.c-openrouter { border-left-color: #2B5773; }
+
+    .cost-card-title {
+      font-size: clamp(0.92rem, 1.5vh, 1.05rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cost-card-desc {
+      font-size: clamp(0.76rem, 1.2vh, 0.84rem);
+      color: var(--text-muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .cost-pill {
+      align-self: flex-start;
+      margin-top: 1px;
+      font-size: clamp(0.66rem, 1vh, 0.74rem);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* ================= Slide 15: 審閱與下一步 ================= */
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(14px, 1.8vw, 24px);
+      min-height: 0;
+    }
+
+    .step-card {
+      background: white;
+      border-radius: 16px;
+      padding: clamp(16px, 2.2vh, 26px) clamp(16px, 1.8vw, 22px);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+    }
+
+    .step-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.6rem, 2.5vh, 2.2rem);
+      font-weight: 900;
+      color: #637754;
+      margin-bottom: 6px;
+    }
+
+    .step-card h3 {
+      font-size: clamp(1.2rem, 1.8vh, 1.4rem);
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .step-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: clamp(0.85rem, 1.3vh, 0.98rem);
+      color: #4C5246;
+      font-weight: 600;
+    }
+
+    /* [Spotlight Styles extracted to src/css/spotlight.css] */
+
+    /* ================= 底部導覽控制列 ================= */
+    #deck-controls {
+      position: relative;
+      height: 54px;
+      flex-shrink: 0;
+      background: rgba(247, 246, 241, 0.98);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 3vw, 40px);
+      z-index: 50;
+    }
+
+    .control-info {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-indicator {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-nav {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--primary-dark);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-nav:hover {
+      background: #E8ECE2;
+      border-color: #A6B898;
+    }
+
+    .btn-nav.primary {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .btn-nav.primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-nav.script-btn {
+      background: #C87D25;
+      color: #FFF;
+      border-color: #B26E1D;
+    }
+
+    .btn-nav.script-btn:hover {
+      background: #B26E1D;
+    }
+
+    /* 目錄跳轉彈窗 */
+    #agenda-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #agenda-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 650px;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #EEE;
+      padding-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .slide-jump-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .jump-item {
+      padding: 12px 16px;
+      border: 1px solid #E5E5DF;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #FAFAFA;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .jump-item:hover {
+      background: #EBF1E6;
+      border-color: #798D6C;
+      color: var(--primary);
+    }
+
+    /* ================= 筆電全螢幕與高度受限自適應 (@media max-height) ================= */
+    @media (max-height: 850px) {
+      .slide {
+        padding: 14px clamp(20px, 3.5vw, 44px);
+      }
+      .slide-header {
+        margin-bottom: 8px;
+      }
+      .slide-title {
+        font-size: 1.75rem;
+      }
+      .slide-badge {
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+      }
+      .cover-hero-title {
+        font-size: 2.8rem;
+        margin-bottom: 12px;
+      }
+      .cover-hero-title span {
+        font-size: 2rem;
+      }
+      .cover-punchline {
+        font-size: 1.15rem;
+        margin-bottom: 16px;
+      }
+      .pain-card {
+        padding: 16px 18px;
+      }
+      .agenda-box {
+        padding: 12px 16px;
+      }
+      .step-card {
+        padding: 14px 18px;
+      }
+      .step-num {
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+      }
+      .step-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 6px;
+      }
+      .step-card ul {
+        font-size: 0.88rem;
+        gap: 4px;
+      }
+    }
+
+    @media (max-height: 720px) {
+      .slide {
+        padding: 10px clamp(16px, 3vw, 36px);
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .slide-header {
+        margin-bottom: 6px;
+      }
+      .g-item-text, .weakness-card-desc, .cost-card-desc, .remedial-card-desc, .task-feature-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .quadrant-card {
+        padding: 10px 16px;
+      }
+      .q-desc {
+        margin-bottom: 6px;
+      }
+      .q-example-box {
+        padding: 6px 12px;
+      }
+      .grading-screenshot-card img,
+      .class-analytics-screenshot img,
+      .api-screenshot-card img,
+      .rubric-screenshot-card img,
+      .radar-screenshot-card img,
+      .remedial-screenshot img,
+      .task-preview-panel img {
+        max-height: min(340px, calc(100vh - 160px));
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 20px 24px;
+      }
+      .cover-layout {
+        grid-template-columns: 1fr;
+      }
+      .cover-card-preview {
+        display: none;
+      }
+      .quadrant-wrapper {
+        gap: 10px;
+      }
+      .quadrant-center-badge {
+        display: none;
+      }
+      .agenda-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+
+/* ==========================================================================
+   2026 研習全新主題樣式 (鹿陽國小 閱讀理解策略與 AI 結合)
+   ========================================================================== */
+
+/* ===== SLIDE 1: 封面升級 ===== */
+.cover-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: clamp(24px, 3.5vw, 48px);
+  align-items: center;
+  height: 100%;
+}
+
+.cover-main-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cover-speaker-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  padding: 12px 22px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(62, 75, 53, 0.06);
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.speaker-avatar-icon {
+  font-size: 2.2rem;
+  background: var(--tag-bg);
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #BAC9AE;
+}
+
+.speaker-card-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.speaker-role-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.speaker-full-name {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.2;
+}
+
+.speaker-affiliation {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.cover-blueprint-card {
+  background: white;
+  border-radius: 24px;
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 16px 36px rgba(46, 56, 38, 0.08);
+  padding: clamp(20px, 2.8vh, 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+.blueprint-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #F0EEE6;
+}
+
+.blueprint-title-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3E4B35;
+  box-shadow: 0 0 0 4px #DCE5D5;
+}
+
+.blueprint-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.03em;
+}
+
+.blueprint-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.blueprint-step-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-cream);
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid #EAE7DC;
+}
+
+.blueprint-step-box.highlight {
+  background: #F4F8F0;
+  border: 1.5px solid #738864;
+  box-shadow: 0 4px 12px rgba(99, 119, 84, 0.1);
+}
+
+.b-step-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #6A825B;
+  flex-shrink: 0;
+}
+
+.b-step-content strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--primary-dark);
+  margin-bottom: 2px;
+}
+
+.b-step-content p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.blueprint-step-arrow {
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #8C9982;
+  letter-spacing: 0.05em;
+  padding: 2px 0;
+}
+
+.blueprint-footer {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: #273121;
+  color: #FFF;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ===== SLIDE 2: 講師簡介與經歷時間軸 ===== */
+.speaker-profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.5vh, 18px);
+  height: 100%;
+}
+
+.speaker-hero-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  padding: clamp(12px, 1.6vh, 18px) clamp(18px, 2.2vw, 28px);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+.speaker-bio-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.avatar-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3E4B35, #637754);
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(62, 75, 53, 0.25);
+  border: 3px solid #FFF;
+  flex-shrink: 0;
+}
+
+.speaker-display-name {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.2;
+}
+
+.speaker-display-school {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.speaker-metrics-group {
+  display: flex;
+  gap: 12px;
+}
+
+.metric-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-cream);
+  border: 1px solid #E5E2D8;
+  padding: 6px 16px;
+  border-radius: 12px;
+  min-width: 95px;
+}
+
+.metric-pill.highlight {
+  background: #FAF5EB;
+  border: 1.5px solid #C87D25;
+}
+
+.m-val {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.metric-pill.highlight .m-val {
+  color: #C87D25;
+}
+
+.m-val small {
+  font-size: 0.82rem;
+  margin-left: 2px;
+}
+
+.m-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.experience-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(10px, 1.2vw, 16px);
+  flex: 1;
+}
+
+.exp-card {
+  background: white;
+  border-radius: 18px;
+  border: 1.5px solid var(--border-color);
+  padding: clamp(12px, 1.8vh, 20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.exp-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(62, 75, 53, 0.1);
+}
+
+.exp-card.exp-tech-highlight {
+  border: 2px solid #3B5F71;
+  background: #F7FAFC;
+}
+
+.exp-card.exp-current-now {
+  border: 2px solid var(--accent);
+  background: #FDFAF5;
+}
+
+.exp-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.exp-icon {
+  font-size: 1.5rem;
+}
+
+.exp-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.tag-edu {
+  background: #E8EFE5;
+  color: #38502E;
+}
+
+.tag-school {
+  background: #EAEFF2;
+  color: #2F4D5F;
+}
+
+.tag-tech {
+  background: #E1ECF4;
+  color: #1D5377;
+  font-weight: 900;
+}
+
+.tag-now {
+  background: #FCEFD8;
+  color: #A35E0F;
+  font-weight: 900;
+}
+
+.exp-title {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.exp-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 600;
+  flex: 1;
+}
+
+.exp-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed #E5E2D8;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #6A7961;
+}
+
+/* 簡約版學校卡片 (只呈現學校名稱，大器聚焦) */
+.exp-grid-clean .exp-card {
+  justify-content: flex-start;
+  gap: clamp(14px, 2.2vh, 24px);
+  padding: clamp(18px, 2.8vh, 28px) clamp(14px, 1.6vw, 22px);
+  min-height: 200px;
+}
+
+.exp-main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.exp-school-name {
+  font-size: clamp(1.2rem, 2.1vh, 1.55rem);
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.exp-sub-label {
+  display: inline-block;
+  background: var(--bg-cream);
+  color: var(--text-muted);
+  font-size: clamp(0.85rem, 1.3vh, 0.95rem);
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid #E2DFD4;
+}
+
+.exp-tech-highlight .exp-sub-label {
+  background: #EBF3F8;
+  color: #1D5377;
+  border-color: #BED8EB;
+}
+
+.exp-current-now .exp-sub-label {
+  background: #FDF3E3;
+  color: #A35E0F;
+  border-color: #F0CE99;
+}
+
+/* ===== SLIDE 3: 臺灣 PIRLS 國際成績圖表儀表板 ===== */
+.pirls-dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.2vh, 14px);
+  height: 100%;
+}
+
+.pirls-notice-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #F3F6EF;
+  border-left: 5px solid #4D683E;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: #2B3425;
+}
+
+.notice-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.pirls-charts-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.05fr 1.3fr;
+  gap: clamp(10px, 1.4vw, 16px);
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 18px;
+  border: 1.5px solid var(--border-color);
+  padding: clamp(12px, 1.6vh, 18px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+}
+
+.chart-header {
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid #F0EEE7;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chart-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.chart-subtitle {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* 圖表 1: 垂直分數條 */
+.score-bars-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex: 1;
+  padding: 8px 4px;
+  gap: 12px;
+}
+
+.score-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.score-meta-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.rank-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: #E8ECE4;
+  color: #344729;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.rank-badge.gold {
+  background: #FBF0DD;
+  color: #9C6010;
+  font-weight: 900;
+  border: 1px solid #ECC88F;
+}
+
+.score-val {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #3E4B35;
+}
+
+.score-val.accent {
+  color: #C87D25;
+  font-size: 1.4rem;
+}
+
+.bar-track {
+  width: 42px;
+  height: 110px;
+  background: #EEEDE7;
+  border-radius: 10px 10px 4px 4px;
+  display: flex;
+  align-items: flex-end;
+  padding: 3px;
+}
+
+.bar-fill {
+  width: 100%;
+  border-radius: 8px 8px 3px 3px;
+  background: #738864;
+  transition: height 0.6s ease;
+}
+
+.bar-fill.highest {
+  background: #48613A;
+}
+
+.bar-fill.current {
+  background: linear-gradient(180deg, #D48833, #AD6518);
+  box-shadow: 0 4px 12px rgba(200, 125, 37, 0.25);
+}
+
+.score-meta-bottom {
+  margin-top: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.score-meta-bottom strong {
+  font-size: 0.92rem;
+  color: var(--primary-dark);
+}
+
+.score-meta-bottom small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.chart-footnote {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  background: var(--bg-cream);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.chart-footnote.alert-note {
+  background: #FDF3E7;
+  color: #8C5311;
+  font-weight: 700;
+}
+
+/* 圖表 2: 文體橫條圖 */
+.genre-gap-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.genre-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.genre-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genre-name {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.genre-score {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.genre-score.high {
+  color: #385B2D;
+}
+
+.genre-score.low {
+  color: #B83A35;
+}
+
+.h-bar-track {
+  width: 100%;
+  height: 16px;
+  background: #EAE8E0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.h-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.high-fill {
+  background: linear-gradient(90deg, #537545, #35522A);
+}
+
+.low-fill {
+  background: linear-gradient(90deg, #D96560, #B83A35);
+}
+
+.genre-detail {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.gap-indicator-pill {
+  background: #FDF0EF;
+  border: 1px dashed #D94841;
+  color: #BA332C;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* 圖表 3: 2023–2025 三年演進流 */
+.tri-year-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.year-flow-item {
+  background: var(--bg-cream);
+  border: 1px solid #EAE7DC;
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.year-flow-item.current-year {
+  background: #F3F8EF;
+  border: 1.5px solid #637B53;
+  box-shadow: 0 4px 10px rgba(99, 123, 83, 0.08);
+}
+
+.year-tag {
+  align-self: flex-start;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.tag-2023 {
+  background: #E4ECE0;
+  color: #35492C;
+}
+
+.tag-2024 {
+  background: #EAE6D9;
+  color: #615842;
+}
+
+.tag-2025 {
+  background: #2D3926;
+  color: #FFF;
+}
+
+.year-topic {
+  font-size: 0.94rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.year-points {
+  list-style: none;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.year-points li {
+  position: relative;
+  padding-left: 10px;
+}
+
+.year-points li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #7B8B70;
+  font-weight: bold;
+}
+
+/* 底部橋接提示條 */
+.pirls-bridge-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #232B1E;
+  color: #F7F6F1;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.bridge-tag {
+  background: #C87D25;
+  color: #FFF;
+  font-weight: 900;
+  font-size: 0.74rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.bridge-text {
+  color: #E2DFD4;
+}
+
+.bridge-text strong {
+  color: #FFDE9E;
+}
+
+@media (max-width: 1024px) {
+  .experience-timeline-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pirls-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .speaker-hero-strip {
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+}
+
+
+/* ==========================================================================
+   SLIDE 3: 個人獲獎與專業榮譽樣式
+   ========================================================================== */
+.awards-dashboard-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1.6fr;
+  gap: clamp(14px, 1.8vw, 24px);
+  height: 100%;
+  min-height: 0;
+}
+
+/* 左側：殿堂級首獎專區 */
+.awards-hall-of-fame {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vh, 16px);
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: clamp(14px, 1.8vh, 20px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+.hof-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.96rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #F0EEE7;
+}
+
+.award-hero-card {
+  display: flex;
+  gap: 16px;
+  background: var(--bg-cream);
+  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1.5px solid #E5E1D6;
+  flex: 1;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.award-hero-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(62, 75, 53, 0.08);
+}
+
+.award-hero-card.gold-border {
+  border: 2px solid #D4A137;
+  background: linear-gradient(135deg, #FFFDF8 0%, #FAF4E4 100%);
+}
+
+.award-hero-card.rose-border {
+  border: 2px solid #D97E7E;
+  background: linear-gradient(135deg, #FFFDFD 0%, #FAEEEE 100%);
+}
+
+.award-hero-img-wrap {
+  width: 105px;
+  height: 125px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.08);
+  position: relative;
+  cursor: pointer;
+  background: white;
+}
+
+.award-hero-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.award-hero-img-wrap:hover img {
+  transform: scale(1.08);
+}
+
+.zoom-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 40, 25, 0.65);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.award-hero-img-wrap:hover .zoom-overlay {
+  opacity: 1;
+}
+
+.award-hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.award-badge-pill {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.pill-gold {
+  background: #FCEBC7;
+  color: #94640A;
+  border: 1px solid #ECC880;
+}
+
+.pill-rose {
+  background: #FCE8E8;
+  color: #A33535;
+  border: 1px solid #ECC4C4;
+}
+
+.award-hero-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.25;
+}
+
+.award-hero-subtitle {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.award-meta-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.meta-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #55634D;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1px 7px;
+  border-radius: 4px;
+  border: 1px solid #E0DED5;
+}
+
+/* 右側：六大獎項網格 */
+.awards-grid-panel {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: clamp(12px, 1.6vh, 18px) clamp(16px, 1.8vw, 22px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+  min-height: 0;
+}
+
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #F0EEE7;
+}
+
+.panel-title {
+  font-size: 0.94rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.click-hint {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #7B8A72;
+}
+
+.awards-sub-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: clamp(8px, 1.2vh, 12px);
+  flex: 1;
+}
+
+.award-sub-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-cream);
+  border: 1px solid #EAE7DC;
+  border-radius: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.award-sub-card:hover {
+  background: #F4F8F0;
+  border-color: #7A916C;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(62, 75, 53, 0.08);
+}
+
+.award-sub-card.highlight-tech-card {
+  border: 1.5px solid #3B6B8A;
+  background: #F2F7FA;
+}
+
+.sub-card-thumb {
+  width: 54px;
+  height: 68px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.06);
+  background: white;
+}
+
+.sub-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sub-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sub-pill {
+  align-self: flex-start;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
+.pill-emerald { background: #E5F3E8; color: #2D6B3B; }
+.pill-blue    { background: #E3EEF7; color: #1C547A; }
+.pill-tech    { background: #E9EDF5; color: #2A4877; }
+.pill-amber   { background: #FBF0DC; color: #8F570B; }
+
+.sub-card-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub-card-award {
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.sub-card-year {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* 獎狀放大彈窗 */
+.cert-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 26, 16, 0.78);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.cert-modal-backdrop.active {
+  display: flex;
+  animation: fadeInModal 0.25s ease;
+}
+
+.cert-modal-box {
+  background: white;
+  border-radius: 20px;
+  max-width: 820px;
+  width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+  overflow: hidden;
+  border: 1.5px solid #E2DFD4;
+}
+
+.cert-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border-bottom: 1.5px solid #F0EEE7;
+  background: var(--bg-cream);
+}
+
+.cert-modal-header h4 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--primary-dark);
+}
+
+.cert-close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: #6C7564;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.cert-close-btn:hover {
+  color: var(--accent-red);
+}
+
+.cert-modal-img-wrap {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #252A22;
+  overflow: auto;
+}
+
+.cert-modal-img-wrap img {
+  max-width: 100%;
+  max-height: calc(85vh - 90px);
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 1024px) {
+  .awards-dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  .awards-sub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* ====== spotlight.css ====== */
+/* ================= 簡報重點逐項跳出與特大靠中聚焦 (Audience Center Spotlight for Slide 8~14) ================= */
+    .step-item {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+                  opacity 0.28s ease,
+                  box-shadow 0.35s ease,
+                  filter 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* 1. 已揭示但非當前的重點：保持在旁，微縮並柔化，將全場視覺徹底留給中間焦點 */
+    .step-item.revealed:not(.active-step) {
+      opacity: 0.42 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(0.96) !important;
+      filter: saturate(0.8) !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .step-item.revealed:not(.active-step):hover {
+      opacity: 0.85 !important;
+      filter: saturate(1) !important;
+      transform: translateY(-2px) scale(0.99) !important;
+    }
+
+    /* 2. 正在講的那一點：放大約 1.18 倍、大幅靠向畫面中央、壓在左圖上、立體落影與邊框！ */
+    .step-item.revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateX(clamp(-110px, -8vw, -60px)) translateY(-2px) scale(1.18) !important;
+      z-index: 50 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid rgba(62, 75, 53, 0.25) !important;
+      border-left: 7px solid var(--primary) !important;
+      box-shadow: 0 22px 50px rgba(20, 28, 16, 0.22),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(67, 80, 56, 0.45) !important;
+      filter: saturate(1.05) !important;
+    }
+
+    /* 智慧錨點：第一張靠頂展開、最後一張靠底展開，絕不超出上下視窗邊界 */
+    .step-item:first-child.revealed.active-step {
+      transform-origin: top right !important;
+    }
+    .step-item:last-child.revealed.active-step {
+      transform-origin: bottom right !important;
+    }
+    .step-item:not(:first-child):not(:last-child).revealed.active-step {
+      transform-origin: center right !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：橘色系 */
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step,
+    .grading-feature-item:nth-child(3).revealed.active-step,
+    .weakness-card:nth-child(3).revealed.active-step {
+      border-left: 7px solid #C87D25 !important;
+      border-color: rgba(200, 125, 37, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(140, 83, 17, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(200, 125, 37, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：藍色系 */
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step,
+    .grading-feature-item:nth-child(2).revealed.active-step {
+      border-left: 7px solid #2B5773 !important;
+      border-color: rgba(43, 87, 115, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(37, 70, 86, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(43, 87, 115, 0.5) !important;
+    }
+
+    /* 特殊色系聚焦光暈配合主題色：紅色警示系 */
+    .weakness-card:first-child.revealed.active-step,
+    .cost-card:first-child.revealed.active-step {
+      border-left: 7px solid #D94841 !important;
+      border-color: rgba(217, 72, 65, 0.3) !important;
+      box-shadow: 0 22px 50px rgba(180, 40, 35, 0.25),
+                  0 8px 18px rgba(0, 0, 0, 0.08),
+                  0 0 0 3.5px rgba(217, 72, 65, 0.5) !important;
+    }
+
+    /* 聚焦中動態提示徽章 */
+    .step-item.revealed.active-step::after {
+      content: '● 聚焦中';
+      position: absolute;
+      top: 7px;
+      right: 12px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #3E4B35;
+      background: #EAF0E4;
+      padding: 1px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      animation: pulseFocusTag 2s infinite ease-in-out;
+    }
+
+    .step-item:is(.c2, .c-rubric, .c-radar, .s3, .c-deepseek, .radar).revealed.active-step::after,
+    .grading-feature-item:nth-child(3).revealed.active-step::after,
+    .weakness-card:nth-child(3).revealed.active-step::after {
+      color: #8C5311 !important;
+      background: #FDF3E5 !important;
+    }
+
+    .step-item:is(.c3, .c-feedback, .c-scale, .s2, .c-openrouter).revealed.active-step::after,
+    .grading-feature-item:nth-child(2).revealed.active-step::after {
+      color: #254656 !important;
+      background: #EAF0F4 !important;
+    }
+
+    .weakness-card:first-child.revealed.active-step::after,
+    .cost-card:first-child.revealed.active-step::after {
+      color: #901C17 !important;
+      background: #FDF0EF !important;
+    }
+
+    @keyframes pulseFocusTag {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+
+    /* 放大聚焦時，卡片內文字體適度清晰放大，方便遠處觀眾辨識 */
+    .step-item.revealed.active-step :is(.task-feature-title, .g-item-header, .weakness-card-title, .remedial-card-title, .cost-card-title) {
+      font-size: clamp(1.02rem, 1.65vh, 1.2rem) !important;
+      color: #1F2818 !important;
+      margin-bottom: 4px !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-feature-desc, .g-item-text, .weakness-card-desc, .remedial-card-desc, .cost-card-desc) {
+      font-size: clamp(0.82rem, 1.3vh, 0.92rem) !important;
+      color: #283320 !important;
+      line-height: 1.45 !important;
+    }
+
+    .step-item.revealed.active-step :is(.task-highlight-pill, .g-item-tag, .weakness-pill, .remedial-pill, .cost-pill) {
+      font-size: clamp(0.72rem, 1.15vh, 0.8rem) !important;
+      padding: 3px 9px !important;
+      font-weight: 800 !important;
+      margin-top: 5px !important;
+    }
+
+    /* 左側面板當有卡片聚焦時，微調對比與亮度，突顯右側浮空的當前焦點 */
+    .slide:has(.step-item.active-step) :is(.task-preview-panel, .grading-screenshot-card, .rubric-screenshot-card, .radar-screenshot-card, .class-analytics-screenshot, .remedial-screenshot, .api-screenshot-card) {
+      filter: brightness(0.97) saturate(0.92);
+      transition: filter 0.35s ease;
+    }
+
+    @media print {
+      .step-item {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+      .step-item::after {
+        display: none !important;
+      }
+    }
+
+    /* ================= 橫向經歷卡片網格專屬 (徹底修復裁切破版問題) ================= */
+    .experience-timeline-grid .step-item {
+      opacity: 0.45 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(0.98) !important;
+      transform-origin: center center !important;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2) !important;
+    }
+
+    .experience-timeline-grid .step-item.revealed:not(.active-step) {
+      opacity: 0.75 !important;
+      visibility: visible !important;
+      transform: translateY(0) scale(1) !important;
+      transform-origin: center center !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+      filter: none !important;
+    }
+
+    .experience-timeline-grid .step-item.revealed.active-step,
+    .experience-timeline-grid .step-item:first-child.revealed.active-step,
+    .experience-timeline-grid .step-item:last-child.revealed.active-step,
+    .experience-timeline-grid .step-item:not(:first-child):not(:last-child).revealed.active-step {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateY(-8px) scale(1.05) !important; /* 垂直微浮 8px，完全原地放大，絕對禁止 translateX 橫向位移 */
+      transform-origin: center center !important; /* 強制以正中央為基準，禁止 top right */
+      z-index: 25 !important;
+      background: #FFFFFF !important;
+      border: 2px solid var(--accent) !important;
+      border-left: 2px solid var(--accent) !important; /* 覆蓋 border-left: 7px */
+      box-shadow: 0 16px 36px rgba(62, 75, 53, 0.16),
+                  0 0 0 3px rgba(200, 125, 37, 0.35) !important;
+      filter: saturate(1.05) !important;
+    }
+
+    .experience-timeline-grid .step-item.revealed.active-step::after {
+      display: none !important; /* 隱藏右上方 ● 聚焦中 標籤，維持卡片整潔 */
+    }
+
+</style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div id="progress-bar"></div>
+
+  <!-- 簡報容器 -->
+  <main id="deck">
+
+    <!-- ==================== SLIDE 1: 封面 ==================== -->
+        <!-- ==================== SLIDE 1 ==================== -->
+    <section class="slide active" data-slide="1">
+  <div class="cover-layout">
+    <div class="cover-main-col">
+      <div class="slide-badge">🏫 鹿陽國民小學 • 教師專業成長研習</div>
+      <h1 class="cover-hero-title">
+        閱讀理解策略
+        <span>與 AI 的結合</span>
+      </h1>
+      <p class="cover-punchline">
+        當我們進行閱讀理解測驗時，我們會怎麼做？<br>
+        從 PIRLS 國際閱讀架構出發，打造智慧提問、評量與深度對話的新課堂。
+      </p>
+
+      <div class="cover-speaker-card">
+        <div class="speaker-avatar-icon">👨‍🏫</div>
+        <div class="speaker-card-details">
+          <div class="speaker-role-tag">研習講師</div>
+          <div class="speaker-full-name">高志賢 老師</div>
+          <div class="speaker-affiliation">臺中市沙鹿區鹿陽國民小學</div>
+        </div>
+      </div>
+
+      <div class="cover-tags">
+        <div class="tag-item">🎯 PIRLS 閱讀理解四歷程</div>
+        <div class="tag-item">🤖 生成式 AI 輔助試題設計</div>
+        <div class="tag-item">📊 閱讀素養診斷與即時反饋</div>
+      </div>
+    </div>
+
+    <div class="cover-side-col">
+      <div class="cover-blueprint-card">
+        <div class="blueprint-header">
+          <div class="blueprint-title-dot"></div>
+          <span class="blueprint-title">研習探討核心 Core Mission</span>
+        </div>
+        <div class="blueprint-steps">
+          <div class="blueprint-step-box">
+            <div class="b-step-num">01</div>
+            <div class="b-step-content">
+              <strong>國際評量視野</strong>
+              <p>掌握 PIRLS 四歷程，跳脫傳統死記硬背出題</p>
+            </div>
+          </div>
+          <div class="blueprint-step-arrow">↓ 科技賦能</div>
+          <div class="blueprint-step-box highlight">
+            <div class="b-step-num">02</div>
+            <div class="b-step-content">
+              <strong>AI 協同命題與評估</strong>
+              <p>善用 Prompt 工程，秒級產出四層次高階提問</p>
+            </div>
+          </div>
+          <div class="blueprint-step-arrow">↓ 課堂落地</div>
+          <div class="blueprint-step-box">
+            <div class="b-step-num">03</div>
+            <div class="b-step-content">
+              <strong>測驗現場落地實務</strong>
+              <p>自動閱卷、素養雷達圖與即時差異化課堂補救</p>
+            </div>
+          </div>
+        </div>
+        <div class="blueprint-footer">
+          <span>💡 讓繁重複雜的出題批改交給 AI，把思辨對話還給學生</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- ==================== SLIDE 2 ==================== -->
+    <section class="slide" data-slide="2">
+  <div class="slide-header">
+    <div class="slide-badge">👨‍🏫 講師簡介 • SPEAKER PROFILE</div>
+    <h2 class="slide-title">高志賢 老師：28 年國小教育現場深耕 × 資工科技跨域融合</h2>
+  </div>
+
+  <div class="slide-body">
+    <div class="speaker-profile-layout">
+      <!-- 頂部概覽橫幅 -->
+      <div class="speaker-hero-strip">
+        <div class="speaker-bio-main">
+          <div class="avatar-ring">高</div>
+          <div class="speaker-bio-text">
+            <h3 class="speaker-display-name">高志賢 老師</h3>
+            <p class="speaker-display-school">臺中市沙鹿區鹿陽國民小學 • 現職服務第二年</p>
+          </div>
+        </div>
+        <div class="speaker-metrics-group">
+          <div class="metric-pill">
+            <span class="m-val">28<small>年+</small></span>
+            <span class="m-label">教學現場累積年資</span>
+          </div>
+          <div class="metric-pill">
+            <span class="m-val">4<small>所</small></span>
+            <span class="m-label">歷任學校深耕經驗</span>
+          </div>
+          <div class="metric-pill highlight">
+            <span class="m-val">雙軌</span>
+            <span class="m-label">師資專業 × 資訊工程</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 經歷卡片 (僅呈現學校名稱與經歷，簡約大器聚焦) -->
+      <div class="experience-timeline-grid exp-grid-clean">
+        <!-- 節點 1: 新竹師範學院 -->
+        <div class="exp-card step-item" data-step="1">
+          <div class="exp-card-header">
+            <span class="exp-icon">🎓</span>
+            <span class="exp-tag tag-edu">師資培育</span>
+          </div>
+          <div class="exp-main-content">
+            <h4 class="exp-school-name">國立新竹師範學院</h4>
+            <span class="exp-sub-label">畢業</span>
+          </div>
+        </div>
+
+        <!-- 節點 2: 南投縣僑光國小 19 年 -->
+        <div class="exp-card step-item" data-step="2">
+          <div class="exp-card-header">
+            <span class="exp-icon">🏫</span>
+            <span class="exp-tag tag-school">任職 19 年</span>
+          </div>
+          <div class="exp-main-content">
+            <h4 class="exp-school-name">南投縣僑光國小</h4>
+            <span class="exp-sub-label">19 年</span>
+          </div>
+        </div>
+
+        <!-- 節點 3: 東海大學資訊工程學系 (中間進修) -->
+        <div class="exp-card step-item exp-tech-highlight" data-step="3">
+          <div class="exp-card-header">
+            <span class="exp-icon">💻</span>
+            <span class="exp-tag tag-tech">跨域進修</span>
+          </div>
+          <div class="exp-main-content">
+            <h4 class="exp-school-name">東海大學<br>資訊工程學系</h4>
+            <span class="exp-sub-label">畢業</span>
+          </div>
+        </div>
+
+        <!-- 節點 4: 烏日區溪尾國小 7 年 -->
+        <div class="exp-card step-item" data-step="4">
+          <div class="exp-card-header">
+            <span class="exp-icon">🏫</span>
+            <span class="exp-tag tag-school">任職 7 年</span>
+          </div>
+          <div class="exp-main-content">
+            <h4 class="exp-school-name">烏日區溪尾國小</h4>
+            <span class="exp-sub-label">7 年</span>
+          </div>
+        </div>
+
+        <!-- 節點 5: 鹿陽國小 目前第二年 -->
+        <div class="exp-card step-item exp-current-now" data-step="5">
+          <div class="exp-card-header">
+            <span class="exp-icon">🌟</span>
+            <span class="exp-tag tag-now">現任服務</span>
+          </div>
+          <div class="exp-main-content">
+            <h4 class="exp-school-name">鹿陽國民小學</h4>
+            <span class="exp-sub-label">目前第二年</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- ==================== SLIDE 3 ==================== -->
+    <section class="slide" data-slide="3">
+  <div class="slide-header">
+    <div class="slide-badge">🏆 專業肯定 • HONORS & AWARDS</div>
+    <h2 class="slide-title">教育部全國級教學大獎肯定：從教學卓越金質獎到科技創新實踐</h2>
+  </div>
+
+  <div class="slide-body">
+    <div class="awards-dashboard-layout">
+      <!-- 左側：兩大全國殿堂級重磅首獎 -->
+      <div class="awards-hall-of-fame">
+        <div class="hof-banner-title">
+          <span>🌟 全國教育殿堂最高榮譽</span>
+        </div>
+
+        <!-- 1. 教學卓越金質獎 -->
+        <div class="award-hero-card gold-border">
+          <div class="award-hero-img-wrap" onclick="openCertModal('assets/images/awards/教育部111年教學卓越獎金質獎.jpg', '教育部 111 年教學卓越獎【金質獎】')">
+            <img src="assets/images/awards/教育部111年教學卓越獎金質獎.jpg" alt="教育部 111 年教學卓越獎金質獎 獎狀" loading="lazy">
+            <div class="zoom-overlay">🔍 點擊看獎狀</div>
+          </div>
+          <div class="award-hero-content">
+            <div class="award-badge-pill pill-gold">🏆 全國最高殊榮 • 金質獎</div>
+            <h3 class="award-hero-title">教育部 111 年教學卓越獎</h3>
+            <p class="award-hero-subtitle">教育界奧斯卡獎 • 全國國小團隊首獎</p>
+            <div class="award-meta-row">
+              <span class="meta-tag">教育部主辦</span>
+              <span class="meta-tag">民國 111 年</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 教育芬芳獎 -->
+        <div class="award-hero-card rose-border">
+          <div class="award-hero-img-wrap" onclick="openCertModal('assets/images/awards/教育部104年教育芬芳獎.jpg', '教育部 104 年【教育芬芳獎】')">
+            <img src="assets/images/awards/教育部104年教育芬芳獎.jpg" alt="教育部 104 年教育芬芳獎 獎狀" loading="lazy">
+            <div class="zoom-overlay">🔍 點擊看獎狀</div>
+          </div>
+          <div class="award-hero-content">
+            <div class="award-badge-pill pill-rose">🌸 教育典範 • 個人最高榮譽</div>
+            <h3 class="award-hero-title">教育部 104 年教育芬芳獎</h3>
+            <p class="award-hero-subtitle">表彰深耕杏壇、熱忱奉獻之感人教育事蹟</p>
+            <div class="award-meta-row">
+              <span class="meta-tag">教育部主辦</span>
+              <span class="meta-tag">民國 104 年</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側：六大科技創新與卓越教學榮譽網格 -->
+      <div class="awards-grid-panel">
+        <div class="panel-header-row">
+          <span class="panel-title">🎖️ 科技融入、行動學習與課堂實踐歷程（共 6 項教育部全國獎項）</span>
+          <span class="click-hint">💡 點選任一卡片可放大查看獎狀證書</span>
+        </div>
+
+        <div class="awards-sub-grid">
+          <!-- 3. 教學卓越獎佳作 -->
+          <div class="award-sub-card" onclick="openCertModal('assets/images/awards/教育部109年教學卓越獎佳作.jpg', '教育部 109 年教學卓越獎【佳作】')">
+            <div class="sub-card-thumb">
+              <img src="assets/images/awards/教育部109年教學卓越獎佳作.jpg" alt="教育部 109 年教學卓越獎佳作" loading="lazy">
+            </div>
+            <div class="sub-card-body">
+              <div class="sub-pill pill-emerald">教學卓越</div>
+              <h4 class="sub-card-title">教育部 109 年教學卓越獎</h4>
+              <p class="sub-card-award">【全國佳作】</p>
+              <span class="sub-card-year">民國 109 年</span>
+            </div>
+          </div>
+
+          <!-- 4. 夢的N次方 課堂實踐家 -->
+          <div class="award-sub-card highlight-tech-card" onclick="openCertModal('assets/images/awards/教育部110年夢的N次方-臺中場科技教育領域課堂實踐家.jpg', '教育部 110 年夢的N次方 科技教育領域【課堂實踐家】')">
+            <div class="sub-card-thumb">
+              <img src="assets/images/awards/教育部110年夢的N次方-臺中場科技教育領域課堂實踐家.jpg" alt="夢的N次方 課堂實踐家" loading="lazy">
+            </div>
+            <div class="sub-card-body">
+              <div class="sub-pill pill-blue">科技領航</div>
+              <h4 class="sub-card-title">教育部夢的N次方（臺中場）</h4>
+              <p class="sub-card-award">【科技教育領域 課堂實踐家】</p>
+              <span class="sub-card-year">民國 110 年</span>
+            </div>
+          </div>
+
+          <!-- 5. 104年 資訊科技融入教學創新應用團隊 優勝 -->
+          <div class="award-sub-card" onclick="openCertModal('assets/images/awards/教育部104年資訊科技融入教學創新應用團隊優勝.jpg', '教育部 104 年資訊科技融入教學創新應用團隊【全國優勝】')">
+            <div class="sub-card-thumb">
+              <img src="assets/images/awards/教育部104年資訊科技融入教學創新應用團隊優勝.jpg" alt="104年資訊科技融入教學 優勝" loading="lazy">
+            </div>
+            <div class="sub-card-body">
+              <div class="sub-pill pill-tech">資訊創新</div>
+              <h4 class="sub-card-title">資訊科技融入教學創新應用</h4>
+              <p class="sub-card-award">【全國團隊 優勝】</p>
+              <span class="sub-card-year">民國 104 年</span>
+            </div>
+          </div>
+
+          <!-- 6. 105年 資訊科技融入教學創新應用團隊 優勝 -->
+          <div class="award-sub-card" onclick="openCertModal('assets/images/awards/教育部105年資訊科技融入教學創新應用團隊優勝.jpg', '教育部 105 年資訊科技融入教學創新應用團隊【全國優勝】')">
+            <div class="sub-card-thumb">
+              <img src="assets/images/awards/教育部105年資訊科技融入教學創新應用團隊優勝.jpg" alt="105年資訊科技融入教學 優勝" loading="lazy">
+            </div>
+            <div class="sub-card-body">
+              <div class="sub-pill pill-tech">連年獲獎</div>
+              <h4 class="sub-card-title">資訊科技融入教學創新應用</h4>
+              <p class="sub-card-award">【全國團隊 優勝】</p>
+              <span class="sub-card-year">民國 105 年</span>
+            </div>
+          </div>
+
+          <!-- 7. 104年 國中小行動學習推動計畫 優良學校 -->
+          <div class="award-sub-card" onclick="openCertModal('assets/images/awards/教育部104年國中小行動學習推動計畫優良學校.jpg', '教育部 104 年國中小行動學習推動計畫【優良學校】')">
+            <div class="sub-card-thumb">
+              <img src="assets/images/awards/教育部104年國中小行動學習推動計畫優良學校.jpg" alt="104年國中小行動學習推動計畫 優良學校" loading="lazy">
+            </div>
+            <div class="sub-card-body">
+              <div class="sub-pill pill-amber">行動學習</div>
+              <h4 class="sub-card-title">國中小行動學習推動計畫</h4>
+              <p class="sub-card-award">【全國優良學校】</p>
+              <span class="sub-card-year">民國 104 年</span>
+            </div>
+          </div>
+
+          <!-- 8. 105年 國中小行動學習推動計畫 優良學校 -->
+          <div class="award-sub-card" onclick="openCertModal('assets/images/awards/教育部105年國中小行動學習推動計畫優良學校.jpg', '教育部 105 年國中小行動學習推動計畫【優良學校】')">
+            <div class="sub-card-thumb">
+              <img src="assets/images/awards/教育部105年國中小行動學習推動計畫優良學校.jpg" alt="105年國中小行動學習推動計畫 優良學校" loading="lazy">
+            </div>
+            <div class="sub-card-body">
+              <div class="sub-pill pill-amber">持續深耕</div>
+              <h4 class="sub-card-title">國中小行動學習推動計畫</h4>
+              <p class="sub-card-award">【全國優良學校】</p>
+              <span class="sub-card-year">民國 105 年</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- ==================== SLIDE 4 ==================== -->
+    <section class="slide" data-slide="4">
+  <div class="slide-header">
+    <div class="slide-badge">📊 國際閱讀評量洞察 • PIRLS IN TAIWAN</div>
+    <h2 class="slide-title">臺灣 PIRLS 國際閱讀成績與最新趨勢比較（2023–2025 深度剖析）</h2>
+  </div>
+
+  <div class="slide-body">
+    <div class="pirls-dashboard-layout">
+      <!-- 國際評量機制說明橫幅 -->
+      <div class="pirls-notice-banner">
+        <span class="notice-icon">💡</span>
+        <div class="notice-text">
+          <strong>國際評量週期機制說明：</strong>
+          PIRLS 為國際教育學會（IEA）每 5 年舉辦一次之全球國小四年級閱讀調查。受疫情影響，最新一屆 <strong>PIRLS 2021 成績於 2023 年 5 月正式公布</strong>（首度全面改為數位評量）；2024 年發布認知歷程深度診斷，2025 年推動雙閱讀教學對策並備戰 2026 新一輪施測。
+        </div>
+      </div>
+
+      <!-- 圖表與數據儀表板核心區 -->
+      <div class="pirls-charts-grid">
+        <!-- 圖表 1: 歷屆平均成績與國際排名走勢 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">📈 歷屆 PIRLS 成績與國際排名走勢</h3>
+            <span class="chart-subtitle">2011 ~ 2023 最新公布</span>
+          </div>
+
+          <div class="score-bars-wrapper">
+            <!-- 2011 -->
+            <div class="score-bar-group">
+              <div class="score-meta-top">
+                <span class="rank-badge">全球第 9 名</span>
+                <span class="score-val">553 分</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" style="height: 75%;"></div>
+              </div>
+              <div class="score-meta-bottom">
+                <strong>2011 年</strong>
+                <small>紙本測驗 (48國)</small>
+              </div>
+            </div>
+
+            <!-- 2016 -->
+            <div class="score-bar-group">
+              <div class="score-meta-top">
+                <span class="rank-badge">全球第 8 名</span>
+                <span class="score-val">559 分</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill highest" style="height: 82%;"></div>
+              </div>
+              <div class="score-meta-bottom">
+                <strong>2016 年</strong>
+                <small>紙本最高分 (50國)</small>
+              </div>
+            </div>
+
+            <!-- 2023 公布 (2021 屆) -->
+            <div class="score-bar-group highlight">
+              <div class="score-meta-top">
+                <span class="rank-badge gold">全球第 7 名 (最佳)</span>
+                <span class="score-val accent">544 分</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill current" style="height: 68%;"></div>
+              </div>
+              <div class="score-meta-bottom">
+                <strong class="text-accent">2023 最新公布</strong>
+                <small>全面數位評量 (57國)</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-footnote">
+            ★ 2023 年公布成績：排名創歷屆最佳（與瑞典並列），但平均分數下滑 15 分，呈現數位評量挑戰。
+          </div>
+        </div>
+
+        <!-- 圖表 2: 文體斷層落差（說明文 vs. 故事體） -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">⚖️ 文體能力嚴重失衡：說明文 vs. 故事體</h3>
+            <span class="chart-subtitle">2023 最新評量數據對照</span>
+          </div>
+
+          <div class="genre-gap-container">
+            <!-- 說明文 -->
+            <div class="genre-item">
+              <div class="genre-label-row">
+                <span class="genre-name">📘 獲取資訊（說明文）</span>
+                <span class="genre-score high">549 分 • 全球第 7 名</span>
+              </div>
+              <div class="h-bar-track">
+                <div class="h-bar-fill high-fill" style="width: 82%;"></div>
+              </div>
+              <p class="genre-detail">擅長事實檢索、表格讀取與明確訊息定位</p>
+            </div>
+
+            <!-- 斷層標籤 -->
+            <div class="gap-indicator-pill">
+              <span>⚠️ 兩者落差高達 16 分（華語區共通弱點）</span>
+            </div>
+
+            <!-- 故事體 -->
+            <div class="genre-item">
+              <div class="genre-label-row">
+                <span class="genre-name">📙 文學欣賞（故事體）</span>
+                <span class="genre-score low">533 分 • 全球第 17 名</span>
+              </div>
+              <div class="h-bar-track">
+                <div class="h-bar-fill low-fill" style="width: 66%;"></div>
+              </div>
+              <p class="genre-detail">人物情感推論、象徵意境詮釋與評價能力相對薄弱</p>
+            </div>
+          </div>
+
+          <div class="chart-footnote alert-note">
+            ★ 學生擅長「找現成答案」，但面臨需要「同理、詮釋與整合」的深層提問時表現落差顯著！
+          </div>
+        </div>
+
+        <!-- 圖表 3 / 對照卡: 2023、2024、2025 近三年臺灣閱讀素養演進與國際對標 -->
+        <div class="chart-card comparison-timeline-card">
+          <div class="chart-header">
+            <h3 class="chart-title">📅 2023–2025 臺灣閱讀素養最新演進對照</h3>
+            <span class="chart-subtitle">從國際評量公布到課堂對策落地</span>
+          </div>
+
+          <div class="tri-year-flow">
+            <!-- 2023 -->
+            <div class="year-flow-item">
+              <div class="year-tag tag-2023">2023 年</div>
+              <h4 class="year-topic">最新成績正式發布</h4>
+              <ul class="year-points">
+                <li><strong>成績 544 分</strong>，名次升至全球第 7 名（與瑞典並列）。</li>
+                <li>首度全面採用電腦化線上數位施測。</li>
+                <li><strong>警訊</strong>：高分群（>625分）減少至 17%，雙峰落差擴大。</li>
+              </ul>
+            </div>
+
+            <!-- 2024 -->
+            <div class="year-flow-item">
+              <div class="year-tag tag-2024">2024 年</div>
+              <h4 class="year-topic">歷程深度診斷研究</h4>
+              <ul class="year-points">
+                <li>國教院分析：L1 直接提取與 L2 直接推論表現穩健。</li>
+                <li><strong>關鍵痛點</strong>：<strong>L3 詮釋整合與 L4 檢驗評估出現認知斷層</strong>。</li>
+                <li>現場測驗多停留在表層記憶題，缺乏思辨鷹架。</li>
+              </ul>
+            </div>
+
+            <!-- 2025 -->
+            <div class="year-flow-item current-year">
+              <div class="year-tag tag-2025">2025 年</div>
+              <h4 class="year-topic">雙閱讀教學與 AI 備戰</h4>
+              <ul class="year-points">
+                <li>教育部推動「雙閱讀素養（紙本+數位）」教學計畫。</li>
+                <li>備戰 <strong>2026 PIRLS 全新數位循環評量</strong>。</li>
+                <li><strong>核心解方</strong>：引進 <strong>AI 輔助高階提問</strong>，解決出題與診斷困境！</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部總結與研習主題串接 -->
+      <div class="pirls-bridge-strip">
+        <span class="bridge-tag">💡 測驗現場的核心反思</span>
+        <span class="bridge-text">
+          當我們進行閱讀理解測驗的時候，我們常習慣只出<strong>「L1 表層訊息提取題」</strong>（好出也好改）；
+          但 PIRLS 成績明確警示：<strong>孩子真正落後的是 L3 詮釋與 L4 評估！</strong>
+          這正是為何我們必須<strong>「結合 AI」</strong>──讓 AI 成為現場老師設計多層次深度試題的最強後盾！
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  </main>
+
+  <!-- 底部導覽列 -->
+  <footer id="deck-controls">
+    <div class="control-info">
+      <span>鹿陽國民小學 • 閱讀理解策略與 AI 的結合</span>
+      <span class="page-indicator" id="page-num">1 / 4</span>
+    </div>
+
+    <div class="control-buttons">
+      <a href="luyang-script.html" target="_blank" class="btn-nav script-btn" title="在新分頁開啟講者逐字稿網頁">🎙️ 講者逐字稿</a>
+      <button class="btn-nav" id="btn-agenda" title="查看目錄">📑 目錄</button>
+      <button class="btn-nav" id="btn-prev" title="上一頁 (←)">上一頁</button>
+      <button class="btn-nav primary" id="btn-next" title="下一頁 (→)">下一頁</button>
+      <button class="btn-nav" id="btn-fullscreen" title="全螢幕 (F)">⛶ 全螢幕</button>
+    </div>
+  </footer>
+
+  <!-- 目錄跳轉彈窗 -->
+  <div id="agenda-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">快速跳轉至投影片</h3>
+        <button class="close-btn" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="slide-jump-grid">
+        <div class="jump-item" data-jump="1"><span>01</span> 首頁：閱讀理解策略與 AI 的結合</div>
+        <div class="jump-item" data-jump="2"><span>02</span> 講師經歷：高志賢老師簡介</div>
+        <div class="jump-item" data-jump="3"><span>03</span> 個人獲獎：教育部教學大獎肯定</div>
+        <div class="jump-item" data-jump="4"><span>04</span> 數據指標：臺灣 PIRLS 成績與趨勢洞察</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 獎狀放大預覽彈窗 -->
+  <div id="cert-modal" class="cert-modal-backdrop" onclick="closeCertModal(event)">
+    <div class="cert-modal-box">
+      <div class="cert-modal-header">
+        <h4 id="cert-modal-title">教育部獎狀證書</h4>
+        <button class="cert-close-btn" onclick="closeCertModalDirect()">&times;</button>
+      </div>
+      <div class="cert-modal-img-wrap">
+        <img id="cert-modal-img" src="" alt="獎狀原圖">
+      </div>
+    </div>
+  </div>
+
+  <script>
+const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 1;
+    let currentStep = 1;
+
+    const pageIndicator = document.getElementById('page-num');
+    const progressBar = document.getElementById('progress-bar');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const btnAgenda = document.getElementById('btn-agenda');
+    const agendaModal = document.getElementById('agenda-modal');
+    const btnCloseModal = document.getElementById('btn-close-modal');
+    const jumpItems = document.querySelectorAll('.jump-item');
+
+    function getSlideStepItems(slideEl) {
+      if (!slideEl) return [];
+      return Array.from(slideEl.querySelectorAll('.step-item'));
+    }
+
+    function applySlideSteps(slideEl, activeStepIndex) {
+      const items = getSlideStepItems(slideEl);
+      if (items.length === 0) return;
+
+      currentStep = Math.max(1, Math.min(activeStepIndex, items.length));
+
+      items.forEach((item, idx) => {
+        const itemStep = idx + 1;
+        if (itemStep < currentStep) {
+          // 上一點已講過：保留顯示但縮小、輕柔對比
+          item.classList.add('revealed');
+          item.classList.remove('active-step');
+        } else if (itemStep === currentStep) {
+          // 正在講的那一點：跳出放大、光暈聚焦！
+          item.classList.add('revealed', 'active-step');
+        } else {
+          // 尚未輪到的點：隱藏
+          item.classList.remove('revealed', 'active-step');
+        }
+      });
+
+      pageIndicator.textContent = `${currentSlide} / ${totalSlides} • 重點 ${currentStep}/${items.length}`;
+      btnPrev.disabled = (currentSlide === 1 && currentStep <= 1);
+      btnNext.disabled = (currentSlide === totalSlides && currentStep >= items.length);
+    }
+
+    function updateSlide(targetIndex, initialStep = 1) {
+      if (targetIndex < 1) targetIndex = 1;
+      if (targetIndex > totalSlides) targetIndex = totalSlides;
+
+      slides.forEach((slide, idx) => {
+        const slideIndex = idx + 1;
+        slide.classList.remove('active', 'prev');
+        if (slideIndex === targetIndex) {
+          slide.classList.add('active');
+        } else if (slideIndex < targetIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      currentSlide = targetIndex;
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      progressBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      if (items.length > 0) {
+        applySlideSteps(activeSlideEl, initialStep);
+      } else {
+        currentStep = 1;
+        pageIndicator.textContent = `${currentSlide} / ${totalSlides}`;
+        btnPrev.disabled = (currentSlide === 1);
+        btnNext.disabled = (currentSlide === totalSlides);
+      }
+    }
+
+    function goNext() {
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      if (items.length > 0 && currentStep < items.length) {
+        // 在當前頁面推進到下一個重點
+        applySlideSteps(activeSlideEl, currentStep + 1);
+      } else {
+        // 當前頁面的重點已全部講完，推進到下一頁
+        if (currentSlide < totalSlides) {
+          updateSlide(currentSlide + 1, 1);
+        }
+      }
+    }
+
+    function goPrev() {
+      const activeSlideEl = slides[currentSlide - 1];
+      const items = getSlideStepItems(activeSlideEl);
+
+      if (items.length > 0 && currentStep > 1) {
+        // 在當前頁面返回上一個重點
+        applySlideSteps(activeSlideEl, currentStep - 1);
+      } else {
+        // 返回上一頁（若上一頁有重點，直接進入上一頁的最後一個重點）
+        if (currentSlide > 1) {
+          const prevSlideEl = slides[currentSlide - 2];
+          const prevItems = getSlideStepItems(prevSlideEl);
+          updateSlide(currentSlide - 1, prevItems.length > 0 ? prevItems.length : 1);
+        }
+      }
+    }
+
+    btnPrev.addEventListener('click', goPrev);
+    btnNext.addEventListener('click', goNext);
+
+    // 點擊任何重點卡片，可直接切換聚焦該重點
+    document.querySelectorAll('.step-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const slideEl = item.closest('.slide');
+        if (!slideEl || !slideEl.classList.contains('active')) return;
+        const items = getSlideStepItems(slideEl);
+        const clickedIndex = items.indexOf(item);
+        if (clickedIndex !== -1) {
+          applySlideSteps(slideEl, clickedIndex + 1);
+        }
+      });
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (agendaModal.classList.contains('active')) {
+        if (e.key === 'Escape') agendaModal.classList.remove('active');
+        return;
+      }
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          goNext();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          goPrev();
+          break;
+        case 'Home':
+          updateSlide(1, 1);
+          break;
+        case 'End':
+          updateSlide(totalSlides, 1);
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 'm':
+        case 'M':
+          agendaModal.classList.toggle('active');
+          break;
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    btnFullscreen.addEventListener('click', toggleFullscreen);
+
+    btnAgenda.addEventListener('click', () => agendaModal.classList.add('active'));
+    btnCloseModal.addEventListener('click', () => agendaModal.classList.remove('active'));
+    agendaModal.addEventListener('click', (e) => {
+      if (e.target === agendaModal) agendaModal.classList.remove('active');
+    });
+
+    jumpItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const target = parseInt(item.getAttribute('data-jump'), 10);
+        updateSlide(target, 1);
+        agendaModal.classList.remove('active');
+      });
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    window.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) goNext();
+      if (touchEndX > touchStartX + 50) goPrev();
+    }, false);
+
+    // 獎狀彈窗操作
+    window.openCertModal = function(imgSrc, title) {
+      const modal = document.getElementById('cert-modal');
+      const modalImg = document.getElementById('cert-modal-img');
+      const modalTitle = document.getElementById('cert-modal-title');
+      if (modal && modalImg && modalTitle) {
+        modalImg.src = imgSrc;
+        modalTitle.textContent = title || '教育部獎狀證書';
+        modal.classList.add('active');
+      }
+    };
+
+    window.closeCertModal = function(e) {
+      if (e && e.target && e.target.id === 'cert-modal') {
+        const modal = document.getElementById('cert-modal');
+        if (modal) modal.classList.remove('active');
+      }
+    };
+
+    window.closeCertModalDirect = function() {
+      const modal = document.getElementById('cert-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        window.closeCertModalDirect();
+      }
+    });
+
+    updateSlide(1, 1);
+
+</script>
+</body>
+</html>

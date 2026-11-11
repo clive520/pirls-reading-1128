@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>鹿陽國民小學「閱讀理解策略與 AI 的結合」- 講師高志賢老師</title>
+  <title>AI 賦能閱讀理解：從 PIRLS 架構到智慧化課堂實踐</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -28,8 +28,8 @@
   <!-- 底部導覽列 -->
   <footer id="deck-controls">
     <div class="control-info">
-      <span>鹿陽國民小學 • 閱讀理解策略與 AI 的結合</span>
-      <span class="page-indicator" id="page-num">1 / 4</span>
+      <span>AI 協助國小閱讀理解 • PIRLS 專題研習</span>
+      <span class="page-indicator" id="page-num">1 / 15</span>
     </div>
 
     <div class="control-buttons">
@@ -53,18 +53,6 @@
       </div>
     </div>
   </div>
-
-  <!-- 獎狀放大預覽彈窗 -->
-  <div id="cert-modal" class="cert-modal-backdrop" onclick="closeCertModal(event)">
-    <div class="cert-modal-box">
-      <div class="cert-modal-header">
-        <h4 id="cert-modal-title">教育部獎狀證書</h4>
-        <button class="cert-close-btn" onclick="closeCertModalDirect()">&times;</button>
-      </div>
-      <div class="cert-modal-img-wrap">
-        <img id="cert-modal-img" src="" alt="獎狀原圖">
-      </div>
-    </div>
   </div>
 
   <script>

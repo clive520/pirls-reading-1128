@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>講者演講逐字稿手冊 • 鹿陽國民小學「閱讀理解策略與 AI 的結合」</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+      --primary: #3E4B35;
+      --primary-light: #596B4C;
+      --primary-dark: #273121;
+      --accent: #C87D25;
+      --accent-red: #D94841;
+      --bg-body: #F5F4EE;
+      --card-bg: #FFFFFF;
+      --text-main: #20241D;
+      --text-muted: #5F6659;
+      --border-color: #E2DFD4;
+      --quote-bg: #F4F6F1;
+      --action-bg: #FFF8EE;
+      --action-border: #F0C383;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    /* 頂部導覽列 */
+    header.top-bar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .brand-badge {
+      background: #E7EEE0;
+      color: #34422B;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: white;
+      color: var(--primary-dark);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #ECEFE8;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+    }
+
+    /* 主版面佈局 */
+    .container {
+      max-width: 1100px;
+      margin: 36px auto;
+      padding: 0 24px 80px 24px;
+    }
+
+    /* 講稿模組卡片 */
+    .script-section {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+      margin-bottom: 40px;
+      overflow: hidden;
+      scroll-margin-top: 90px;
+    }
+
+    .section-header {
+      background: #FAFAF7;
+      border-bottom: 1px solid var(--border-color);
+      padding: 22px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .slide-tag {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #FFF;
+      background: var(--primary);
+      padding: 4px 14px;
+      border-radius: 8px;
+    }
+
+    .slide-topic {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      flex: 1;
+      margin-left: 14px;
+    }
+
+    .time-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: #FFF7EC;
+      border: 1px solid #F0DEBF;
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+
+    .section-body {
+      padding: 32px;
+    }
+
+    /* 投影片重點對照卡 */
+    .slide-summary-box {
+      background: #F4F6F1;
+      border-left: 5px solid var(--primary);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .slide-summary-box strong {
+      color: var(--primary-dark);
+      font-size: 1.05rem;
+    }
+
+    /* 講者動作與現場互動指示 */
+    .stage-directions {
+      background: var(--action-bg);
+      border: 1px solid var(--action-border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #7A4F0E;
+    }
+
+    .stage-directions strong {
+      color: #5C3A07;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 逐字稿正文樣式 */
+    .speech-script {
+      font-size: 1.12rem;
+      color: #2D3328;
+      line-height: 1.95;
+    }
+
+    .speech-script p {
+      margin-bottom: 18px;
+      text-indent: 2em;
+    }
+
+    .speech-script .highlight-phrase {
+      background: #FFF0D9;
+      color: #9C5708;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .speech-script .punchline {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: #EDF3E7;
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin: 20px 0;
+      text-indent: 0;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* 快捷目錄浮動列 */
+    .quick-jump {
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .quick-jump span {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .quick-pill {
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #F1F3ED;
+      color: var(--primary-dark);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .quick-pill:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* 列印友善排版 */
+    @media print {
+      header.top-bar, .quick-jump, .top-actions {
+        display: none !important;
+      }
+      body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+      }
+      .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .script-section {
+        box-shadow: none;
+        border: 1px solid #CCC;
+        page-break-after: always;
+        margin-bottom: 20px;
+      }
+      .section-header {
+        background: #EEE !important;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+
+</style>
+</head>
+<body>
+
+  <!-- 頂部功能條 -->
+  <header class="top-bar">
+    <div class="brand">
+      <h1>🎙️ 講者演講逐字稿手冊</h1>
+      <span class="brand-badge">鹿陽國民小學研習 • 講師高志賢</span>
+    </div>
+    <div class="top-actions">
+      <button class="btn" onclick="window.print()">🖨️ 列印 / 另存 PDF</button>
+      <a href="luyang.html" class="btn btn-primary" target="_blank">🖥️ 開啟播放投影片</a>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- 快捷跳轉 -->
+    <div class="quick-jump">
+      <span>快速跳轉：</span>
+      <a href="#slide-1" class="quick-pill">01 封面開場</a>
+      <a href="#slide-2" class="quick-pill">02 講師經歷</a>
+      <a href="#slide-3" class="quick-pill">03 個人獲獎</a>
+      <a href="#slide-4" class="quick-pill">04 PIRLS 國際成績</a>
+    </div>
+
+    <!-- ==================== SLIDE 1 講稿 ==================== -->
+        <!-- ==================== SLIDE 1 講稿 ==================== -->
+    <article class="script-section" id="slide-1">
+  <div class="section-header">
+    <span class="slide-tag">SLIDE 01</span>
+    <h2 class="slide-topic">首頁開場：閱讀理解策略與 AI 的結合</h2>
+    <span class="duration-pill">建議時間：2 ~ 3 分鐘</span>
+  </div>
+
+  <div class="speech-box">
+    <div class="speech-label">🎙️ 講師逐字開場白範例：</div>
+    <div class="speech-text">
+      <p>「各位鹿陽國小優秀的教學夥伴、各位老師，大家早安！非常榮幸今天能夠站在這裡，與大家共同探討這個在當前教育現場最火熱、也最關鍵的主題──<strong>『閱讀理解策略與 AI 的結合』</strong>。」</p>
+      <p>「每次我們提到『閱讀理解測驗』，老師們心中可能浮現的第一個畫面就是：月考要到了、學習階段驗收要到了，我們必須翻開課本、找習作、去題庫系統拼拼湊湊出一張考卷。學生寫完之後，老師一張一張批改、訂正……然後呢？下一次測驗，學生好像還是停留在差不多的地方。」</p>
+      <p>「今天這場研習，我們的核心目標只有一個問題：<strong>『當我們進行閱讀理解測驗的時候，我們究竟會怎麼做？我們還能怎麼做？』</strong>」</p>
+      <p>「透過國際評量 PIRLS 的四歷程架構，結合生成式 AI（如 Gemini 與 AI Studio），我們要把老師從繁重複雜的出題與改卷泥淖中解放出來，將寶貴的精力真正還給課堂上的高階思辨與個別化回饋。今天，就讓我們一起展開這趟充滿驚喜的智慧教學旅程！」</p>
+    </div>
+  </div>
+
+  <div class="key-points-grid">
+    <div class="point-card">
+      <div class="p-num">🎯</div>
+      <div class="p-title">確立研習核心命題</div>
+      <div class="p-desc">破除「AI 會取代教學」的焦慮，定調「AI 是輔助老師出題與診斷的最佳助理」。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">💡</div>
+      <div class="p-title">引發現場教師共鳴</div>
+      <div class="p-desc">點出傳統命題與批改的繁重痛點，點出本次研習能為老師帶來的實質省時解方。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">🚀</div>
+      <div class="p-title">架構預告與期待</div>
+      <div class="p-desc">預告由歷程架構 ➔ 科技命題 ➔ 現場實測落地，打造高互動、動手做的實用研習。</div>
+    </div>
+  </div>
+</article>
+
+    <!-- ==================== SLIDE 2 講稿 ==================== -->
+    <article class="script-section" id="slide-2">
+  <div class="section-header">
+    <span class="slide-tag">SLIDE 02</span>
+    <h2 class="slide-topic">講師自介：28 年國小現場深耕 × 資工跨界融合</h2>
+    <span class="duration-pill">建議時間：3 ~ 4 分鐘</span>
+  </div>
+
+  <div class="speech-box">
+    <div class="speech-label">🎙️ 講師逐字講述範例：</div>
+    <div class="speech-text">
+      <p>「在正式進入工具與策略之前，我想先花一點時間跟各位老師分享我的背景。很多老師第一次看我的簡介，會好奇：『高老師，你怎麼既懂國小教學現場，又對資訊科技和 AI 這麼熟悉？』」</p>
+      <p>「其實我的起點和大家完全一樣──我從<strong>國立新竹師範學院</strong>畢業，帶著滿腔熱血進入國小教學現場。我的教學生涯第一站是在<strong>南投縣僑光國小</strong>，一待就是 <strong>19 年</strong>。這 19 年裡，我擔任過導師、帶過各個年段的孩子，深刻見證了孩子們在閱讀理解上的真實困難：有的孩子連題意都抓不到，有的孩子只會抄課文關鍵字，每次出閱讀卷，老師改得筋疲力盡，孩子卻感受不到成就感。」</p>
+      <p>「在任教的中途，因為我對電腦程式與科技教育充滿好奇與熱忱，我選擇回到校園進修，自<strong>東海大學資訊工程學系</strong>畢業。資工的訓練讓我深刻體會到：『工程思維、演算法與系統架構，其實可以為教育現場帶來巨大的賦能』。」</p>
+      <p>「之後，我來到<strong>烏日區溪尾國小任職 7 年</strong>，積極實踐科技融入語文課堂；而現在，我來到了<strong>鹿陽國小</strong>，目前是第二年。在鹿陽國小，我將這 28 年累積的現場語文教學直覺，與資工科技思維、生成式 AI 技術緊密整合，研發了讓老師能一鍵產生四歷程題目的智慧系統。我今天不是以科技專家自居，而是以『一位在國小課堂教了 28 年的資深老師』的身分，分享如何用科技為我們減輕負擔、提升教學品質！」</p>
+    </div>
+  </div>
+
+  <div class="key-points-grid">
+    <div class="point-card">
+      <div class="p-num">🤝</div>
+      <div class="p-title">拉近距離與建立信任</div>
+      <div class="p-desc">強調自己是有 28 年真實班級經歷的現場老師，非空談理論的外部講師。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">💻</div>
+      <div class="p-title">彰顯跨域獨特優勢</div>
+      <div class="p-desc">新竹師院（教育專業）+ 東海資工（技術實力），保證所教方法「實用、落地、可執行」。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">🏫</div>
+      <div class="p-title">認同鹿陽在地連結</div>
+      <div class="p-desc">以鹿陽國小第二年現職教師的身分，凝聚現場夥伴向心力與共好願景。</div>
+    </div>
+  </div>
+</article>
+
+    <!-- ==================== SLIDE 3 講稿 ==================== -->
+    <article class="script-section" id="slide-3">
+  <div class="section-header">
+    <span class="slide-tag">SLIDE 03</span>
+    <h2 class="slide-topic">專業榮譽：教育部全國教學大獎與科技實踐肯定</h2>
+    <span class="duration-pill">建議時間：2 ~ 3 分鐘</span>
+  </div>
+
+  <div class="speech-box">
+    <div class="speech-label">🎙️ 講師逐字講述範例：</div>
+    <div class="speech-text">
+      <p>「除了教學生涯的歷程之外，在我和團隊夥伴這 28 年的教學耕耘中，也非常榮幸獲得了教育部多項重要獎項的肯定。」</p>
+      <p>「大家看畫面的左側，這是我教學生涯中非常珍惜的兩份榮譽：第一個是<strong>民國 111 年獲得教育部教學卓越獎『金質獎』</strong>，這被譽為臺灣教育界的奧斯卡獎，代表了我們在教學課程設計、課堂實踐與學生學習成效上獲得最高級別的國家認證；另一份是<strong>民國 104 年榮獲教育部的『教育芬芳獎』</strong>，肯定了我投身教育現場無怨無悔的熱忱。」</p>
+      <p>「而在右側大家可以看到，因為我具備師資教育與資訊工程的雙重背景，在推動<strong>『資訊科技融入教學』</strong>與<strong>『行動學習』</strong>方面，我們團隊在 104 年、105 年連續兩年榮獲教育部創新應用團隊的<strong>全國優勝</strong>，並在 110 年獲選為教育部夢的N次方<strong>『科技教育領域課堂實踐家』</strong>。」</p>
+      <p>「之所以向各位夥伴分享這些歷程，不是為了宣揚個人成就，而是希望讓大家放心：<strong>今天我們所分享的每一個閱讀策略、每一段 AI 提問的 Prompt、每一次測驗的設計思維，都不是憑空想像的象牙塔理論，而是經過全國頂尖教學競賽與數千堂真實課堂千錘百鍊的實踐智慧！</strong>」</p>
+    </div>
+  </div>
+
+  <div class="key-points-grid">
+    <div class="point-card">
+      <div class="p-num">🏆</div>
+      <div class="p-title">權威說服力</div>
+      <div class="p-desc">教學卓越金質獎與教育芬芳獎，建立講者在教育專業與課程設計上的國家級威信。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">💻</div>
+      <div class="p-title">科技創新底蘊</div>
+      <div class="p-desc">連續兩屆資訊科技創新團隊優勝與夢的N次方實踐家，印證科技融入教學的實操能力。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">🎯</div>
+      <div class="p-title">強化研習信任感</div>
+      <div class="p-desc">強調後續分享的 AI 閱讀策略具備高度「實戰性與可靠性」，非紙上談兵。</div>
+    </div>
+  </div>
+</article>
+
+    <!-- ==================== SLIDE 4 講稿 ==================== -->
+    <article class="script-section" id="slide-4">
+  <div class="section-header">
+    <span class="slide-tag">SLIDE 04</span>
+    <h2 class="slide-topic">國際指標：臺灣 PIRLS 閱讀成績與最新趨勢洞察（2023–2025）</h2>
+    <span class="duration-pill">建議時間：4 ~ 5 分鐘</span>
+  </div>
+
+  <div class="speech-box">
+    <div class="speech-label">🎙️ 講師逐字講述範例：</div>
+    <div class="speech-text">
+      <p>「當我們想改善閱讀理解測驗，我們必須先抬頭看看國際常模與科學數據：<strong>『臺灣孩子的閱讀理解能力，在國際上到底處在什麼位置？真正的瓶頸在哪裡？』</strong>」</p>
+      <p>「大家所熟知的 PIRLS（國際閱讀素養調查），是由國際教育學會（IEA）每 5 年舉辦一次全球大型施測。受疫情影響，最新一屆 PIRLS 2021 的成果，教育部在 <strong>2023 年 5 月正式向國際公布</strong>。大家看左邊的數據圖表：臺灣四年級學生的平均成績是 <strong>544 分</strong>，在 global 57 個國家與地區中，高居<strong>全球第 7 名</strong>（與瑞典並列）！名次是我們自 2006 年參賽以來的歷史新高！」</p>
+      <p>「但是，請老師們注意圖表中的兩個關鍵警訊：第一，分數從 2016 年的 559 分下滑了 15 分，高分群學生比例下降；第二，請看中間這張文體對比圖──<strong>說明文 549 分（全球第 7），但故事體只有 533 分（全球第 17），兩者整整差了 16 分！</strong>」</p>
+      <p>「為什麼會差這麼多？因為我們的孩子非常擅長『獲取資訊』，給他一張火車時刻表、一篇科學說明文，他很快就能找到『幾點開車、有幾隻腳』；但一旦進入故事體，需要『同理主角動機、詮釋象徵意涵、評價文字風格』時，孩子就卡住了！」</p>
+      <p>「2024 年國教院發布的深層診斷更進一步指出：在 PIRLS 的四個歷程中，臺灣學生的<strong>『直接提取 L1』與『直接推論 L2』</strong>表現很強，但<strong>『詮釋整合 L3』與『檢驗評估 L4』出現了嚴重的能力斷崖！</strong>」</p>
+      <p>「到了 2025 年的現在，教育部全力推動『雙閱讀素養』，並備戰即將到來的 2026 PIRLS 數位評量。這給我們現場教師最大的啟發是什麼？──<strong>如果我們在課堂上的測驗，永遠只出『找出第幾行寫什麼』的表層選擇題，學生的高階思維能力就永遠長不出來！</strong>這就是為什麼今天我們要借助 AI，幫我們在 10 秒鐘之內，產出橫跨 L1 到 L4 四層次的高品質閱讀試題！」</p>
+    </div>
+  </div>
+
+  <div class="key-points-grid">
+    <div class="point-card">
+      <div class="p-num">📊</div>
+      <div class="p-title">精準數據對比</div>
+      <div class="p-desc">說明文 549 vs 故事體 533（16 分斷層），以具體數字震撼學員，引導問題意識。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">🧠</div>
+      <div class="p-title">診斷核心癥結</div>
+      <div class="p-desc">點出 L1/L2（表層）與 L3/L4（高階思維）的斷崖，直指傳統考卷題型單一的現場困境。</div>
+    </div>
+    <div class="point-card">
+      <div class="p-num">🔗</div>
+      <div class="p-title">完美銜接 AI 核心解方</div>
+      <div class="p-desc">將 PIRLS 痛點順理成章轉化為「為何我們需要 AI 輔助出題與評量」的最佳動機。</div>
+    </div>
+  </div>
+</article>
+
+
+
+  </div>
+
+</body>
+</html>

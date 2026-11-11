@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鹿陽國民小學「閱讀理解策略與 AI 的結合」- 講師高志賢老師</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+/* {{CSS}} */
+</style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div id="progress-bar"></div>
+
+  <!-- 簡報容器 -->
+  <main id="deck">
+
+    <!-- ==================== SLIDE 1: 封面 ==================== -->
+    <!-- {{SLIDES}} -->
+
+
+  </main>
+
+  <!-- 底部導覽列 -->
+  <footer id="deck-controls">
+    <div class="control-info">
+      <span>鹿陽國民小學 • 閱讀理解策略與 AI 的結合</span>
+      <span class="page-indicator" id="page-num">1 / 4</span>
+    </div>
+
+    <div class="control-buttons">
+      <a href="luyang-script.html" target="_blank" class="btn-nav script-btn" title="在新分頁開啟講者逐字稿網頁">🎙️ 講者逐字稿</a>
+      <button class="btn-nav" id="btn-agenda" title="查看目錄">📑 目錄</button>
+      <button class="btn-nav" id="btn-prev" title="上一頁 (←)">上一頁</button>
+      <button class="btn-nav primary" id="btn-next" title="下一頁 (→)">下一頁</button>
+      <button class="btn-nav" id="btn-fullscreen" title="全螢幕 (F)">⛶ 全螢幕</button>
+    </div>
+  </footer>
+
+  <!-- 目錄跳轉彈窗 -->
+  <div id="agenda-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">快速跳轉至投影片</h3>
+        <button class="close-btn" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="slide-jump-grid">
+<!-- {{MODAL_JUMP_ITEMS}} -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 獎狀放大預覽彈窗 -->
+  <div id="cert-modal" class="cert-modal-backdrop" onclick="closeCertModal(event)">
+    <div class="cert-modal-box">
+      <div class="cert-modal-header">
+        <h4 id="cert-modal-title">教育部獎狀證書</h4>
+        <button class="cert-close-btn" onclick="closeCertModalDirect()">&times;</button>
+      </div>
+      <div class="cert-modal-img-wrap">
+        <img id="cert-modal-img" src="" alt="獎狀原圖">
+      </div>
+    </div>
+  </div>
+
+  <script>
+// {{JS}}
+</script>
+</body>
+</html>
