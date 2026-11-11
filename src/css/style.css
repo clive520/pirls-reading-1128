@@ -2041,6 +2041,55 @@
   color: #6A7961;
 }
 
+/* 簡約版學校卡片 (只呈現學校名稱，大器聚焦) */
+.exp-grid-clean .exp-card {
+  justify-content: flex-start;
+  gap: clamp(14px, 2.2vh, 24px);
+  padding: clamp(18px, 2.8vh, 28px) clamp(14px, 1.6vw, 22px);
+  min-height: 200px;
+}
+
+.exp-main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.exp-school-name {
+  font-size: clamp(1.2rem, 2.1vh, 1.55rem);
+  font-weight: 900;
+  color: var(--primary-dark);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.exp-sub-label {
+  display: inline-block;
+  background: var(--bg-cream);
+  color: var(--text-muted);
+  font-size: clamp(0.85rem, 1.3vh, 0.95rem);
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid #E2DFD4;
+}
+
+.exp-tech-highlight .exp-sub-label {
+  background: #EBF3F8;
+  color: #1D5377;
+  border-color: #BED8EB;
+}
+
+.exp-current-now .exp-sub-label {
+  background: #FDF3E3;
+  color: #A35E0F;
+  border-color: #F0CE99;
+}
+
 /* ===== SLIDE 3: 臺灣 PIRLS 國際成績圖表儀表板 ===== */
 .pirls-dashboard-layout {
   display: flex;
